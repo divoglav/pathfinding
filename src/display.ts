@@ -1,10 +1,7 @@
 import config from "./config";
 import { Cell } from "./structures/cell";
 
-export function main(canvas: HTMLCanvasElement, cells: Cell[][]) {
-  const context = canvas.getContext("2d");
-  if (!context) return;
-
+export function main(context: CanvasRenderingContext2D, cells: Cell[][]) {
   displayCells(context, cells);
 }
 

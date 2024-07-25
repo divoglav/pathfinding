@@ -9,15 +9,16 @@ export class Grid {
     this.rows = _rows;
     this.cols = _cols;
 
-    this.setupData();
+    this.createCells();
     this.setupNeighbors();
   }
 
-  private setupData() {
+  private createCells() {
     for (let x = 0; x < this.rows; x++) {
       this.cells.push([]);
       for (let y = 0; y < this.cols; y++) {
         const cell = new Cell(x, y);
+        if (Math.random() < 0.1) cell.setBlock(true);
         this.cells[x].push(cell);
       }
     }

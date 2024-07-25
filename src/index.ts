@@ -16,8 +16,8 @@ function main() {
   const grid = new Grid(config.grid.rows, config.grid.columns);
   const cells = grid.getCells();
 
-  const canvas = createCanvas();
-  display.main(canvas, cells);
+  const context = createCanvas().getContext("2d");
+  display.main(context!, cells);
 
   console.log("grid:");
   console.log(grid);

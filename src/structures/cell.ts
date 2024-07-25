@@ -30,6 +30,10 @@ export class Cell {
   isBlock() {
     return this._isBlock;
   }
+
+  setBlock(isBlock: boolean) {
+    this._isBlock = isBlock;
+  }
 }
 
 export type Neighbor = Cell | null;
