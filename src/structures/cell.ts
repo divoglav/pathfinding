@@ -1,30 +1,34 @@
 export class Cell {
-  private x: number;
-  private y: number;
+  private _x: number;
+  private _y: number;
 
-  private neighbors: Neighbor[] = [];
+  private _neighbors: Neighbor[] = [];
 
-  private isBlock: boolean = false;
+  private _isBlock: boolean = false;
 
-  constructor(_x: number, _y: number) {
-    this.x = _x;
-    this.y = _y;
+  constructor(x: number, y: number) {
+    this._x = x;
+    this._y = y;
   }
 
   getX() {
-    return this.x;
+    return this._x;
   }
 
   getY() {
-    return this.y;
+    return this._y;
   }
 
   setNeighbors(neighbors: Neighbor[]) {
-    this.neighbors = neighbors;
+    this._neighbors = neighbors;
   }
 
   getNeighbor(neighbor: Neighbors) {
-    return this.neighbors[neighbor];
+    return this._neighbors[neighbor];
+  }
+
+  isBlock() {
+    return this._isBlock;
   }
 }
 

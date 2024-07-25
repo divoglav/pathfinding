@@ -13,17 +13,14 @@ function createCanvas() {
 }
 
 function main() {
-  const context = createCanvas().getContext("2d");
-
   const grid = new Grid(config.grid.rows, config.grid.columns);
+  const cells = grid.getCells();
 
-  display.main(context!, grid);
+  const canvas = createCanvas();
+  display.main(canvas, cells);
 
   console.log("grid:");
   console.log(grid);
-
-  console.log("x3 y0");
-  console.log(grid.getCell(3, 0));
 }
 
 main();
