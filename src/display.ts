@@ -1,31 +1,46 @@
-// TODO: Optimize
-
 import config from "./config";
 import { Cell } from "./structures/cell";
 
 export class Display {
   private _context: CanvasRenderingContext2D;
 
+  private _cellDisplayWidth = config.canvas.width / config.grid.rows;
+  private _cellDisplayHeight = config.canvas.height / config.grid.columns;
+  private _cellAdjustedWidth = this._cellDisplayHeight - config.display.border;
+  private _cellAdjustedHeight = this._cellDisplayHeight - config.display.border;
+
   constructor(context: CanvasRenderingContext2D) {
     this._context = context;
   }
 
+  displayCell(x: number, y: number) {
+    this._context.fillRect(
+      x * this._cellDisplayWidth,
+      y * this._cellDisplayHeight,
+      this._cellAdjustedWidth,
+      this._cellAdjustedHeight,
+    );
+  }
+
   displayCells(cells: Cell[][]) {
-    const displayWidth = config.canvas.width / config.grid.rows;
-    const displayHeight = config.canvas.height / config.grid.columns;
-    const border = config.display.border;
+    const rows = config.grid.rows;
+    const cols = config.grid.columns;
 
-    for (let x = 0; x < cells.length; x++) {
-      for (let y = 0; y < cells[x].length; y++) {
-        const cell = cells[x][y];
+    // cell batch
+    this._context.fillStyle = config.display.colors.cell;
+    for (let x = 0; x < rows; x++) {
+      for (let y = 0; y < cols; y++) {
+        if (cells[x][y].isBlock()) continue;
+        this.displayCell(x, y);
+      }
+    }
 
-        if (cell.isBlock()) {
-          this._context.fillStyle = config.display.colors.block;
-        } else {
-          this._context.fillStyle = config.display.colors.cell;
-        }
-
-        this._context.fillRect(x * displayWidth, y * displayHeight, displayWidth - border, displayHeight - border);
+    // block batch
+    this._context.fillStyle = config.display.colors.block;
+    for (let x = 0; x < rows; x++) {
+      for (let y = 0; y < cols; y++) {
+        if (!cells[x][y].isBlock()) continue;
+        this.displayCell(x, y);
       }
     }
   }

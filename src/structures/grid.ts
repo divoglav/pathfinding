@@ -15,11 +15,15 @@ export class Grid {
   }
 
   private createCells() {
+    const blockChance = config.cell.blockChance;
+
     for (let x = 0; x < this._rows; x++) {
       this._cells.push([]);
       for (let y = 0; y < this._cols; y++) {
         const cell = new Cell(x, y);
-        if (Math.random() < config.cell.blockChance) cell.setBlock(true);
+
+        if (Math.random() < blockChance) cell.setBlock(true);
+
         this._cells[x].push(cell);
       }
     }
