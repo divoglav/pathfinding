@@ -1,7 +1,10 @@
 export class Cell {
   private x: number;
   private y: number;
+
   private neighbors: Neighbor[] = [];
+
+  private isBlock: boolean = false;
 
   constructor(_x: number, _y: number) {
     this.x = _x;

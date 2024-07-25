@@ -1,0 +1,19 @@
+export default {
+  canvas: {
+    width: 600,
+    height: 400,
+  },
+
+  grid: {
+    rows: 5,
+    columns: 3,
+  },
+
+  cell: {
+    display: {
+      width: 30,
+      height: 30,
+      border: 1,
+    },
+  },
+};

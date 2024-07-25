@@ -3,7 +3,7 @@ import { Cell } from "./cell";
 export class Grid {
   private rows: number;
   private cols: number;
-  private data: Cell[][] = [];
+  private cells: Cell[][] = [];
 
   constructor(_rows: number, _cols: number) {
     this.rows = _rows;
@@ -15,10 +15,10 @@ export class Grid {
 
   private setupData() {
     for (let x = 0; x < this.rows; x++) {
-      this.data.push([]);
+      this.cells.push([]);
       for (let y = 0; y < this.cols; y++) {
         const cell = new Cell(x, y);
-        this.data[x].push(cell);
+        this.cells[x].push(cell);
       }
     }
   }
@@ -26,16 +26,16 @@ export class Grid {
   private setupNeighbors() {
     for (let x = 0; x < this.rows; x++) {
       for (let y = 0; y < this.cols; y++) {
-        const cell = this.data[x][y];
+        const cell = this.cells[x][y];
 
-        const north = this.get(x, y - 1);
-        const northEast = this.get(x + 1, y - 1);
-        const east = this.get(x + 1, y);
-        const southEast = this.get(x + 1, y + 1);
-        const south = this.get(x, y + 1);
-        const southWest = this.get(x - 1, y + 1);
-        const west = this.get(x - 1, y);
-        const northWest = this.get(x - 1, y - 1);
+        const north = this.getCell(x, y - 1);
+        const northEast = this.getCell(x + 1, y - 1);
+        const east = this.getCell(x + 1, y);
+        const southEast = this.getCell(x + 1, y + 1);
+        const south = this.getCell(x, y + 1);
+        const southWest = this.getCell(x - 1, y + 1);
+        const west = this.getCell(x - 1, y);
+        const northWest = this.getCell(x - 1, y - 1);
 
         cell.setNeighbors([north, northEast, east, southEast, south, southWest, west, northWest]);
       }
@@ -46,7 +46,11 @@ export class Grid {
     return x >= 0 && x < this.rows && y >= 0 && y < this.cols;
   }
 
-  get(x: number, y: number) {
-    return this.isValidCoordinate(x, y) ? this.data[x][y] : null;
+  getCell(x: number, y: number) {
+    return this.isValidCoordinate(x, y) ? this.cells[x][y] : null;
+  }
+
+  getCells() {
+    return this.cells;
   }
 }
