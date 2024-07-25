@@ -10,14 +10,15 @@ const config = {
   },
 
   cell: {
-    blockChance: 0,
+    blockChance: 0.1,
   },
 
   display: {
     colors: {
-      cell: "pink",
+      cell: "green",
       block: "black",
     },
+
     border: 1,
   },
 };

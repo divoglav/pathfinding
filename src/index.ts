@@ -1,7 +1,7 @@
 import "./styles/reset.css";
 import "./styles/style.css";
 import config from "./config";
-import { Grid } from "./structures/grid";
+import { Grid } from "./grid";
 import { Display } from "./display";
 
 function createCanvas() {

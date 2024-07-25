@@ -1,5 +1,5 @@
 import config from "./config";
-import { Cell } from "./structures/cell";
+import { Cell } from "./cell";
 
 export class Display {
   private _context: CanvasRenderingContext2D;

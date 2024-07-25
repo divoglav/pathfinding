@@ -1,4 +1,4 @@
-import config from "../config";
+import config from "./config";
 import { Cell } from "./cell";
 
 export class Grid {
@@ -19,6 +19,7 @@ export class Grid {
 
     for (let x = 0; x < this._rows; x++) {
       this._cells.push([]);
+
       for (let y = 0; y < this._cols; y++) {
         const cell = new Cell(x, y);
 
