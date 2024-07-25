@@ -11,25 +11,18 @@ function createCanvas() {
   return canvas;
 }
 
-class Grid<T> {
-  private data: T[][];
 
-  constructor() {
-    this.data = [];
-  }
-
-  get(x: number, y: number) {
-    return this.data[x][y];
-  }
-}
 
 function main() {
   const context = createCanvas().getContext("2d");
 
   display.main(context!);
 
-  const grid = new Grid();
-  console.log(grid);
+  //const grid = new Grid(10, 5);
+  //console.log(grid);
+
+  //console.log("x5 y3:");
+  //console.log(grid.get(5, 3));
 }
 
 main();
