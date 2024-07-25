@@ -1,8 +1,8 @@
 import "./styles/reset.css";
 import "./styles/style.css";
 import config from "./config";
-import * as display from "./display";
 import { Grid } from "./structures/grid";
+import { Display } from "./display";
 
 function createCanvas() {
   const canvas = document.createElement("canvas");
@@ -13,11 +13,13 @@ function createCanvas() {
 }
 
 function main() {
+  const context = createCanvas().getContext("2d");
+  const display = new Display(context!);
+
   const grid = new Grid(config.grid.rows, config.grid.columns);
   const cells = grid.getCells();
 
-  const context = createCanvas().getContext("2d");
-  display.main(context!, cells);
+  display.displayCells(cells);
 
   console.log("grid:");
   console.log(grid);

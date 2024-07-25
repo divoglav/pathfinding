@@ -1,33 +1,34 @@
+import config from "../config";
 import { Cell } from "./cell";
 
 export class Grid {
-  private rows: number;
-  private cols: number;
-  private cells: Cell[][] = [];
+  private _rows: number;
+  private _cols: number;
+  private _cells: Cell[][] = [];
 
-  constructor(_rows: number, _cols: number) {
-    this.rows = _rows;
-    this.cols = _cols;
+  constructor(rows: number, cols: number) {
+    this._rows = rows;
+    this._cols = cols;
 
     this.createCells();
     this.setupNeighbors();
   }
 
   private createCells() {
-    for (let x = 0; x < this.rows; x++) {
-      this.cells.push([]);
-      for (let y = 0; y < this.cols; y++) {
+    for (let x = 0; x < this._rows; x++) {
+      this._cells.push([]);
+      for (let y = 0; y < this._cols; y++) {
         const cell = new Cell(x, y);
-        if (Math.random() < 0.1) cell.setBlock(true);
-        this.cells[x].push(cell);
+        if (Math.random() < config.cell.blockChance) cell.setBlock(true);
+        this._cells[x].push(cell);
       }
     }
   }
 
   private setupNeighbors() {
-    for (let x = 0; x < this.rows; x++) {
-      for (let y = 0; y < this.cols; y++) {
-        const cell = this.cells[x][y];
+    for (let x = 0; x < this._rows; x++) {
+      for (let y = 0; y < this._cols; y++) {
+        const cell = this._cells[x][y];
 
         const north = this.getCell(x, y - 1);
         const northEast = this.getCell(x + 1, y - 1);
@@ -44,14 +45,14 @@ export class Grid {
   }
 
   private isValidCoordinate(x: number, y: number) {
-    return x >= 0 && x < this.rows && y >= 0 && y < this.cols;
+    return x >= 0 && x < this._rows && y >= 0 && y < this._cols;
   }
 
   getCell(x: number, y: number) {
-    return this.isValidCoordinate(x, y) ? this.cells[x][y] : null;
+    return this.isValidCoordinate(x, y) ? this._cells[x][y] : null;
   }
 
   getCells() {
-    return this.cells;
+    return this._cells;
   }
 }
