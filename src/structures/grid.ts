@@ -1,37 +1,52 @@
-import { Cell, Neighbors } from "./cell";
+import { Cell } from "./cell";
 
 export class Grid {
-  private data: Cell[][];
+  private rows: number;
+  private cols: number;
+  private data: Cell[][] = [];
 
-  constructor(rows: number, cols: number) {
-    this.data = [];
+  constructor(_rows: number, _cols: number) {
+    this.rows = _rows;
+    this.cols = _cols;
 
-    for (let r = 0; r < rows; r++) {
+    this.setupData();
+    this.setupNeighbors();
+  }
+
+  private setupData() {
+    for (let x = 0; x < this.rows; x++) {
       this.data.push([]);
-
-      for (let c = 0; c < cols; c++) {
-        const cell = new Cell(r, c);
-        this.data[r].push(cell);
-      }
-    }
-
-    for (let x = 0; x < this.data.length; x++) {
-      for (let y = 0; y < this.data.length; y++) {
-        const cell = this.data[x][y];
-
-        const north = 0;
-        const northEast = 0;
-        const east = 0;
-        const southEast = 0;
-        const south = 0;
-        const southWest = 0;
-        const west = 0;
-        const northWest = 0;
+      for (let y = 0; y < this.cols; y++) {
+        const cell = new Cell(x, y);
+        this.data[x].push(cell);
       }
     }
   }
 
+  private setupNeighbors() {
+    for (let x = 0; x < this.rows; x++) {
+      for (let y = 0; y < this.cols; y++) {
+        const cell = this.data[x][y];
+
+        const north = this.get(x, y - 1);
+        const northEast = this.get(x + 1, y - 1);
+        const east = this.get(x + 1, y);
+        const southEast = this.get(x + 1, y + 1);
+        const south = this.get(x, y + 1);
+        const southWest = this.get(x - 1, y + 1);
+        const west = this.get(x - 1, y);
+        const northWest = this.get(x - 1, y - 1);
+
+        cell.setNeighbors([north, northEast, east, southEast, south, southWest, west, northWest]);
+      }
+    }
+  }
+
+  private isValidCoordinate(x: number, y: number) {
+    return x >= 0 && x < this.rows && y >= 0 && y < this.cols;
+  }
+
   get(x: number, y: number) {
-    return this.data[x][y];
+    return this.isValidCoordinate(x, y) ? this.data[x][y] : null;
   }
 }

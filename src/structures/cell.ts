@@ -1,12 +1,11 @@
 export class Cell {
   private x: number;
   private y: number;
+  private neighbors: Neighbor[] = [];
 
-  private neighbors: Cell[] = [];
-
-  constructor(x: number, y: number) {
-    this.x = x;
-    this.y = y;
+  constructor(_x: number, _y: number) {
+    this.x = _x;
+    this.y = _y;
   }
 
   getX() {
@@ -17,7 +16,7 @@ export class Cell {
     return this.y;
   }
 
-  setNeighbors(neighbors: Cell[]) {
+  setNeighbors(neighbors: Neighbor[]) {
     this.neighbors = neighbors;
   }
 
@@ -26,6 +25,7 @@ export class Cell {
   }
 }
 
+export type Neighbor = Cell | null;
 export enum Neighbors {
   North,
   NorthEast,
