@@ -1,4 +1,4 @@
-import { Cell } from "./cell";
+import { Cell, Neighbors } from "./cell";
 
 export class Grid {
   private data: Cell[][];
@@ -12,6 +12,21 @@ export class Grid {
       for (let c = 0; c < cols; c++) {
         const cell = new Cell(r, c);
         this.data[r].push(cell);
+      }
+    }
+
+    for (let x = 0; x < this.data.length; x++) {
+      for (let y = 0; y < this.data.length; y++) {
+        const cell = this.data[x][y];
+
+        const north = 0;
+        const northEast = 0;
+        const east = 0;
+        const southEast = 0;
+        const south = 0;
+        const southWest = 0;
+        const west = 0;
+        const northWest = 0;
       }
     }
   }
