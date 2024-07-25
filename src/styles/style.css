@@ -1,0 +1,8 @@
+body {
+  background-color: #303030;
+  color: rgba(255, 255, 255, 0.87);
+}
+
+canvas {
+  border: 1px solid teal;
+}
