@@ -1,72 +1,79 @@
 import { Cell } from "./cell";
+import * as utils from "./utils/general";
 
-export function aStar(start: Cell, target: Cell) {
-  const open: Cell[] = [];
-  const closed = new Set<Cell>();
+const open: Cell[] = [];
+const closed = new Set<Cell>();
 
-  addToOpen(open, start);
-
-  while (open.length > 0) {
-    let current = getLowestScore(open);
-
-    if (current === target) {
-      const path = reconstructPath(current);
-      for (let i = 0; i < path.length; i++) {
-        path[i].addState(Cell.PATH);
-      }
-      return;
-    }
-
-    removeFromList(open, current);
-    current.removeState(Cell.OPEN);
-    closed.add(current);
-    current.addState(Cell.CLOSED);
-
-    const neighbors = current.getNeighbors();
-    for (let n = 0; n < neighbors.length; n++) {
-      const neighbor = neighbors[n];
-      if (!neighbor || neighbor.hasState(Cell.CLOSED) || neighbor.hasState(Cell.BLOCK)) continue;
-
-      const gTentative = current.g + 1;
-
-      if (!neighbor.hasState(Cell.OPEN)) addToOpen(open, neighbor);
-      else if (gTentative >= neighbor.g) continue;
-
-      neighbor.parent = current;
-      neighbor.g = gTentative;
-      neighbor.f = neighbor.g + neighbor.h;
-    }
+function getLowestScore(array: Cell[]) {
+  let minScoreCell = array[0];
+  // TODO i = 1
+  for (let i = 0; i < array.length; i++) {
+    if (array[i]._f < minScoreCell._f) minScoreCell = array[i];
   }
-}
-
-function addToOpen(open: Cell[], cell: Cell) {
-  open.push(cell);
-  cell.addState(Cell.OPEN);
-}
-
-function removeFromList(open: Cell[], cell: Cell) {
-  const indexToRemove = open.indexOf(cell);
-  if (indexToRemove !== -1) open.splice(indexToRemove, 1);
-}
-
-function getLowestScore(list: Cell[]) {
-  let minScoreCell = list[0];
-
-  for (let i = 1; i < list.length; i++) {
-    if (list[i].f < minScoreCell.f) minScoreCell = list[i];
-  }
-
   return minScoreCell;
 }
 
 function reconstructPath(cell: Cell) {
   const path: Cell[] = [];
-
   let current: Cell | null = cell;
   while (current) {
     path.push(current);
-    current = current.parent;
+    current = current._parent;
+  }
+  return path;
+}
+
+function success(current: Cell) {
+  const path = reconstructPath(current);
+  for (let i = 0; i < path.length; i++) {
+    path[i].addState(Cell.PATH);
+  }
+}
+
+export function aStar(start: Cell, target: Cell) {
+  open.push(start);
+  start.addState(Cell.OPEN);
+
+  const SADCOUNT = 53;
+  for (let i = 0; i < SADCOUNT; i++) {
+    if (open.length > 0) {
+      iterate(target);
+    }
+  }
+}
+
+function iterate(target: Cell) {
+  let current = getLowestScore(open);
+
+  if (current === target) {
+    success(current);
+    return;
   }
 
-  return path;
+  utils.removeFromArray(open, current);
+  current.removeState(Cell.OPEN);
+  closed.add(current);
+  current.addState(Cell.CLOSED);
+
+  const neighbors = current.getNeighbors();
+  for (let n = 0; n < neighbors.length; n++) {
+    const neighbor = neighbors[n];
+    if (!neighbor || neighbor.hasState(Cell.CLOSED) || neighbor.hasState(Cell.BLOCK)) continue;
+
+    const moveCostToThisNeighbor = 1;
+    const gSum = current.getG() + moveCostToThisNeighbor;
+
+    if (neighbor.hasState(Cell.OPEN)) {
+      if (gSum < neighbor.getG()) {
+        neighbor.setParent(current);
+        neighbor.setG(gSum);
+      }
+    } else {
+      open.push(neighbor);
+      neighbor.addState(Cell.OPEN);
+
+      neighbor.setParent(current);
+      neighbor.setG(gSum);
+    }
+  }
 }

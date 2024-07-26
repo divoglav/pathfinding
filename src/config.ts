@@ -1,21 +1,21 @@
 const config = {
   canvas: {
-    width: 600,
-    height: 400,
+    width: 900,
+    height: 600,
   },
 
   grid: {
-    rows: 15,
-    columns: 10,
+    rows: 9,
+    columns: 6,
   },
 
   cell: {
-    blockChance: 0.2,
+    blockChance: 0,
   },
 
   display: {
     FPS: 30,
-    info: false,
+    info: true,
 
     colors: {
       background: "#000000",

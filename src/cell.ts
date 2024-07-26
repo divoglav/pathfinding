@@ -9,11 +9,11 @@ export class Cell {
 
   private _neighbors: Neighbor[] = [];
 
-  g: number = 0; // move score
-  h: number = 0; // distance score
-  f: number = 0; // total score
+  private _g: number = 0; // move score
+  private _h: number = 0; // distance score
+  private _f: number = 0; // total score
 
-  parent: Cell | null = null;
+  private _parent: Cell | null = null;
 
   constructor(
     readonly x: number,
@@ -22,38 +22,63 @@ export class Cell {
 
   reset() {
     this._state = Cell.EMPTY;
-    this.g = this.h = this.f = 0;
-    this.parent = null;
+    this._g = this._h = this._f = 0;
+    this._parent = null;
   }
 
   hasState(cellState: number): boolean {
     return (this._state & cellState) !== 0;
   }
-
   addState(cellState: number) {
     this._state |= cellState;
   }
-
   removeState(cellState: number) {
     this._state &= ~cellState;
+  }
+
+  getG() {
+    return this._g;
+  }
+  setG(value: number) {
+    this._g = value;
+    this.updateF();
+  }
+
+  getH() {
+    return this._h;
+  }
+  setH(value: number) {
+    this._h = value;
+  }
+
+  getF() {
+    return this._f;
+  }
+  private updateF() {
+    this._f = this._g + this._h;
+  }
+
+  getParent() {
+    return this._parent;
+  }
+  setParent(cell: Cell) {
+    this._parent = cell;
   }
 
   setNeighbors(neighbors: Neighbor[]) {
     this._neighbors = neighbors;
   }
-
   getNeighbor(neighbor: Neighbors) {
     return this._neighbors[neighbor];
   }
-
   getNeighbors() {
     return this._neighbors;
   }
 
-  calculateDistanceTo(target: Cell) {
+  calculateHTo(target: Cell) {
     const xd = this.x - target.x;
     const yd = this.y - target.y;
-    this.h = Math.sqrt(xd * xd + yd * yd);
+    this._h = Math.sqrt(xd * xd + yd * yd);
   }
 }
 

@@ -64,19 +64,19 @@ export class Display {
         if (cell.hasState(Cell.BLOCK)) continue;
 
         this._context.fillText(
-          cell.g.toFixed(2).toString(),
+          cell.getG().toString(),
           cell.x * this._width + this._halfWidth,
           cell.y * this._height + this._halfHeight - this._quarterHeight,
         );
 
         this._context.fillText(
-          cell.h.toFixed(2).toString(),
+          cell.getH().toFixed(2).toString(),
           cell.x * this._width + this._halfWidth,
           cell.y * this._height + this._halfHeight,
         );
 
         this._context.fillText(
-          cell.f.toFixed(2).toString(),
+          cell.getF().toFixed(2).toString(),
           cell.x * this._width + this._halfWidth,
           cell.y * this._height + this._halfHeight + this._quarterHeight,
         );

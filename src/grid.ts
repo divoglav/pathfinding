@@ -73,7 +73,7 @@ export class Grid {
   calculateAllDistancesTo(target: Cell) {
     for (let x = 0; x < this._rows; x++) {
       for (let y = 0; y < this._cols; y++) {
-        this._cells[x][y].calculateDistanceTo(target);
+        this._cells[x][y].calculateHTo(target);
       }
     }
   }
