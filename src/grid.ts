@@ -25,6 +25,8 @@ export class Grid {
 
         if (Math.random() < blockChance) cell.addState(Cell.BLOCK);
 
+        cell.addState(Cell.TO_DISPLAY);
+
         this._cells[x].push(cell);
       }
     }

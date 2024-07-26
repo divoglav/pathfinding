@@ -1,12 +1,12 @@
 const config = {
   canvas: {
-    width: 900,
-    height: 600,
+    width: 700,
+    height: 700,
   },
 
   grid: {
-    rows: 30,
-    columns: 20,
+    rows: 40,
+    columns: 40,
   },
 
   cell: {
@@ -14,7 +14,7 @@ const config = {
   },
 
   display: {
-    FPS: 30,
+    FPS: 60,
     info: false,
 
     colors: {
@@ -30,12 +30,12 @@ const config = {
       },
     },
 
-    border: 2,
+    border: 0.5,
   },
 
   pathfinding: {
     // Scales the G value.
-    heuristic: 0.5,
+    heuristic: 0.2,
   },
 };
 

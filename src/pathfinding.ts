@@ -1,4 +1,5 @@
 import { Cell } from "./cell";
+import config from "./config";
 import * as utils from "./utils/general";
 
 const open: Cell[] = [];
@@ -27,6 +28,7 @@ function success(current: Cell) {
   const path = reconstructPath(current);
   for (let i = 0; i < path.length; i++) {
     path[i].addState(Cell.PATH);
+    path[i].addState(Cell.TO_DISPLAY);
   }
 }
 
@@ -34,9 +36,10 @@ export function aStar(start: Cell, target: Cell) {
   open.push(start);
   start.addState(Cell.OPEN);
 
-  while (open.length > 0) {
-    iterate(target);
-  }
+  const main = setInterval(() => {
+    if (open.length > 0) iterate(target);
+    else clearInterval(main);
+  }, 1000 / config.display.FPS);
 }
 
 function iterate(target: Cell) {
@@ -52,10 +55,13 @@ function iterate(target: Cell) {
   closed.add(current);
   current.addState(Cell.CLOSED);
 
+  current.addState(Cell.TO_DISPLAY);
+
   const neighbors = current.getNeighbors();
   for (let n = 0; n < neighbors.length; n++) {
     const neighbor = neighbors[n];
     if (!neighbor || neighbor.hasState(Cell.CLOSED) || neighbor.hasState(Cell.BLOCK)) continue;
+    neighbor.addState(Cell.TO_DISPLAY);
 
     const moveCostToThisNeighbor = 1;
     const gSum = current.getG() + moveCostToThisNeighbor;

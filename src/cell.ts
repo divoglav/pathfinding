@@ -1,11 +1,12 @@
 import config from "./config";
 
 export class Cell {
-  static readonly EMPTY = 1 << 0; // 00001
-  static readonly BLOCK = 1 << 1; // 00010
-  static readonly OPEN = 1 << 2; // 00100
-  static readonly CLOSED = 1 << 3; // 01000
-  static readonly PATH = 1 << 4; // 10000
+  static readonly EMPTY = 1 << 0;
+  static readonly BLOCK = 1 << 1;
+  static readonly OPEN = 1 << 2;
+  static readonly CLOSED = 1 << 3;
+  static readonly PATH = 1 << 4;
+  static readonly TO_DISPLAY = 1 << 5;
 
   private _state = Cell.EMPTY;
 
@@ -87,11 +88,11 @@ export class Cell {
 export type Neighbor = Cell | null;
 export enum Neighbors {
   North,
-  //NorthEast,
+  NorthEast,
   East,
-  //SouthEast,
+  SouthEast,
   South,
-  //SouthWest,
+  SouthWest,
   West,
-  //NorthWest,
+  NorthWest,
 }

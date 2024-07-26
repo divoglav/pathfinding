@@ -35,8 +35,8 @@ function main() {
   // -------------------------------- //
 
   setInterval(() => {
-    display.displayAllCells(cells);
-    if (config.display.info) display.displayCellInfo(cells);
+    display.displayFlaggedCells(cells);
+    if (config.display.info) display.displayAllCellsInfo(cells);
   }, 1000 / config.display.FPS);
 }
 
