@@ -6,9 +6,8 @@ const closed = new Set<Cell>();
 
 function getLowestScore(array: Cell[]) {
   let minScoreCell = array[0];
-  // TODO i = 1
-  for (let i = 0; i < array.length; i++) {
-    if (array[i]._f < minScoreCell._f) minScoreCell = array[i];
+  for (let i = 1; i < array.length; i++) {
+    if (array[i].getF() < minScoreCell.getF()) minScoreCell = array[i];
   }
   return minScoreCell;
 }
@@ -18,12 +17,13 @@ function reconstructPath(cell: Cell) {
   let current: Cell | null = cell;
   while (current) {
     path.push(current);
-    current = current._parent;
+    current = current.getParent();
   }
   return path;
 }
 
 function success(current: Cell) {
+  open.length = 0;
   const path = reconstructPath(current);
   for (let i = 0; i < path.length; i++) {
     path[i].addState(Cell.PATH);
@@ -34,11 +34,8 @@ export function aStar(start: Cell, target: Cell) {
   open.push(start);
   start.addState(Cell.OPEN);
 
-  const SADCOUNT = 53;
-  for (let i = 0; i < SADCOUNT; i++) {
-    if (open.length > 0) {
-      iterate(target);
-    }
+  while (open.length > 0) {
+    iterate(target);
   }
 }
 

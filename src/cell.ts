@@ -1,3 +1,5 @@
+import config from "./config";
+
 export class Cell {
   static readonly EMPTY = 1 << 0; // 00001
   static readonly BLOCK = 1 << 1; // 00010
@@ -55,7 +57,7 @@ export class Cell {
     return this._f;
   }
   private updateF() {
-    this._f = this._g + this._h;
+    this._f = this._g * config.pathfinding.heuristic + this._h;
   }
 
   getParent() {
