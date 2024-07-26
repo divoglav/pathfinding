@@ -3,6 +3,7 @@ import "./styles/style.css";
 import config from "./config";
 import { Grid } from "./grid";
 import { Display } from "./display";
+import * as pathfinding from "./pathfinding";
 
 function createCanvas() {
   const canvas = document.createElement("canvas");
@@ -19,10 +20,19 @@ function main() {
   const grid = new Grid(config.grid.rows, config.grid.columns);
   const cells = grid.getCells();
 
-  display.displayCells(cells);
+  // -------------- start -------------- //
 
-  console.log("grid:");
-  console.log(grid);
+  const startCell = cells[0][0];
+  startCell.isBlock = false;
+
+  const targetCell = cells[config.grid.rows - 1][config.grid.columns - 1];
+  targetCell.isBlock = false;
+
+  pathfinding.aStar(startCell, targetCell, cells);
+
+  setInterval(() => {
+    display.displayCells(cells);
+  }, 1000 / config.display.FPS);
 }
 
 main();

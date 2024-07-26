@@ -23,7 +23,7 @@ export class Grid {
       for (let y = 0; y < this._cols; y++) {
         const cell = new Cell(x, y);
 
-        if (Math.random() < blockChance) cell.setBlock(true);
+        if (Math.random() < blockChance) cell.isBlock = true;
 
         this._cells[x].push(cell);
       }
@@ -36,15 +36,16 @@ export class Grid {
         const cell = this._cells[x][y];
 
         const north = this.getCell(x, y - 1);
-        const northEast = this.getCell(x + 1, y - 1);
+        //const northEast = this.getCell(x + 1, y - 1);
         const east = this.getCell(x + 1, y);
-        const southEast = this.getCell(x + 1, y + 1);
+        //const southEast = this.getCell(x + 1, y + 1);
         const south = this.getCell(x, y + 1);
-        const southWest = this.getCell(x - 1, y + 1);
+        //const southWest = this.getCell(x - 1, y + 1);
         const west = this.getCell(x - 1, y);
-        const northWest = this.getCell(x - 1, y - 1);
+        //const northWest = this.getCell(x - 1, y - 1);
 
-        cell.setNeighbors([north, northEast, east, southEast, south, southWest, west, northWest]);
+        //cell.setNeighbors([north, northEast, east, southEast, south, southWest, west, northWest]);
+        cell.setNeighbors([north, east, south, west]);
       }
     }
   }

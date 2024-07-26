@@ -30,7 +30,7 @@ export class Display {
     this._context.fillStyle = config.display.colors.cell;
     for (let x = 0; x < rows; x++) {
       for (let y = 0; y < cols; y++) {
-        if (cells[x][y].isBlock()) continue;
+        if (cells[x][y].isBlock) continue;
         this.displayCell(x, y);
       }
     }
@@ -39,7 +39,7 @@ export class Display {
     this._context.fillStyle = config.display.colors.block;
     for (let x = 0; x < rows; x++) {
       for (let y = 0; y < cols; y++) {
-        if (!cells[x][y].isBlock()) continue;
+        if (!cells[x][y].isBlock) continue;
         this.displayCell(x, y);
       }
     }

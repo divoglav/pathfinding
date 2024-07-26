@@ -14,6 +14,8 @@ const config = {
   },
 
   display: {
+    FPS: 60,
+
     colors: {
       cell: "green",
       block: "black",

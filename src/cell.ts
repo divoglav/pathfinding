@@ -3,17 +3,16 @@ export class Cell {
   private _y: number;
   private _neighbors: Neighbor[] = [];
 
-  private _isBlock: boolean = false;
+  isBlock: boolean = false;
 
-  // TODO: use the boolean flags for quick
-  // lookup while still using the lists.
+  inOpenList: boolean = false;
+  inClosedList: boolean = false;
 
-  private _inOpenList: boolean = false;
-  private _inClosedList: boolean = false;
+  g: number = 0; // move score
+  h: number = 0; // distance score
+  f: number = 0; // total score
 
-  private _moveCost: number = 0; // G
-  private _distanceCost: number = 0; // H
-  private _score: number = 0; // F
+  parent: Cell | null = null;
 
   constructor(x: number, y: number) {
     this._x = x;
@@ -36,23 +35,19 @@ export class Cell {
     return this._neighbors[neighbor];
   }
 
-  isBlock() {
-    return this._isBlock;
-  }
-
-  setBlock(isBlock: boolean) {
-    this._isBlock = isBlock;
+  getNeighbors() {
+    return this._neighbors;
   }
 }
 
 export type Neighbor = Cell | null;
 export enum Neighbors {
   North,
-  NorthEast,
+  //NorthEast,
   East,
-  SouthEast,
+  //SouthEast,
   South,
-  SouthWest,
+  //SouthWest,
   West,
-  NorthWest,
+  //NorthWest,
 }
