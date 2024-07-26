@@ -3,11 +3,7 @@ export class Cell {
   private _y: number;
   private _neighbors: Neighbor[] = [];
 
-  isBlock: boolean = false;
-  isPath: boolean = false;
-
-  inOpenList: boolean = false;
-  inClosedList: boolean = false;
+  private _type: CellType = CellType.Empty;
 
   g: number = 0; // move score
   h: number = 0; // distance score
@@ -18,6 +14,14 @@ export class Cell {
   constructor(x: number, y: number) {
     this._x = x;
     this._y = y;
+  }
+
+  setType(type: CellType) {
+    this._type = type;
+  }
+
+  getType() {
+    return this._type;
   }
 
   getX() {
@@ -39,6 +43,14 @@ export class Cell {
   getNeighbors() {
     return this._neighbors;
   }
+}
+
+export enum CellType {
+  Empty,
+  Block,
+  Open,
+  Closed,
+  Path,
 }
 
 export type Neighbor = Cell | null;

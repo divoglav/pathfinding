@@ -23,10 +23,10 @@ function main() {
   // -------------- start -------------- //
 
   const startCell = cells[0][0];
-  startCell.isBlock = false;
+  startCell._isBlock = false;
 
   const targetCell = cells[config.grid.rows - 1][config.grid.columns - 1];
-  targetCell.isBlock = false;
+  targetCell._isBlock = false;
 
   pathfinding.aStar(startCell, targetCell, cells);
 

@@ -1,4 +1,4 @@
-import { Cell } from "./cell";
+import { Cell, CellType } from "./cell";
 import config from "./config";
 
 export function aStar(start: Cell, target: Cell, all: Cell[][]) {
@@ -15,23 +15,23 @@ export function aStar(start: Cell, target: Cell, all: Cell[][]) {
     if (current === target) {
       const path = reconstructPath(current);
       for (let i = 0; i < path.length; i++) {
-        path[i].isPath = true;
+        path[i].setType(CellType.Path);
       }
-      console.log("path found");
       return;
     }
 
-    removeFromOpen(open, current);
-    addToClosed(closed, current);
+    removeFromList(open, current);
+    closed.add(current);
+    current.setType(CellType.Closed);
 
     const neighbors = current.getNeighbors();
     for (let n = 0; n < neighbors.length; n++) {
       const neighbor = neighbors[n];
-      if (!neighbor || neighbor.inClosedList || neighbor.isBlock) continue;
+      if (!neighbor || neighbor.getType() === CellType.Closed || neighbor.getType() === CellType.Block) continue;
 
       const gTentative = current.g + 1;
 
-      if (!neighbor.inOpenList) addToOpen(open, neighbor);
+      if (neighbor.getType() !== CellType.Open) addToOpen(open, neighbor);
       else if (gTentative >= neighbor.g) continue;
 
       neighbor.parent = current;
@@ -39,8 +39,6 @@ export function aStar(start: Cell, target: Cell, all: Cell[][]) {
       neighbor.f = neighbor.g + neighbor.h;
     }
   }
-
-  console.log("no path");
 }
 
 function setDistanceScores(cells: Cell[][], target: Cell) {
@@ -53,7 +51,7 @@ function setDistanceScores(cells: Cell[][], target: Cell) {
   for (let x = 0; x < rows; x++) {
     for (let y = 0; y < cols; y++) {
       const cell = cells[x][y];
-      if (cell.isBlock) continue;
+      if (cell.getType() === CellType.Block) continue;
 
       const xDifference = cell.getX() - xTarget;
       const yDifference = cell.getY() - yTarget;
@@ -65,20 +63,12 @@ function setDistanceScores(cells: Cell[][], target: Cell) {
 
 function addToOpen(open: Cell[], cell: Cell) {
   open.push(cell);
-  cell.inOpenList = true;
+  cell.setType(CellType.Open);
 }
 
-function removeFromOpen(open: Cell[], cell: Cell) {
+function removeFromList(open: Cell[], cell: Cell) {
   const indexToRemove = open.indexOf(cell);
-  if (indexToRemove !== -1) {
-    open.splice(indexToRemove, 1);
-    cell.inOpenList = false;
-  }
-}
-
-function addToClosed(closed: Set<Cell>, cell: Cell) {
-  closed.add(cell);
-  cell.inClosedList = true;
+  if (indexToRemove !== -1) open.splice(indexToRemove, 1);
 }
 
 function getLowestScore(list: Cell[]) {

@@ -17,8 +17,10 @@ const config = {
     FPS: 60,
 
     colors: {
-      cell: "green",
+      empty: "gray",
       block: "black",
+      open: "green",
+      closed: "teal",
       path: "orange",
     },
 
