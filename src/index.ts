@@ -36,7 +36,7 @@ function main() {
 
   setInterval(() => {
     display.displayAllCells(cells);
-    display.displayCellValues(cells);
+    if (config.display.info) display.displayCellInfo(cells);
   }, 1000 / config.display.FPS);
 }
 

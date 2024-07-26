@@ -2,17 +2,21 @@ import config from "./config";
 import { Cell } from "./cell";
 
 export class Display {
-  private readonly _cellWidth = config.canvas.width / config.grid.rows;
-  private readonly _cellHeight = config.canvas.height / config.grid.columns;
-  private readonly _cellAdjustedWidth = this._cellWidth - config.display.border;
-  private readonly _cellAdjustedHeight = this._cellHeight - config.display.border;
+  // Cache for faster usage
+  private readonly _width = config.canvas.width / config.grid.rows;
+  private readonly _height = config.canvas.height / config.grid.columns;
+  private readonly _adjustedWidth = this._width - config.display.border;
+  private readonly _adjustedHeight = this._height - config.display.border;
+  private readonly _halfWidth = this._width / 2;
+  private readonly _halfHeight = this._height / 2;
+  private readonly _quarterHeight = this._height / 4;
   private readonly _colors = config.display.colors;
 
   constructor(private readonly _context: CanvasRenderingContext2D) {
     _context.textRendering = "optimizeSpeed";
     _context.textBaseline = "middle";
     _context.textAlign = "center";
-    _context.font = "15px Ubuntu";
+    _context.font = `${this._width / 4}px Ubuntu`;
   }
 
   private clear() {
@@ -21,12 +25,7 @@ export class Display {
   }
 
   private displayCell(x: number, y: number) {
-    this._context.fillRect(
-      x * this._cellWidth,
-      y * this._cellHeight,
-      this._cellAdjustedWidth,
-      this._cellAdjustedHeight,
-    );
+    this._context.fillRect(x * this._width, y * this._height, this._adjustedWidth, this._adjustedHeight);
   }
 
   displayAllCells(cells: Cell[][]) {
@@ -53,13 +52,9 @@ export class Display {
     drawCellsBatch(Cell.PATH, this._colors.cells.path);
   }
 
-  displayCellValues(cells: Cell[][]) {
+  displayCellInfo(cells: Cell[][]) {
     const rows = config.grid.rows;
     const cols = config.grid.columns;
-
-    const halfWidth = this._cellWidth / 2;
-    const halfHeight = this._cellHeight / 2;
-    const quarterHeight = this._cellHeight / 4;
 
     this._context.fillStyle = this._colors.info;
 
@@ -70,20 +65,20 @@ export class Display {
 
         this._context.fillText(
           cell.g.toFixed(2).toString(),
-          cell.x * this._cellWidth + halfWidth,
-          cell.y * this._cellHeight + halfHeight - quarterHeight,
+          cell.x * this._width + this._halfWidth,
+          cell.y * this._height + this._halfHeight - this._quarterHeight,
         );
 
         this._context.fillText(
           cell.h.toFixed(2).toString(),
-          cell.x * this._cellWidth + halfWidth,
-          cell.y * this._cellHeight + halfHeight,
+          cell.x * this._width + this._halfWidth,
+          cell.y * this._height + this._halfHeight,
         );
 
         this._context.fillText(
           cell.f.toFixed(2).toString(),
-          cell.x * this._cellWidth + halfWidth,
-          cell.y * this._cellHeight + halfHeight + quarterHeight,
+          cell.x * this._width + this._halfWidth,
+          cell.y * this._height + this._halfHeight + this._quarterHeight,
         );
       }
     }

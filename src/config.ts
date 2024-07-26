@@ -5,8 +5,8 @@ const config = {
   },
 
   grid: {
-    rows: 9,
-    columns: 6,
+    rows: 15,
+    columns: 10,
   },
 
   cell: {
@@ -14,7 +14,8 @@ const config = {
   },
 
   display: {
-    FPS: 60,
+    FPS: 30,
+    info: false,
 
     colors: {
       background: "#000000",
