@@ -4,6 +4,7 @@ export class Cell {
   private _neighbors: Neighbor[] = [];
 
   isBlock: boolean = false;
+  isPath: boolean = false;
 
   inOpenList: boolean = false;
   inClosedList: boolean = false;

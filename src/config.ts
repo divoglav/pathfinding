@@ -10,7 +10,7 @@ const config = {
   },
 
   cell: {
-    blockChance: 0.1,
+    blockChance: 0.2,
   },
 
   display: {
@@ -19,6 +19,7 @@ const config = {
     colors: {
       cell: "green",
       block: "black",
+      path: "orange",
     },
 
     border: 1,

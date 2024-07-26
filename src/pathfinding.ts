@@ -12,7 +12,11 @@ export function aStar(start: Cell, target: Cell, all: Cell[][]) {
   while (open.length > 0) {
     let current = getLowestScore(open);
 
-    if (current == target) {
+    if (current === target) {
+      const path = reconstructPath(current);
+      for (let i = 0; i < path.length; i++) {
+        path[i].isPath = true;
+      }
       console.log("path found");
       return;
     }
@@ -28,7 +32,7 @@ export function aStar(start: Cell, target: Cell, all: Cell[][]) {
       const gTentative = current.g + 1;
 
       if (!neighbor.inOpenList) addToOpen(open, neighbor);
-      //else if (tentativeMoveScore >= neighbor.moveCost) continue;
+      else if (gTentative >= neighbor.g) continue;
 
       neighbor.parent = current;
       neighbor.g = gTentative;
@@ -85,4 +89,16 @@ function getLowestScore(list: Cell[]) {
   }
 
   return minScoreCell;
+}
+
+function reconstructPath(cell: Cell) {
+  const path: Cell[] = [];
+
+  let current: Cell | null = cell;
+  while (current) {
+    path.push(current);
+    current = current.parent;
+  }
+
+  return path;
 }

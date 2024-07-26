@@ -26,20 +26,30 @@ export class Display {
     const rows = config.grid.rows;
     const cols = config.grid.columns;
 
-    // cell batch
-    this._context.fillStyle = config.display.colors.cell;
-    for (let x = 0; x < rows; x++) {
-      for (let y = 0; y < cols; y++) {
-        if (cells[x][y].isBlock) continue;
-        this.displayCell(x, y);
-      }
-    }
-
     // block batch
     this._context.fillStyle = config.display.colors.block;
     for (let x = 0; x < rows; x++) {
       for (let y = 0; y < cols; y++) {
         if (!cells[x][y].isBlock) continue;
+        this.displayCell(x, y);
+      }
+    }
+
+    // cell batch
+    this._context.fillStyle = config.display.colors.cell;
+    for (let x = 0; x < rows; x++) {
+      for (let y = 0; y < cols; y++) {
+        const cell = cells[x][y];
+        if (cell.isBlock || cell.isPath) continue;
+        this.displayCell(x, y);
+      }
+    }
+
+    // path batch
+    this._context.fillStyle = config.display.colors.path;
+    for (let x = 0; x < rows; x++) {
+      for (let y = 0; y < cols; y++) {
+        if (!cells[x][y].isPath) continue;
         this.displayCell(x, y);
       }
     }
