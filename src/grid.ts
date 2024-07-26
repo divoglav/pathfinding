@@ -1,5 +1,6 @@
-import config from "./config";
 import { Cell } from "./cell";
+import config from "./config";
+import * as noise from "./libs/noise/noise";
 
 export class Grid {
   private readonly _rows: number;
@@ -15,14 +16,24 @@ export class Grid {
   }
 
   private createCells() {
-    const blockChance = config.cell.blockChance;
-
     for (let x = 0; x < this._rows; x++) {
       this._cells.push([]);
 
       for (let y = 0; y < this._cols; y++) {
         const cell = new Cell(x, y);
-        if (Math.random() < blockChance) cell.addState(Cell.BLOCK);
+
+        if (config.blocks.noise.active) {
+          if (noise.get(x, y, config.blocks.noise.scalar) < config.blocks.value) {
+            cell.removeState(Cell.EMPTY);
+            cell.addState(Cell.BLOCK);
+          }
+        } else {
+          if (Math.random() < config.blocks.value) {
+            cell.removeState(Cell.EMPTY);
+            cell.addState(Cell.BLOCK);
+          }
+        }
+
         cell.addState(Cell.TO_DISPLAY);
         this._cells[x].push(cell);
       }
@@ -72,7 +83,7 @@ export class Grid {
     }
   }
 
-  unblockCellAndNeighbors(cell: Cell) {
+  unblockCellRecursive(cell: Cell, recursions: number = 0) {
     cell.removeState(Cell.BLOCK);
     cell.addState(Cell.EMPTY);
 
@@ -83,6 +94,10 @@ export class Grid {
 
       neighbor.removeState(Cell.BLOCK);
       neighbor.addState(Cell.EMPTY);
+
+      if (recursions > 0) {
+        this.unblockCellRecursive(neighbor, recursions - 1);
+      }
     }
   }
 }

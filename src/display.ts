@@ -66,7 +66,7 @@ export class Display {
 
   // TODO: TO_DISPLAY
   displayAllCellsInfo(cells: Cell[][]) {
-    this._context.fillStyle = this._colors.info;
+    this._context.fillStyle = this._colors.debug;
 
     for (let x = 0; x < this._rows; x++) {
       for (let y = 0; y < this._cols; y++) {

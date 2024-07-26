@@ -21,7 +21,7 @@ export class Cell {
   constructor(
     readonly x: number,
     readonly y: number,
-  ) { }
+  ) {}
 
   reset() {
     this._state = Cell.EMPTY;

@@ -5,22 +5,27 @@ const config = {
   },
 
   grid: {
-    rows: 30,
-    columns: 30,
+    rows: 60,
+    columns: 60,
   },
 
-  cell: {
-    blockChance: 0.3,
+  blocks: {
+    value: 0.3,
+    noise: {
+      active: true,
+      scalar: 0.12,
+    },
+    unblockLayers: 3,
   },
 
   display: {
     FPS: 60,
-    info: false,
+    debug: false,
     lineWidth: 0.5,
 
     colors: {
       stroke: "#666",
-      info: "#000",
+      debug: "#000",
 
       cells: {
         empty: "#888",
@@ -33,14 +38,15 @@ const config = {
   },
 
   pathfinding: {
-    gScale: 0.2,
+    gScale: 0.3,
   },
 };
 
 Object.freeze(config);
 Object.freeze(config.canvas);
 Object.freeze(config.grid);
-Object.freeze(config.cell);
+Object.freeze(config.blocks);
+Object.freeze(config.blocks.noise);
 Object.freeze(config.display);
 Object.freeze(config.display.colors);
 Object.freeze(config.display.colors.cells);
