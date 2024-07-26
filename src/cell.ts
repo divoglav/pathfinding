@@ -1,9 +1,16 @@
 export class Cell {
+  static readonly EMPTY = 1 << 0; // 00001
+  static readonly BLOCK = 1 << 1; // 00010
+  static readonly OPEN = 1 << 2; // 00100
+  static readonly CLOSED = 1 << 3; // 01000
+  static readonly PATH = 1 << 4; // 10000
+
   private _x: number;
   private _y: number;
-  private _neighbors: Neighbor[] = [];
 
-  private _type: CellType = CellType.Empty;
+  private _state = Cell.EMPTY;
+
+  private _neighbors: Neighbor[] = [];
 
   g: number = 0; // move score
   h: number = 0; // distance score
@@ -16,12 +23,16 @@ export class Cell {
     this._y = y;
   }
 
-  setType(type: CellType) {
-    this._type = type;
+  hasState(cellState: number): boolean {
+    return (this._state & cellState) !== 0;
   }
 
-  getType() {
-    return this._type;
+  addState(cellState: number) {
+    this._state |= cellState;
+  }
+
+  removeState(cellState: number) {
+    this._state &= ~cellState;
   }
 
   getX() {
@@ -43,14 +54,6 @@ export class Cell {
   getNeighbors() {
     return this._neighbors;
   }
-}
-
-export enum CellType {
-  Empty,
-  Block,
-  Open,
-  Closed,
-  Path,
 }
 
 export type Neighbor = Cell | null;

@@ -1,5 +1,5 @@
 import config from "./config";
-import { Cell, CellType } from "./cell";
+import { Cell } from "./cell";
 
 export class Grid {
   private _rows: number;
@@ -23,7 +23,7 @@ export class Grid {
       for (let y = 0; y < this._cols; y++) {
         const cell = new Cell(x, y);
 
-        if (Math.random() < blockChance) cell.setType(CellType.Block);
+        if (Math.random() < blockChance) cell.addState(Cell.BLOCK);
 
         this._cells[x].push(cell);
       }

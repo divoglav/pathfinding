@@ -1,5 +1,5 @@
 import config from "./config";
-import { Cell, CellType } from "./cell";
+import { Cell } from "./cell";
 
 export class Display {
   private _context: CanvasRenderingContext2D;
@@ -26,10 +26,12 @@ export class Display {
     const rows = config.grid.rows;
     const cols = config.grid.columns;
 
+    // Batch different colors seperately for performance
+
     this._context.fillStyle = config.display.colors.empty;
     for (let x = 0; x < rows; x++) {
       for (let y = 0; y < cols; y++) {
-        if (cells[x][y].getType() === CellType.Empty) {
+        if (cells[x][y].hasState(Cell.EMPTY)) {
           this.displayCell(x, y);
         }
       }
@@ -38,7 +40,7 @@ export class Display {
     this._context.fillStyle = config.display.colors.block;
     for (let x = 0; x < rows; x++) {
       for (let y = 0; y < cols; y++) {
-        if (cells[x][y].getType() === CellType.Block) {
+        if (cells[x][y].hasState(Cell.BLOCK)) {
           this.displayCell(x, y);
         }
       }
@@ -47,7 +49,7 @@ export class Display {
     this._context.fillStyle = config.display.colors.open;
     for (let x = 0; x < rows; x++) {
       for (let y = 0; y < cols; y++) {
-        if (cells[x][y].getType() === CellType.Open) {
+        if (cells[x][y].hasState(Cell.OPEN)) {
           this.displayCell(x, y);
         }
       }
@@ -56,7 +58,7 @@ export class Display {
     this._context.fillStyle = config.display.colors.closed;
     for (let x = 0; x < rows; x++) {
       for (let y = 0; y < cols; y++) {
-        if (cells[x][y].getType() === CellType.Closed) {
+        if (cells[x][y].hasState(Cell.CLOSED)) {
           this.displayCell(x, y);
         }
       }
@@ -65,7 +67,7 @@ export class Display {
     this._context.fillStyle = config.display.colors.path;
     for (let x = 0; x < rows; x++) {
       for (let y = 0; y < cols; y++) {
-        if (cells[x][y].getType() === CellType.Path) {
+        if (cells[x][y].hasState(Cell.PATH)) {
           this.displayCell(x, y);
         }
       }

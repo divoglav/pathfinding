@@ -1,4 +1,4 @@
-import { Cell, CellType } from "./cell";
+import { Cell } from "./cell";
 import config from "./config";
 
 export function aStar(start: Cell, target: Cell, all: Cell[][]) {
@@ -15,23 +15,24 @@ export function aStar(start: Cell, target: Cell, all: Cell[][]) {
     if (current === target) {
       const path = reconstructPath(current);
       for (let i = 0; i < path.length; i++) {
-        path[i].setType(CellType.Path);
+        path[i].addState(Cell.PATH);
       }
       return;
     }
 
     removeFromList(open, current);
+    current.removeState(Cell.OPEN);
     closed.add(current);
-    current.setType(CellType.Closed);
+    current.addState(Cell.CLOSED);
 
     const neighbors = current.getNeighbors();
     for (let n = 0; n < neighbors.length; n++) {
       const neighbor = neighbors[n];
-      if (!neighbor || neighbor.getType() === CellType.Closed || neighbor.getType() === CellType.Block) continue;
+      if (!neighbor || neighbor.hasState(Cell.CLOSED) || neighbor.hasState(Cell.BLOCK)) continue;
 
       const gTentative = current.g + 1;
 
-      if (neighbor.getType() !== CellType.Open) addToOpen(open, neighbor);
+      if (!neighbor.hasState(Cell.OPEN)) addToOpen(open, neighbor);
       else if (gTentative >= neighbor.g) continue;
 
       neighbor.parent = current;
@@ -51,7 +52,7 @@ function setDistanceScores(cells: Cell[][], target: Cell) {
   for (let x = 0; x < rows; x++) {
     for (let y = 0; y < cols; y++) {
       const cell = cells[x][y];
-      if (cell.getType() === CellType.Block) continue;
+      if (cell.hasState(Cell.BLOCK)) continue;
 
       const xDifference = cell.getX() - xTarget;
       const yDifference = cell.getY() - yTarget;
@@ -63,7 +64,7 @@ function setDistanceScores(cells: Cell[][], target: Cell) {
 
 function addToOpen(open: Cell[], cell: Cell) {
   open.push(cell);
-  cell.setType(CellType.Open);
+  cell.addState(Cell.OPEN);
 }
 
 function removeFromList(open: Cell[], cell: Cell) {
