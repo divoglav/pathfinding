@@ -1,3 +1,6 @@
+// TODO: lerp the cells that are to be displayed
+// so that they have a growing animation.
+
 import config from "./config";
 import { Cell } from "./cell";
 
@@ -5,8 +8,6 @@ export class Display {
   // Cache for faster usage
   private readonly _width = config.canvas.width / config.grid.rows;
   private readonly _height = config.canvas.height / config.grid.columns;
-  private readonly _adjustedWidth = this._width - config.display.border;
-  private readonly _adjustedHeight = this._height - config.display.border;
   private readonly _halfWidth = this._width / 2;
   private readonly _halfHeight = this._height / 2;
   private readonly _quarterHeight = this._height / 4;
@@ -20,15 +21,20 @@ export class Display {
     _context.textBaseline = "middle";
     _context.textAlign = "center";
     _context.font = `${this._width / 4}px Ubuntu`;
+    _context.strokeStyle = config.display.colors.stroke;
+    _context.lineWidth = config.display.lineWidth > 0 ? config.display.lineWidth : 0.1;
   }
 
   private displayCell(cell: Cell) {
-    this._context.fillRect(cell.x * this._width, cell.y * this._height, this._adjustedWidth, this._adjustedHeight);
+    const x = cell.x * this._width;
+    const y = cell.y * this._height;
+    this._context.fillRect(x, y, this._width, this._height);
+    this._context.strokeRect(x, y, this._width, this._height);
     cell.removeState(Cell.TO_DISPLAY);
   }
 
   clear() {
-    this._context.fillStyle = this._colors.background;
+    this._context.fillStyle = this._colors.cells.empty;
     this._context.fillRect(0, 0, config.canvas.width, config.canvas.height);
   }
 

@@ -34,6 +34,7 @@ function main() {
 
   // -------------------------------- //
 
+  display.clear();
   setInterval(() => {
     display.displayFlaggedCells(cells);
     if (config.display.info) display.displayAllCellsInfo(cells);

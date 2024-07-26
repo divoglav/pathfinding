@@ -5,8 +5,8 @@ const config = {
   },
 
   grid: {
-    rows: 40,
-    columns: 40,
+    rows: 100,
+    columns: 100,
   },
 
   cell: {
@@ -17,20 +17,20 @@ const config = {
     FPS: 60,
     info: false,
 
+    lineWidth: 0.5,
+
     colors: {
-      background: "#000000",
-      info: "#000000",
+      stroke: "#666",
+      info: "#000",
 
       cells: {
-        empty: "gray",
-        block: "black",
+        empty: "#888",
+        block: "#222",
         open: "green",
         closed: "teal",
         path: "orange",
       },
     },
-
-    border: 0.5,
   },
 
   pathfinding: {
