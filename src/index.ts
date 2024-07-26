@@ -4,7 +4,6 @@ import config from "./config";
 import { Grid } from "./grid";
 import { Display } from "./display";
 import * as pathfinding from "./pathfinding";
-import { Cell } from "./cell";
 
 function createCanvas() {
   const canvas = document.createElement("canvas");
@@ -24,12 +23,10 @@ function main() {
   // -------------------------------- //
 
   const startCell = cells[0][0];
-  startCell.removeState(Cell.BLOCK);
-  startCell.addState(Cell.EMPTY);
+  grid.unblockCellAndNeighbors(startCell);
 
   const targetCell = cells[config.grid.rows - 1][config.grid.columns - 1];
-  targetCell.removeState(Cell.BLOCK);
-  targetCell.addState(Cell.EMPTY);
+  grid.unblockCellAndNeighbors(targetCell);
 
   grid.calculateAllDistancesTo(targetCell);
 

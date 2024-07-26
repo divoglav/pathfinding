@@ -22,7 +22,7 @@ export class Display {
     const rows = config.grid.rows;
     const cols = config.grid.columns;
 
-    // Separating different color batches for performance
+    // Separating different color groups for performance
 
     const drawCellsBatch = (cellState: number, color: string) => {
       this._context.fillStyle = color;

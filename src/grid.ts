@@ -77,4 +77,18 @@ export class Grid {
       }
     }
   }
+
+  unblockCellAndNeighbors(cell: Cell) {
+    cell.removeState(Cell.BLOCK);
+    cell.addState(Cell.EMPTY);
+
+    const neighbors = cell.getNeighbors();
+    for (let i = 0; i < neighbors.length; i++) {
+      const neighbor = neighbors[i];
+      if (!neighbor) continue;
+
+      neighbor.removeState(Cell.BLOCK);
+      neighbor.addState(Cell.EMPTY);
+    }
+  }
 }
