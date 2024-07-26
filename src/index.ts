@@ -3,7 +3,7 @@ import "./styles/style.css";
 import config from "./config";
 import { Grid } from "./grid";
 import { Display } from "./display";
-import * as pathfinding from "./pathfinding";
+import { AStar } from "./aStar";
 
 function createCanvas() {
   const canvas = document.createElement("canvas");
@@ -20,8 +20,6 @@ function main() {
   const grid = new Grid(config.grid.rows, config.grid.columns);
   const cells = grid.getCells();
 
-  // -------------------------------- //
-
   const startCell = cells[0][0];
   grid.unblockCellAndNeighbors(startCell);
 
@@ -30,12 +28,13 @@ function main() {
 
   grid.calculateAllDistancesTo(targetCell);
 
-  pathfinding.aStar(startCell, targetCell);
-
-  // -------------------------------- //
+  const aStar = new AStar(startCell, targetCell);
 
   display.clear();
-  setInterval(() => {
+  const loop = setInterval(() => {
+    console.log(1);
+    if (aStar.iterate()) clearInterval(loop);
+
     display.displayFlaggedCells(cells);
     if (config.display.info) display.displayAllCellsInfo(cells);
   }, 1000 / config.display.FPS);

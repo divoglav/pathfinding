@@ -5,8 +5,8 @@ const config = {
   },
 
   grid: {
-    rows: 100,
-    columns: 100,
+    rows: 30,
+    columns: 30,
   },
 
   cell: {
@@ -16,7 +16,6 @@ const config = {
   display: {
     FPS: 60,
     info: false,
-
     lineWidth: 0.5,
 
     colors: {
@@ -25,7 +24,7 @@ const config = {
 
       cells: {
         empty: "#888",
-        block: "#222",
+        block: "#333",
         open: "green",
         closed: "teal",
         path: "orange",
@@ -34,8 +33,7 @@ const config = {
   },
 
   pathfinding: {
-    // Scales the G value.
-    heuristic: 0.2,
+    gScale: 0.2,
   },
 };
 
