@@ -5,8 +5,8 @@ const config = {
   },
 
   grid: {
-    rows: 6,
-    columns: 4,
+    rows: 9,
+    columns: 6,
   },
 
   cell: {
@@ -17,14 +17,19 @@ const config = {
     FPS: 60,
 
     colors: {
-      empty: "gray",
-      block: "black",
-      open: "green",
-      closed: "teal",
-      path: "orange",
+      background: "#000000",
+      info: "#000000",
+
+      cells: {
+        empty: "gray",
+        block: "black",
+        open: "green",
+        closed: "teal",
+        path: "orange",
+      },
     },
 
-    border: 1,
+    border: 2,
   },
 };
 
@@ -34,5 +39,6 @@ Object.freeze(config.grid);
 Object.freeze(config.cell);
 Object.freeze(config.display);
 Object.freeze(config.display.colors);
+Object.freeze(config.display.colors.cells);
 
 export default config;

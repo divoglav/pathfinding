@@ -36,6 +36,7 @@ function main() {
 
   setInterval(() => {
     display.displayAllCells(cells);
+    display.displayCellValues(cells);
   }, 1000 / config.display.FPS);
 }
 
