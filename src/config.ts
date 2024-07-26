@@ -5,8 +5,8 @@ const config = {
   },
 
   grid: {
-    rows: 30,
-    columns: 20,
+    rows: 15,
+    columns: 10,
   },
 
   cell: {

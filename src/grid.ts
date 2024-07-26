@@ -2,9 +2,9 @@ import config from "./config";
 import { Cell } from "./cell";
 
 export class Grid {
-  private _rows: number;
-  private _cols: number;
-  private _cells: Cell[][] = [];
+  private readonly _rows: number;
+  private readonly _cols: number;
+  private readonly _cells: Cell[][] = [];
 
   constructor(rows: number, cols: number) {
     this._rows = rows;
@@ -60,5 +60,21 @@ export class Grid {
 
   getCells() {
     return this._cells;
+  }
+
+  resetCells() {
+    for (let x = 0; x < this._rows; x++) {
+      for (let y = 0; y < this._cols; y++) {
+        this._cells[x][y].reset();
+      }
+    }
+  }
+
+  calculateAllDistancesTo(target: Cell) {
+    for (let x = 0; x < this._rows; x++) {
+      for (let y = 0; y < this._cols; y++) {
+        this._cells[x][y].calculateDistanceTo(target);
+      }
+    }
   }
 }

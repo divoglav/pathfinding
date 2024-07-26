@@ -5,9 +5,6 @@ export class Cell {
   static readonly CLOSED = 1 << 3; // 01000
   static readonly PATH = 1 << 4; // 10000
 
-  private _x: number;
-  private _y: number;
-
   private _state = Cell.EMPTY;
 
   private _neighbors: Neighbor[] = [];
@@ -18,9 +15,15 @@ export class Cell {
 
   parent: Cell | null = null;
 
-  constructor(x: number, y: number) {
-    this._x = x;
-    this._y = y;
+  constructor(
+    readonly x: number,
+    readonly y: number,
+  ) {}
+
+  reset() {
+    this._state = Cell.EMPTY;
+    this.g = this.h = this.f = 0;
+    this.parent = null;
   }
 
   hasState(cellState: number): boolean {
@@ -35,14 +38,6 @@ export class Cell {
     this._state &= ~cellState;
   }
 
-  getX() {
-    return this._x;
-  }
-
-  getY() {
-    return this._y;
-  }
-
   setNeighbors(neighbors: Neighbor[]) {
     this._neighbors = neighbors;
   }
@@ -53,6 +48,12 @@ export class Cell {
 
   getNeighbors() {
     return this._neighbors;
+  }
+
+  calculateDistanceTo(target: Cell) {
+    const xd = this.x - target.x;
+    const yd = this.y - target.y;
+    this.h = Math.sqrt(xd * xd + yd * yd);
   }
 }
 

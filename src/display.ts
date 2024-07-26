@@ -22,11 +22,11 @@ export class Display {
     );
   }
 
-  displayCells(cells: Cell[][]) {
+  displayAllCells(cells: Cell[][]) {
     const rows = config.grid.rows;
     const cols = config.grid.columns;
 
-    // Batch different colors seperately for performance
+    // Separating different color batches for performance
 
     this._context.fillStyle = config.display.colors.empty;
     for (let x = 0; x < rows; x++) {

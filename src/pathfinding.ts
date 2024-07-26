@@ -1,9 +1,6 @@
 import { Cell } from "./cell";
-import config from "./config";
 
-export function aStar(start: Cell, target: Cell, all: Cell[][]) {
-  setDistanceScores(all, target);
-
+export function aStar(start: Cell, target: Cell) {
   const open: Cell[] = [];
   const closed = new Set<Cell>();
 
@@ -38,26 +35,6 @@ export function aStar(start: Cell, target: Cell, all: Cell[][]) {
       neighbor.parent = current;
       neighbor.g = gTentative;
       neighbor.f = neighbor.g + neighbor.h;
-    }
-  }
-}
-
-function setDistanceScores(cells: Cell[][], target: Cell) {
-  const rows = config.grid.rows;
-  const cols = config.grid.columns;
-
-  const xTarget = target.getX();
-  const yTarget = target.getY();
-
-  for (let x = 0; x < rows; x++) {
-    for (let y = 0; y < cols; y++) {
-      const cell = cells[x][y];
-      if (cell.hasState(Cell.BLOCK)) continue;
-
-      const xDifference = cell.getX() - xTarget;
-      const yDifference = cell.getY() - yTarget;
-
-      cell.h = Math.sqrt(xDifference * xDifference + yDifference * yDifference);
     }
   }
 }
