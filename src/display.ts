@@ -1,96 +1,55 @@
-// TODO: lerp the cells that are to be displayed
-// so that they have a growing animation.
-
-import config from "./config";
 import { Cell } from "./cell";
+import config from "./config";
+
+const rows = config.map.rows;
+const cols = config.map.columns;
+const cellWidth = config.canvas.width / rows;
+const cellHeight = config.canvas.height / cols;
+const colors = config.display.colors;
 
 export class Display {
-  // Cache for faster usage
-  private readonly _width = config.canvas.width / config.map.rows;
-  private readonly _height = config.canvas.height / config.map.columns;
-  private readonly _halfWidth = this._width / 2;
-  private readonly _halfHeight = this._height / 2;
-  private readonly _quarterHeight = this._height / 4;
-  private readonly _colors = config.display.colors;
-  private readonly _rows = config.map.rows;
-  private readonly _cols = config.map.columns;
-  private _cellsToDisplay: Cell[] = [];
+  private readonly markedCells: Cell[] = [];
 
-  constructor(private readonly _context: CanvasRenderingContext2D) {
-    _context.textRendering = "optimizeSpeed";
-    _context.textBaseline = "middle";
-    _context.textAlign = "center";
-    _context.font = `${this._width / 4}px Ubuntu`;
-    _context.strokeStyle = config.display.colors.border;
-    _context.lineWidth = config.display.lineWidth > 0 ? config.display.lineWidth : 0.1;
+  constructor(private readonly context: CanvasRenderingContext2D) {
+    context.textRendering = "optimizeSpeed";
+    context.textBaseline = "middle";
+    context.textAlign = "center";
+    context.font = `${cellWidth / 4}px Ubuntu`;
+    context.strokeStyle = config.display.colors.border;
+    context.lineWidth = config.display.lineWidth > 0 ? config.display.lineWidth : 0.1;
   }
 
-  private displayCell(cell: Cell) {
-    const x = cell.x * this._width;
-    const y = cell.y * this._height;
-    this._context.fillRect(x, y, this._width, this._height);
-    this._context.strokeRect(x, y, this._width, this._height);
-    cell.removeState(Cell.TO_DISPLAY);
-  }
-
-  clear() {
-    this._context.fillStyle = this._colors.cells.empty;
-    this._context.fillRect(0, 0, config.canvas.width, config.canvas.height);
-  }
-
-  displayFlaggedCells(cells: Cell[][]) {
-    this._cellsToDisplay.length = 0;
-    for (let x = 0; x < this._rows; x++) {
-      for (let y = 0; y < this._cols; y++) {
+  drawCells(cells: Cell[][]) {
+    this.markedCells.length = 0;
+    for (let x = 0; x < rows; x++) {
+      for (let y = 0; y < cols; y++) {
         const cell: Cell = cells[x][y];
-        if (cell.hasState(Cell.TO_DISPLAY)) this._cellsToDisplay.push(cell);
+        if (cell.hasState(Cell.TO_DISPLAY)) this.markedCells.push(cell);
       }
     }
 
     // Separating different color groups for performance
-    const drawCellsBatch = (cellState: number, color: string) => {
-      this._context.fillStyle = color;
-      const count = this._cellsToDisplay.length;
-      for (let i = 0; i < count; i++) {
-        const cell = this._cellsToDisplay[i];
-        if (cell.hasState(cellState)) this.displayCell(cell);
-      }
-    };
-
-    drawCellsBatch(Cell.EMPTY, this._colors.cells.empty);
-    drawCellsBatch(Cell.BLOCK, this._colors.cells.block);
-    drawCellsBatch(Cell.OPEN, this._colors.cells.open);
-    drawCellsBatch(Cell.CLOSED, this._colors.cells.closed);
-    drawCellsBatch(Cell.PATH, this._colors.cells.path);
+    this.drawCellBatch(Cell.EMPTY, colors.cells.empty);
+    this.drawCellBatch(Cell.BLOCK, colors.cells.block);
+    this.drawCellBatch(Cell.OPEN, colors.cells.open);
+    this.drawCellBatch(Cell.CLOSED, colors.cells.closed);
+    this.drawCellBatch(Cell.PATH, colors.cells.path);
   }
 
-  // TODO: TO_DISPLAY
-  displayAllCellsInfo(cells: Cell[][]) {
-    this._context.fillStyle = this._colors.debug;
-
-    for (let x = 0; x < this._rows; x++) {
-      for (let y = 0; y < this._cols; y++) {
-        const cell = cells[x][y];
-        if (cell.hasState(Cell.BLOCK)) continue;
-
-        this._context.fillText(
-          cell.getG().toString(),
-          cell.x * this._width + this._halfWidth,
-          cell.y * this._height + this._halfHeight - this._quarterHeight,
-        );
-
-        this._context.fillText(
-          cell.getH().toFixed(2).toString(),
-          cell.x * this._width + this._halfWidth,
-          cell.y * this._height + this._halfHeight,
-        );
-
-        this._context.fillText(
-          cell.getF().toFixed(2).toString(),
-          cell.x * this._width + this._halfWidth,
-          cell.y * this._height + this._halfHeight + this._quarterHeight,
-        );
-      }
+  private drawCellBatch(cellState: number, color: string) {
+    this.context.fillStyle = color;
+    const count = this.markedCells.length;
+    for (let i = 0; i < count; i++) {
+      const cell = this.markedCells[i];
+      if (cell.hasState(cellState)) this.drawCell(cell);
     }
+  }
+
+  private drawCell(cell: Cell) {
+    const x = cell.x * cellWidth;
+    const y = cell.y * cellHeight;
+    this.context.fillRect(x, y, cellWidth, cellHeight);
+    this.context.strokeRect(x, y, cellWidth, cellHeight);
+    cell.removeState(Cell.TO_DISPLAY);
   }
 }

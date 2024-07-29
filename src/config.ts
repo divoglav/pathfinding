@@ -5,13 +5,14 @@ const config = {
   },
 
   map: {
-    rows: 60,
-    columns: 60,
+    rows: 50,
+    columns: 50,
 
-    unblockSpawnLayers: 5,
+    unblockSpawnLayers: 4,
 
     blocks: {
-      type: "noise",
+      // random, noise, none
+      type: "none",
 
       noise: {
         percent: 0.4,
@@ -45,7 +46,8 @@ const config = {
   },
 
   pathfinding: {
-    gScale: 0.3,
+    IPS: 60,
+    gScalar: 0.3,
   },
 };
 

@@ -2,21 +2,21 @@ import { Cell } from "./cell";
 import * as generalUtils from "./utils/general";
 
 export class AStar {
-  private readonly _open: Cell[] = [];
-  private readonly _closed = new Set<Cell>();
+  private readonly open: Cell[] = [];
+  private readonly closed = new Set<Cell>();
 
   constructor(
-    _start: Cell,
-    private readonly _target: Cell,
+    start: Cell,
+    private readonly target: Cell,
   ) {
-    this._open.push(_start);
-    _start.addState(Cell.OPEN);
+    this.open.push(start);
+    start.addState(Cell.OPEN);
   }
 
   private getBestFromOpen() {
-    let minFCell = this._open[0];
-    for (let i = 1; i < this._open.length; i++) {
-      const cell = this._open[i];
+    let minFCell = this.open[0];
+    for (let i = 1; i < this.open.length; i++) {
+      const cell = this.open[i];
       if (cell.getF() < minFCell.getF()) minFCell = cell;
     }
     return minFCell;
@@ -32,18 +32,18 @@ export class AStar {
   }
 
   iterate(): boolean {
-    if (this._open.length <= 0) return true;
+    if (this.open.length <= 0) return true;
 
     let current = this.getBestFromOpen();
 
-    if (current === this._target) {
+    if (current === this.target) {
       this.reconstructPath(current);
       return true;
     }
 
-    generalUtils.removeFromArray(this._open, current);
+    generalUtils.removeFromArray(this.open, current);
     current.removeState(Cell.OPEN);
-    this._closed.add(current);
+    this.closed.add(current);
     current.addState(Cell.CLOSED);
 
     current.addState(Cell.TO_DISPLAY);
@@ -63,7 +63,7 @@ export class AStar {
           neighbor.setG(gSum);
         }
       } else {
-        this._open.push(neighbor);
+        this.open.push(neighbor);
         neighbor.addState(Cell.OPEN);
 
         neighbor.setParent(current);

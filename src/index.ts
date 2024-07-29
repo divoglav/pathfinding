@@ -1,12 +1,11 @@
 import "./styles/reset.css";
 import "./styles/style.css";
 import * as input from "./input";
+import * as controller from "./controller";
 import config from "./config";
-import { Grid } from "./grid";
 import { Display } from "./display";
 import { AStar } from "./aStar";
-
-let canvas = createCanvas();
+import { Grid } from "./grid";
 
 function createCanvas() {
   const canvas = document.createElement("canvas");
@@ -17,39 +16,44 @@ function createCanvas() {
 }
 
 function main() {
-  input.setup();
-
-  const context = canvas.getContext("2d");
-
-  const display = new Display(context!);
-  display.clear();
-
   const grid = new Grid(config.map.rows, config.map.columns);
   grid.createCells();
   grid.setupNeighbors();
-  if (config.map.blocks.type === "noise") {
-    grid.generateNoiseBlocks();
-  } else if (config.map.blocks.type === "random") {
-    grid.generateRandomBlocks();
-  }
+  grid.generateBlocks(config.map.blocks.type);
 
   const cells = grid.getCells();
+  const startCell = cells[0][0];
+  grid.unblockCellRecursive(startCell, config.map.unblockSpawnLayers);
+  const endCell = cells[config.map.rows - 1][config.map.columns - 1];
+  grid.unblockCellRecursive(endCell, config.map.unblockSpawnLayers);
 
-  const topLeft = cells[0][0];
-  grid.unblockCellRecursive(topLeft, config.map.unblockSpawnLayers);
+  const canvas = createCanvas();
+  const bcr = canvas.getBoundingClientRect();
+  const context = canvas.getContext("2d");
+  const display = new Display(context!);
 
-  const bottomRight = cells[config.map.rows - 1][config.map.columns - 1];
-  grid.unblockCellRecursive(bottomRight, config.map.unblockSpawnLayers);
+  input.setup();
+  controller.setup(bcr);
 
-  const aStar = new AStar(topLeft, bottomRight);
-  grid.calculateAllDistancesTo(bottomRight);
+  const aStar = new AStar(startCell, endCell);
+  grid.calculateAllDistancesTo(endCell);
 
-  const loop = setInterval(() => {
-    if (aStar.iterate()) clearInterval(loop);
-    display.displayFlaggedCells(cells);
-    if (config.display.debug) display.displayAllCellsInfo(cells);
-    console.log(`x: ${input.coordinates.x}, y: ${input.coordinates.y}`);
-  }, 1000 / config.display.FPS);
+  const pathfindingInterval = 1000 / config.pathfinding.IPS;
+  const pathfindingLoop = () => {
+    aStar.iterate();
+  };
+
+  const displayInterval = 1000 / config.display.FPS;
+  const displayLoop = () => {
+    display.drawCells(cells);
+
+    if (input.isClicked()) {
+      controller.toggleAt(grid, input.getX(), input.getY());
+    }
+  };
+
+  setInterval(pathfindingLoop, pathfindingInterval);
+  setInterval(displayLoop, displayInterval);
 }
 
 main();

@@ -1,5 +1,7 @@
 import config from "./config";
 
+const gScalar = config.pathfinding.gScalar;
+
 export class Cell {
   static readonly EMPTY = 1 << 0;
   static readonly BLOCK = 1 << 1;
@@ -8,15 +10,15 @@ export class Cell {
   static readonly PATH = 1 << 4;
   static readonly TO_DISPLAY = 1 << 5;
 
-  private _state = Cell.EMPTY;
+  private state = Cell.EMPTY;
 
-  private _g: number = 0; // move
-  private _h: number = 0; // distance
-  private _f: number = 0; // total
+  private g: number = 0; // movement
+  private h: number = 0; // distance
+  private f: number = 0; // total
 
-  private _neighbors: Neighbor[] = [];
+  private neighbors: Neighbor[] = [];
 
-  private _parent: Cell | null = null;
+  private parent: Cell | null = null;
 
   constructor(
     readonly x: number,
@@ -24,83 +26,61 @@ export class Cell {
   ) {}
 
   reset() {
-    this._state = Cell.EMPTY;
-    this._g = this._h = this._f = 0;
-    this._parent = null;
+    this.state = Cell.EMPTY;
+    this.g = this.h = this.f = 0;
+    this.parent = null;
   }
 
-  // ----------------------------: State
-
   hasState(cellState: number): boolean {
-    return (this._state & cellState) !== 0;
+    return (this.state & cellState) !== 0;
   }
 
   addState(cellState: number) {
-    this._state |= cellState;
+    this.state |= cellState;
   }
 
   removeState(cellState: number) {
-    this._state &= ~cellState;
+    this.state &= ~cellState;
   }
 
-  // ----------------------------: AD
-
   getG() {
-    return this._g;
+    return this.g;
   }
 
   setG(value: number) {
-    this._g = value;
+    this.g = value;
     this.updateF();
   }
 
-  getH() {
-    return this._h;
-  }
-
   calculateHTo(target: Cell) {
-    const xd = this.x - target.x;
-    const yd = this.y - target.y;
-    this._h = Math.sqrt(xd * xd + yd * yd);
+    const xDifference = this.x - target.x;
+    const yDifference = this.y - target.y;
+    this.h = Math.sqrt(xDifference * xDifference + yDifference * yDifference);
   }
 
   getF() {
-    return this._f;
+    return this.f;
   }
 
   private updateF() {
-    this._f = this._g * config.pathfinding.gScale + this._h;
+    this.f = this.g * gScalar + this.h;
   }
 
-  // ----------------------------: Parent
-
   getParent() {
-    return this._parent;
+    return this.parent;
   }
 
   setParent(cell: Cell) {
-    this._parent = cell;
+    this.parent = cell;
   }
-
-  // ----------------------------: Neighbors
 
   setNeighbors(neighbors: Neighbor[]) {
-    this._neighbors = neighbors;
-  }
-
-  getNeighbor(neighbor: Neighbors) {
-    return this._neighbors[neighbor];
+    this.neighbors = neighbors;
   }
 
   getNeighbors() {
-    return this._neighbors;
+    return this.neighbors;
   }
 }
 
-export type Neighbor = Cell | null;
-export enum Neighbors {
-  North,
-  East,
-  South,
-  West,
-}
+type Neighbor = Cell | null;

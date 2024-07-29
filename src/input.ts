@@ -1,16 +1,34 @@
-type Vector = {
-  x: number;
-  y: number;
-};
+let x: number = 0;
+let y: number = 0;
+let clicked: boolean = false;
 
-export const coordinates: Vector = {
-  x: 0,
-  y: 0,
-};
+export function getX(): number {
+  return x;
+}
+
+export function getY(): number {
+  return y;
+}
+
+export function isClicked(): boolean {
+  return clicked;
+}
 
 export function setup() {
   window.addEventListener("pointermove", (event: PointerEvent) => {
-    coordinates.x = event.x;
-    coordinates.y = event.y;
+    x = event.x;
+    y = event.y;
+  });
+
+  window.addEventListener("pointerdown", () => {
+    clicked = true;
+  });
+
+  window.addEventListener("pointerup", () => {
+    clicked = false;
+  });
+
+  window.addEventListener("blur", () => {
+    clicked = false;
   });
 }

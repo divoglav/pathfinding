@@ -23,33 +23,6 @@ export class Grid {
     }
   }
 
-  generateRandomBlocks() {
-    const percent = config.map.blocks.random.percent;
-    for (let x = 0; x < this._rows; x++) {
-      for (let y = 0; y < this._cols; y++) {
-        const cell = this._cells[x][y];
-        if (Math.random() < percent) {
-          cell.removeState(Cell.EMPTY);
-          cell.addState(Cell.BLOCK);
-        }
-      }
-    }
-  }
-
-  generateNoiseBlocks() {
-    const percent = config.map.blocks.noise.percent;
-    const scalar = config.map.blocks.noise.scalar;
-    for (let x = 0; x < this._rows; x++) {
-      for (let y = 0; y < this._cols; y++) {
-        const cell = this._cells[x][y];
-        if (noise.get(x, y, scalar) < percent) {
-          cell.removeState(Cell.EMPTY);
-          cell.addState(Cell.BLOCK);
-        }
-      }
-    }
-  }
-
   setupNeighbors() {
     for (let x = 0; x < this._rows; x++) {
       for (let y = 0; y < this._cols; y++) {
@@ -65,8 +38,17 @@ export class Grid {
     }
   }
 
-  private isValidCoordinate(x: number, y: number) {
-    return x >= 0 && x < this._rows && y >= 0 && y < this._cols;
+  generateBlocks(type: string) {
+    switch (type) {
+      case "random":
+        this.generateRandomBlocks();
+        break;
+      case "noise":
+        this.generateNoiseBlocks();
+        break;
+      default:
+        break;
+    }
   }
 
   getCell(x: number, y: number) {
@@ -83,6 +65,37 @@ export class Grid {
         this._cells[x][y].reset();
       }
     }
+  }
+
+  private generateRandomBlocks() {
+    const percent = config.map.blocks.random.percent;
+    for (let x = 0; x < this._rows; x++) {
+      for (let y = 0; y < this._cols; y++) {
+        const cell = this._cells[x][y];
+        if (Math.random() < percent) {
+          cell.removeState(Cell.EMPTY);
+          cell.addState(Cell.BLOCK);
+        }
+      }
+    }
+  }
+
+  private generateNoiseBlocks() {
+    const percent = config.map.blocks.noise.percent;
+    const scalar = config.map.blocks.noise.scalar;
+    for (let x = 0; x < this._rows; x++) {
+      for (let y = 0; y < this._cols; y++) {
+        const cell = this._cells[x][y];
+        if (noise.get(x, y, scalar) < percent) {
+          cell.removeState(Cell.EMPTY);
+          cell.addState(Cell.BLOCK);
+        }
+      }
+    }
+  }
+
+  private isValidCoordinate(x: number, y: number) {
+    return x >= 0 && x < this._rows && y >= 0 && y < this._cols;
   }
 
   calculateAllDistancesTo(target: Cell) {
