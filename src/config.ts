@@ -24,7 +24,7 @@ const config = {
     lineWidth: 0.5,
 
     colors: {
-      stroke: "#666",
+      stroke: "#888",
       debug: "#000",
 
       cells: {

@@ -1,9 +1,12 @@
 import "./styles/reset.css";
 import "./styles/style.css";
+import * as input from "./input";
 import config from "./config";
 import { Grid } from "./grid";
 import { Display } from "./display";
 import { AStar } from "./aStar";
+
+let canvas = createCanvas();
 
 function createCanvas() {
   const canvas = document.createElement("canvas");
@@ -14,9 +17,11 @@ function createCanvas() {
 }
 
 function main() {
-  const context = createCanvas().getContext("2d");
+  const context = canvas.getContext("2d");
   const display = new Display(context!);
   display.clear();
+
+  input.setup();
 
   const grid = new Grid(config.grid.rows, config.grid.columns);
   const cells = grid.getCells();
@@ -34,6 +39,7 @@ function main() {
     if (aStar.iterate()) clearInterval(loop);
     display.displayFlaggedCells(cells);
     if (config.display.debug) display.displayAllCellsInfo(cells);
+    console.log(`x: ${input.coordinates.x}, y: ${input.coordinates.y}`);
   }, 1000 / config.display.FPS);
 }
 
