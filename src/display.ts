@@ -6,14 +6,14 @@ import { Cell } from "./cell";
 
 export class Display {
   // Cache for faster usage
-  private readonly _width = config.canvas.width / config.grid.rows;
-  private readonly _height = config.canvas.height / config.grid.columns;
+  private readonly _width = config.canvas.width / config.map.rows;
+  private readonly _height = config.canvas.height / config.map.columns;
   private readonly _halfWidth = this._width / 2;
   private readonly _halfHeight = this._height / 2;
   private readonly _quarterHeight = this._height / 4;
   private readonly _colors = config.display.colors;
-  private readonly _rows = config.grid.rows;
-  private readonly _cols = config.grid.columns;
+  private readonly _rows = config.map.rows;
+  private readonly _cols = config.map.columns;
   private _cellsToDisplay: Cell[] = [];
 
   constructor(private readonly _context: CanvasRenderingContext2D) {
@@ -21,7 +21,7 @@ export class Display {
     _context.textBaseline = "middle";
     _context.textAlign = "center";
     _context.font = `${this._width / 4}px Ubuntu`;
-    _context.strokeStyle = config.display.colors.stroke;
+    _context.strokeStyle = config.display.colors.border;
     _context.lineWidth = config.display.lineWidth > 0 ? config.display.lineWidth : 0.1;
   }
 

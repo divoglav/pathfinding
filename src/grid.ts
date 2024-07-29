@@ -10,37 +10,47 @@ export class Grid {
   constructor(rows: number, cols: number) {
     this._rows = rows;
     this._cols = cols;
-
-    this.createCells();
-    this.setupNeighbors();
   }
 
-  private createCells() {
+  createCells() {
     for (let x = 0; x < this._rows; x++) {
       this._cells.push([]);
-
       for (let y = 0; y < this._cols; y++) {
         const cell = new Cell(x, y);
-
-        if (config.blocks.noise.active) {
-          if (noise.get(x, y, config.blocks.noise.scalar) < config.blocks.value) {
-            cell.removeState(Cell.EMPTY);
-            cell.addState(Cell.BLOCK);
-          }
-        } else {
-          if (Math.random() < config.blocks.value) {
-            cell.removeState(Cell.EMPTY);
-            cell.addState(Cell.BLOCK);
-          }
-        }
-
         cell.addState(Cell.TO_DISPLAY);
         this._cells[x].push(cell);
       }
     }
   }
 
-  private setupNeighbors() {
+  generateRandomBlocks() {
+    const percent = config.map.blocks.random.percent;
+    for (let x = 0; x < this._rows; x++) {
+      for (let y = 0; y < this._cols; y++) {
+        const cell = this._cells[x][y];
+        if (Math.random() < percent) {
+          cell.removeState(Cell.EMPTY);
+          cell.addState(Cell.BLOCK);
+        }
+      }
+    }
+  }
+
+  generateNoiseBlocks() {
+    const percent = config.map.blocks.noise.percent;
+    const scalar = config.map.blocks.noise.scalar;
+    for (let x = 0; x < this._rows; x++) {
+      for (let y = 0; y < this._cols; y++) {
+        const cell = this._cells[x][y];
+        if (noise.get(x, y, scalar) < percent) {
+          cell.removeState(Cell.EMPTY);
+          cell.addState(Cell.BLOCK);
+        }
+      }
+    }
+  }
+
+  setupNeighbors() {
     for (let x = 0; x < this._rows; x++) {
       for (let y = 0; y < this._cols; y++) {
         const cell = this._cells[x][y];

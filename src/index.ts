@@ -17,20 +17,29 @@ function createCanvas() {
 }
 
 function main() {
+  input.setup();
+
   const context = canvas.getContext("2d");
+
   const display = new Display(context!);
   display.clear();
 
-  input.setup();
+  const grid = new Grid(config.map.rows, config.map.columns);
+  grid.createCells();
+  grid.setupNeighbors();
+  if (config.map.blocks.type === "noise") {
+    grid.generateNoiseBlocks();
+  } else if (config.map.blocks.type === "random") {
+    grid.generateRandomBlocks();
+  }
 
-  const grid = new Grid(config.grid.rows, config.grid.columns);
   const cells = grid.getCells();
 
   const topLeft = cells[0][0];
-  grid.unblockCellRecursive(topLeft, config.blocks.unblockLayers);
+  grid.unblockCellRecursive(topLeft, config.map.unblockSpawnLayers);
 
-  const bottomRight = cells[config.grid.rows - 1][config.grid.columns - 1];
-  grid.unblockCellRecursive(bottomRight, config.blocks.unblockLayers);
+  const bottomRight = cells[config.map.rows - 1][config.map.columns - 1];
+  grid.unblockCellRecursive(bottomRight, config.map.unblockSpawnLayers);
 
   const aStar = new AStar(topLeft, bottomRight);
   grid.calculateAllDistancesTo(bottomRight);

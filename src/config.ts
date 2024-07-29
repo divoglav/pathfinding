@@ -4,27 +4,34 @@ const config = {
     height: 700,
   },
 
-  grid: {
+  map: {
     rows: 60,
     columns: 60,
-  },
 
-  blocks: {
-    value: 0.3,
-    noise: {
-      active: true,
-      scalar: 0.12,
+    unblockSpawnLayers: 5,
+
+    blocks: {
+      type: "noise",
+
+      noise: {
+        percent: 0.4,
+        scalar: 0.12,
+      },
+
+      random: {
+        percent: 0.3,
+      },
     },
-    unblockLayers: 3,
   },
 
   display: {
     FPS: 60,
     debug: false,
-    lineWidth: 0.5,
+
+    lineWidth: 0.2,
 
     colors: {
-      stroke: "#888",
+      border: "#888",
       debug: "#000",
 
       cells: {
@@ -43,13 +50,5 @@ const config = {
 };
 
 Object.freeze(config);
-Object.freeze(config.canvas);
-Object.freeze(config.grid);
-Object.freeze(config.blocks);
-Object.freeze(config.blocks.noise);
-Object.freeze(config.display);
-Object.freeze(config.display.colors);
-Object.freeze(config.display.colors.cells);
-Object.freeze(config.pathfinding);
 
 export default config;
