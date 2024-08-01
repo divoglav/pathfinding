@@ -1,3 +1,29 @@
+/*
+  Hexagonal grid.
+
+  Diagonal movement.
+
+  Different pathfinding algorithms.
+
+  Full drawing control.
+
+  Configurable User Interface.
+
+  Two-way pathfinding.
+
+  The macro optimization.
+    - difficult
+    - sector splits
+
+  Cells animation.
+    - lerp?
+
+  Multiple targets?
+
+  Scrollable timeline.
+
+*/
+
 import "./styles/reset.css";
 import "./styles/style.css";
 import * as input from "./input";
@@ -22,9 +48,9 @@ function main() {
   grid.generateBlocks(config.map.blocks.type);
 
   const cells = grid.getCells();
-  const startCell = cells[0][0];
+  const startCell = cells[15][0];
   grid.unblockCellRecursive(startCell, config.map.unblockSpawnLayers);
-  const endCell = cells[config.map.rows - 1][config.map.columns - 1];
+  const endCell = cells[15][config.map.columns - 1];
   grid.unblockCellRecursive(endCell, config.map.unblockSpawnLayers);
 
   const canvas = createCanvas();

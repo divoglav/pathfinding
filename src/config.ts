@@ -1,12 +1,12 @@
 const config = {
   canvas: {
-    width: 700,
-    height: 700,
+    width: 300,
+    height: 900,
   },
 
   map: {
-    rows: 60,
-    columns: 60,
+    rows: 30,
+    columns: 90,
 
     unblockSpawnLayers: 4,
 
@@ -50,7 +50,7 @@ const config = {
     IPS: 60,
     // manhattan, euclidean
     distanceMethod: "euclidean",
-    gScalar: 0.3,
+    gScalar: 0.3
   },
 };
 
