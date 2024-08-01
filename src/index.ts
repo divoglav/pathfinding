@@ -31,6 +31,7 @@ function main() {
   const bcr = canvas.getBoundingClientRect();
   const context = canvas.getContext("2d");
   const display = new Display(context!);
+  display.clear();
 
   input.setup();
   controller.setup(bcr);

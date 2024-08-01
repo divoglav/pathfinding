@@ -31,9 +31,10 @@ const config = {
 
     lineWidth: 0.2,
 
+
     colors: {
       border: "#888",
-      debug: "#000",
+      background: "#888",
 
       cells: {
         empty: "#888",

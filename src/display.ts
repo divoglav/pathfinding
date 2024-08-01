@@ -19,6 +19,11 @@ export class Display {
     context.lineWidth = config.display.lineWidth > 0 ? config.display.lineWidth : 0.1;
   }
 
+  clear() {
+    this.context.fillStyle = config.display.colors.background;
+    this.context.fillRect(0, 0, config.canvas.width, config.canvas.height);
+  }
+
   drawCells(cells: Cell[][]) {
     this.markedCells.length = 0;
     for (let x = 0; x < rows; x++) {
