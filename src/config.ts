@@ -5,14 +5,14 @@ const config = {
   },
 
   map: {
-    rows: 50,
-    columns: 50,
+    rows: 60,
+    columns: 60,
 
     unblockSpawnLayers: 4,
 
     blocks: {
       // random, noise, none
-      type: "none",
+      type: "noise",
 
       noise: {
         percent: 0.4,
@@ -47,6 +47,8 @@ const config = {
 
   pathfinding: {
     IPS: 60,
+    // manhattan, euclidean
+    distanceMethod: "euclidean",
     gScalar: 0.3,
   },
 };

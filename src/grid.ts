@@ -99,11 +99,25 @@ export class Grid {
   }
 
   calculateAllDistancesTo(target: Cell) {
+    const distanceMethod = config.pathfinding.distanceMethod;
+
     for (let x = 0; x < this._rows; x++) {
       for (let y = 0; y < this._cols; y++) {
-        this._cells[x][y].calculateHTo(target);
+        const cell = this._cells[x][y];
+        if (distanceMethod === "manhattan") cell.setH(this.manhattanDistance(cell, target));
+        else if (distanceMethod === "euclidean") cell.setH(this.euclideanDistance(cell, target));
       }
     }
+  }
+
+  private euclideanDistance(from: Cell, to: Cell) {
+    const xDifference = from.x - to.x;
+    const yDifference = from.y - to.y;
+    return Math.sqrt(xDifference * xDifference + yDifference * yDifference);
+  }
+
+  private manhattanDistance(from: Cell, to: Cell) {
+    return Math.abs(from.x - to.x) + Math.abs(from.y - to.y);
   }
 
   unblockCellRecursive(cell: Cell, recursions: number = 0) {

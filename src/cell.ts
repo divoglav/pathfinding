@@ -52,10 +52,8 @@ export class Cell {
     this.updateF();
   }
 
-  calculateHTo(target: Cell) {
-    const xDifference = this.x - target.x;
-    const yDifference = this.y - target.y;
-    this.h = Math.sqrt(xDifference * xDifference + yDifference * yDifference);
+  setH(value: number) {
+    this.h = value;
   }
 
   getF() {
