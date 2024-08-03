@@ -1,4 +1,4 @@
-import { Cell } from "./cell";
+import { Cell, CellOrNull } from "./cell";
 import * as generalUtils from "./utils/general";
 
 export class AStar {
@@ -10,24 +10,24 @@ export class AStar {
     private readonly target: Cell,
   ) {
     this.open.push(start);
-    start.addState(Cell.OPEN);
+    start.setOpen();
   }
 
   private getBestFromOpen() {
     let minFCell = this.open[0];
     for (let i = 1; i < this.open.length; i++) {
       const cell = this.open[i];
-      if (cell.getF() < minFCell.getF()) minFCell = cell;
+      if (cell.f < minFCell.f) minFCell = cell;
     }
     return minFCell;
   }
 
   private reconstructPath(cell: Cell) {
-    let current: Cell | null = cell;
+    let current: CellOrNull = cell;
     while (current) {
-      current.addState(Cell.PATH);
-      current.addState(Cell.TO_DISPLAY);
-      current = current.getParent();
+      current.setPath();
+      current.setDisplay(true);
+      current = current.parent;
     }
   }
 
@@ -42,30 +42,28 @@ export class AStar {
     }
 
     generalUtils.removeFromArray(this.open, current);
-    current.removeState(Cell.OPEN);
     this.closed.add(current);
-    current.addState(Cell.CLOSED);
+    current.setClosed();
 
-    current.addState(Cell.TO_DISPLAY);
+    current.setDisplay(true);
 
-    const neighbors = current.getNeighbors();
+    const neighbors = current.neighbors;
     for (let n = 0; n < neighbors.length; n++) {
       const neighbor = neighbors[n];
-      if (!neighbor || neighbor.hasState(Cell.CLOSED) || neighbor.hasState(Cell.BLOCK)) continue;
+      if (!neighbor || neighbor.isClosed || neighbor.isBlock) continue;
 
-      neighbor.addState(Cell.TO_DISPLAY);
+      neighbor.setDisplay(true);
 
-      const gSum = current.getG() + 1;
+      const gSum = current.g + 1;
 
-      if (neighbor.hasState(Cell.OPEN)) {
-        if (gSum < neighbor.getG()) {
+      if (neighbor.isOpen) {
+        if (gSum < neighbor.g) {
           neighbor.setParent(current);
           neighbor.setG(gSum);
         }
       } else {
         this.open.push(neighbor);
-        neighbor.addState(Cell.OPEN);
-
+        neighbor.setOpen();
         neighbor.setParent(current);
         neighbor.setG(gSum);
       }

@@ -2,83 +2,68 @@ import config from "./config";
 
 const gScalar = config.pathfinding.gScalar;
 
+export type CellOrNull = Cell | null;
+
 export class Cell {
-  static readonly EMPTY = 1 << 0;
-  static readonly BLOCK = 1 << 1;
-  static readonly OPEN = 1 << 2;
-  static readonly CLOSED = 1 << 3;
-  static readonly PATH = 1 << 4;
-  static readonly TO_DISPLAY = 1 << 5;
+  private _isEmpty: boolean = false;
+  private _isBlock: boolean = false;
+  private _isOpen: boolean = false;
+  private _isClosed: boolean = false;
+  private _isPath: boolean = false;
 
-  private state = Cell.EMPTY;
+  private _g: number = 0; // movement
+  private _h: number = 0; // distance
+  private _f: number = 0; // total
 
-  private g: number = 0; // movement
-  private h: number = 0; // distance
-  private f: number = 0; // total
+  private _display: boolean = false;
 
-  private neighbors: Neighbor[] = [];
+  private _neighbors: CellOrNull[] = [];
 
-  private parent: Cell | null = null;
+  private _parent: CellOrNull = null;
 
   constructor(
     readonly x: number,
     readonly y: number,
-  ) {}
+  ) { }
 
-  reset() {
-    this.state = Cell.EMPTY;
-    this.g = this.h = this.f = 0;
-    this.parent = null;
+  private resetState() {
+    this._isEmpty = false;
+    this._isBlock = false;
+    this._isOpen = false;
+    this._isClosed = false;
+    this._isPath = false;
   }
 
-  hasState(cellState: number): boolean {
-    return (this.state & cellState) !== 0;
-  }
+  get isEmpty() { return this._isEmpty; }
+  setEmpty() { this.resetState(); this._isEmpty = true; }
 
-  addState(cellState: number) {
-    this.state |= cellState;
-  }
+  get isBlock() { return this._isBlock; }
+  setBlock() { this.resetState(); this._isBlock = true; }
 
-  removeState(cellState: number) {
-    this.state &= ~cellState;
-  }
+  get isOpen() { return this._isOpen; }
+  setOpen() { this.resetState(); this._isOpen = true; }
 
-  getG() {
-    return this.g;
-  }
+  get isClosed() { return this._isClosed; }
+  setClosed() { this.resetState(); this._isClosed = true; }
 
-  setG(value: number) {
-    this.g = value;
-    this.updateF();
-  }
+  get isPath() { return this._isPath; }
+  setPath() { this.resetState(); this._isPath = true; }
 
-  setH(value: number) {
-    this.h = value;
-  }
+  get display() { return this._display; }
+  setDisplay(display: boolean) { this._display = display; }
 
-  getF() {
-    return this.f;
-  }
+  private updateF() { this._f = this._g * gScalar + this._h; }
 
-  private updateF() {
-    this.f = this.g * gScalar + this.h;
-  }
+  get g() { return this._g; }
+  setG(value: number) { this._g = value; this.updateF(); }
 
-  getParent() {
-    return this.parent;
-  }
+  setH(value: number) { this._h = value; }
 
-  setParent(cell: Cell) {
-    this.parent = cell;
-  }
+  get f() { return this._f; }
 
-  setNeighbors(neighbors: Neighbor[]) {
-    this.neighbors = neighbors;
-  }
+  get parent() { return this._parent; }
+  setParent(cell: Cell) { this._parent = cell; }
 
-  getNeighbors() {
-    return this.neighbors;
-  }
+  get neighbors() { return this._neighbors; }
+  setNeighbors(neighbors: CellOrNull[]) { this._neighbors = neighbors; }
 }
-
-type Neighbor = Cell | null;

@@ -1,60 +1,69 @@
 import { Cell } from "./cell";
 import config from "./config";
 
+// cache
 const rows = config.map.rows;
 const cols = config.map.columns;
 const cellWidth = config.canvas.width / rows;
 const cellHeight = config.canvas.height / cols;
-const colors = config.display.colors;
+const cellColors = config.display.colors.cells;
 
 export class Display {
-  private readonly markedCells: Cell[] = [];
+  private _lastFillColor: string = "";
 
-  constructor(private readonly context: CanvasRenderingContext2D) {
-    context.textRendering = "optimizeSpeed";
-    context.textBaseline = "middle";
-    context.textAlign = "center";
-    context.font = `${cellWidth / 4}px Ubuntu`;
-    context.strokeStyle = config.display.colors.border;
-    context.lineWidth = config.display.lineWidth > 0 ? config.display.lineWidth : 0.1;
+  constructor(private readonly _context: CanvasRenderingContext2D) {
+    _context.textRendering = "optimizeSpeed";
+    _context.textBaseline = "middle";
+    _context.textAlign = "center";
+    _context.font = `${cellWidth / 4}px Ubuntu`;
+    _context.strokeStyle = config.display.colors.border;
+    _context.lineWidth = config.display.lineWidth > 0 ? config.display.lineWidth : 0.1;
   }
 
   clear() {
-    this.context.fillStyle = config.display.colors.background;
-    this.context.fillRect(0, 0, config.canvas.width, config.canvas.height);
+    this._context.fillStyle = config.display.colors.background;
+    this._context.fillRect(0, 0, config.canvas.width, config.canvas.height);
   }
 
   drawCells(cells: Cell[][]) {
-    this.markedCells.length = 0;
     for (let x = 0; x < rows; x++) {
       for (let y = 0; y < cols; y++) {
         const cell: Cell = cells[x][y];
-        if (cell.hasState(Cell.TO_DISPLAY)) this.markedCells.push(cell);
+        if (cell.display) {
+          const color = this.getCellColor(cell);
+          this.drawCell(cell, color);
+        }
       }
     }
-
-    // Separating different color groups for performance
-    this.drawCellBatch(Cell.EMPTY, colors.cells.empty);
-    this.drawCellBatch(Cell.BLOCK, colors.cells.block);
-    this.drawCellBatch(Cell.OPEN, colors.cells.open);
-    this.drawCellBatch(Cell.CLOSED, colors.cells.closed);
-    this.drawCellBatch(Cell.PATH, colors.cells.path);
   }
 
-  private drawCellBatch(cellState: number, color: string) {
-    this.context.fillStyle = color;
-    const count = this.markedCells.length;
-    for (let i = 0; i < count; i++) {
-      const cell = this.markedCells[i];
-      if (cell.hasState(cellState)) this.drawCell(cell);
+  private getCellColor(cell: Cell): string {
+    if (cell.isEmpty) {
+      return cellColors.empty;
+    } else if (cell.isBlock) {
+      return cellColors.block;
+    } else if (cell.isOpen) {
+      return cellColors.open;
+    } else if (cell.isClosed) {
+      return cellColors.closed;
+    } else if (cell.isPath) {
+      return cellColors.path;
     }
+    return cellColors.debug;
   }
 
-  private drawCell(cell: Cell) {
+  private drawCell(cell: Cell, color: string) {
     const x = cell.x * cellWidth;
     const y = cell.y * cellHeight;
-    this.context.fillRect(x, y, cellWidth, cellHeight);
-    this.context.strokeRect(x, y, cellWidth, cellHeight);
-    cell.removeState(Cell.TO_DISPLAY);
+
+    if (this._lastFillColor !== color) {
+      this._context.fillStyle = color;
+      this._lastFillColor = color;
+    }
+
+    this._context.fillRect(x, y, cellWidth, cellHeight);
+    this._context.strokeRect(x, y, cellWidth, cellHeight);
+
+    cell.setDisplay(false);
   }
 }

@@ -17,7 +17,8 @@ export class Grid {
       this._cells.push([]);
       for (let y = 0; y < this._cols; y++) {
         const cell = new Cell(x, y);
-        cell.addState(Cell.TO_DISPLAY);
+        cell.setDisplay(true);
+        cell.setEmpty();
         this._cells[x].push(cell);
       }
     }
@@ -59,23 +60,12 @@ export class Grid {
     return this._cells;
   }
 
-  resetCells() {
-    for (let x = 0; x < this._rows; x++) {
-      for (let y = 0; y < this._cols; y++) {
-        this._cells[x][y].reset();
-      }
-    }
-  }
-
   private generateRandomBlocks() {
     const percent = config.map.blocks.random.percent;
     for (let x = 0; x < this._rows; x++) {
       for (let y = 0; y < this._cols; y++) {
         const cell = this._cells[x][y];
-        if (Math.random() < percent) {
-          cell.removeState(Cell.EMPTY);
-          cell.addState(Cell.BLOCK);
-        }
+        if (Math.random() < percent) cell.setBlock();
       }
     }
   }
@@ -86,10 +76,7 @@ export class Grid {
     for (let x = 0; x < this._rows; x++) {
       for (let y = 0; y < this._cols; y++) {
         const cell = this._cells[x][y];
-        if (noise.get(x, y, scalar) < percent) {
-          cell.removeState(Cell.EMPTY);
-          cell.addState(Cell.BLOCK);
-        }
+        if (noise.get(x, y, scalar) < percent) cell.setBlock();
       }
     }
   }
@@ -121,16 +108,14 @@ export class Grid {
   }
 
   unblockCellRecursive(cell: Cell, recursions: number = 0) {
-    cell.removeState(Cell.BLOCK);
-    cell.addState(Cell.EMPTY);
+    cell.setEmpty();
 
-    const neighbors = cell.getNeighbors();
+    const neighbors = cell.neighbors;
     for (let i = 0; i < neighbors.length; i++) {
       const neighbor = neighbors[i];
       if (!neighbor) continue;
 
-      neighbor.removeState(Cell.BLOCK);
-      neighbor.addState(Cell.EMPTY);
+      neighbor.setEmpty();
 
       if (recursions > 0) {
         this.unblockCellRecursive(neighbor, recursions - 1);

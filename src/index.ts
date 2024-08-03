@@ -1,29 +1,3 @@
-/*
-  Hexagonal grid.
-
-  Diagonal movement.
-
-  Different pathfinding algorithms.
-
-  Full drawing control.
-
-  Configurable User Interface.
-
-  Two-way pathfinding.
-
-  The macro optimization.
-    - difficult
-    - sector splits
-
-  Cells animation.
-    - lerp?
-
-  Multiple targets?
-
-  Scrollable timeline.
-
-*/
-
 import "./styles/reset.css";
 import "./styles/style.css";
 import * as input from "./input";
@@ -33,6 +7,8 @@ import { Display } from "./display";
 import { AStar } from "./aStar";
 import { Grid } from "./grid";
 
+const displayInterval = 1000 / config.display.FPS;
+
 function createCanvas() {
   const canvas = document.createElement("canvas");
   canvas.width = config.canvas.width;
@@ -41,46 +17,34 @@ function createCanvas() {
   return canvas;
 }
 
-function main() {
-  const grid = new Grid(config.map.rows, config.map.columns);
-  grid.createCells();
-  grid.setupNeighbors();
-  grid.generateBlocks(config.map.blocks.type);
+const grid = new Grid(config.map.rows, config.map.columns);
+grid.createCells();
+grid.setupNeighbors();
+grid.generateBlocks(config.map.blocks.type);
 
-  const cells = grid.getCells();
-  const startCell = cells[15][0];
-  grid.unblockCellRecursive(startCell, config.map.unblockSpawnLayers);
-  const endCell = cells[15][config.map.columns - 1];
-  grid.unblockCellRecursive(endCell, config.map.unblockSpawnLayers);
+const cells = grid.getCells();
+const startCell = cells[0][0];
+grid.unblockCellRecursive(startCell, config.map.unblockSpawnLayers);
+const endCell = cells[config.map.rows - 1][config.map.columns - 1];
+grid.unblockCellRecursive(endCell, config.map.unblockSpawnLayers);
 
-  const canvas = createCanvas();
-  const bcr = canvas.getBoundingClientRect();
-  const context = canvas.getContext("2d");
-  const display = new Display(context!);
-  display.clear();
+const canvas = createCanvas();
+const bcr = canvas.getBoundingClientRect();
+const context = canvas.getContext("2d");
+const display = new Display(context!);
+display.clear();
 
-  input.setup();
-  controller.setup(bcr);
+input.setup();
+controller.setup(bcr);
 
-  const aStar = new AStar(startCell, endCell);
-  grid.calculateAllDistancesTo(endCell);
+const aStar = new AStar(startCell, endCell);
+grid.calculateAllDistancesTo(endCell);
 
-  const pathfindingInterval = 1000 / config.pathfinding.IPS;
-  const pathfindingLoop = () => {
-    aStar.iterate();
-  };
+setInterval(() => {
+  aStar.iterate();
+  display.drawCells(cells);
 
-  const displayInterval = 1000 / config.display.FPS;
-  const displayLoop = () => {
-    display.drawCells(cells);
-
-    if (input.isClicked()) {
-      controller.toggleAt(grid, input.getX(), input.getY());
-    }
-  };
-
-  setInterval(pathfindingLoop, pathfindingInterval);
-  setInterval(displayLoop, displayInterval);
-}
-
-main();
+  if (input.isClicked()) {
+    controller.toggleAt(grid, input.getX(), input.getY());
+  }
+}, displayInterval);

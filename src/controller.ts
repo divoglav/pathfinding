@@ -1,4 +1,3 @@
-import { Cell } from "./cell";
 import config from "./config";
 import { Grid } from "./grid";
 
@@ -20,14 +19,12 @@ export function setup(_bcr: DOMRect) {
 export function toggleAt(grid: Grid, xCoordinate: number, yCoordinate: number) {
   const x = Math.round((xCoordinate - bcrLeft - cellHalfWidth) / cellWidth);
   const y = Math.round((yCoordinate - bcrTop - cellHalfHeight) / cellHeight);
-  console.log(`xCoordinate: ${xCoordinate}, bcrLeft: ${bcrLeft}`);
-  console.log(`yCoordinate: ${yCoordinate}, bcrTop: ${bcrTop}`);
 
   const cell = grid.getCell(x, y);
   if (!cell) return;
 
-  if (!cell.hasState(Cell.BLOCK)) {
-    cell.addState(Cell.BLOCK);
-    cell.addState(Cell.TO_DISPLAY);
+  if (!cell.isBlock) {
+    cell.setBlock();
+    cell.setDisplay(true);
   }
 }
