@@ -34,12 +34,10 @@ export function flipCell(cell: Cell) {
   if (_toBlock) {
     if (!cell.isBlock) {
       cell.setBlock();
-      cell.setDisplay();
     }
   } else {
     if (cell.isBlock) {
       cell.setEmpty();
-      cell.setDisplay();
     }
   }
 }

@@ -14,9 +14,6 @@ The macro optimization.
 - difficult
 - sector splits
 
-Cells animation.
-- lerp?
-
 Multiple targets?
 
 Scrollable timeline.

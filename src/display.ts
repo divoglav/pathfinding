@@ -10,6 +10,7 @@ const maxHeight = config.canvas.height / cols;
 const halfWidth = maxWidth / 2;
 const halfHeight = maxHeight / 2;
 const cellColors = config.display.colors.cells;
+const animationIncrement = config.display.animation.increment;
 
 export class Display {
   private _lastFillColor: string = "";
@@ -59,14 +60,18 @@ export class Display {
     return cellColors.debug;
   }
 
+  private easeFunction(value: number) {
+    return value * value * value;
+  }
+
   private drawCell(cell: Cell, color: string) {
     const xCenter = cell.x * maxWidth + halfWidth;
     const yCenter = cell.y * maxHeight + halfHeight;
 
-    const a = cell.incrementAnimation(0.1);
+    const step = this.easeFunction(cell.incrementAnimation(animationIncrement));
 
-    const width = math.lerp(0, maxWidth, a);
-    const height = math.lerp(0, maxHeight, a);
+    const width = math.lerp(0, maxWidth, step);
+    const height = math.lerp(0, maxHeight, step);
 
     const x = xCenter - width / 2;
     const y = yCenter - height / 2;

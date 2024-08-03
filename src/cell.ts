@@ -1,7 +1,7 @@
 import config from "./config";
 
 const gScalar = config.pathfinding.gScalar;
-const cellAnimation = config.display.cellAnimation ? 0 : 1;
+const animation = config.display.animation.active ? 0 : 1;
 
 export type CellOrNull = Cell | null;
 
@@ -37,21 +37,21 @@ export class Cell {
   }
 
   get isEmpty() { return this._isEmpty; }
-  setEmpty() { this.resetState(); this._isEmpty = true; }
+  setEmpty() { this.resetState(); this._isEmpty = true; this.setDisplay(); }
 
   get isBlock() { return this._isBlock; }
-  setBlock() { this.resetState(); this._isBlock = true; }
+  setBlock() { this.resetState(); this._isBlock = true; this.setDisplay(); }
 
   get isOpen() { return this._isOpen; }
-  setOpen() { this.resetState(); this._isOpen = true; }
+  setOpen() { this.resetState(); this._isOpen = true; this.setDisplay(); }
 
   get isClosed() { return this._isClosed; }
-  setClosed() { this.resetState(); this._isClosed = true; }
+  setClosed() { this.resetState(); this._isClosed = true; this.setDisplay(); }
 
   get isPath() { return this._isPath; }
-  setPath() { this.resetState(); this._isPath = true; }
+  setPath() { this.resetState(); this._isPath = true; this.setDisplay(); }
 
-  resetAnimation() { this._animation = cellAnimation; }
+  resetAnimation() { this._animation = animation; }
   incrementAnimation(value: number) {
     this._animation += value;
     if(this._animation >= 1) {
@@ -62,7 +62,7 @@ export class Cell {
   }
 
   get display() { return this._display; }
-  setDisplay() { this._display = true; this.resetAnimation(); }
+  private setDisplay() { this._display = true; this.resetAnimation(); }
   unsetDisplay() { this._display = false; }
 
   private updateF() { this._f = this._g * gScalar + this._h; }

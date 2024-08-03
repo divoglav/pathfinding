@@ -26,7 +26,6 @@ export class AStar {
     let current: CellOrNull = cell;
     while (current) {
       current.setPath();
-      current.setDisplay();
       current = current.parent;
     } }
 
@@ -44,8 +43,6 @@ export class AStar {
     generalUtils.removeFromArray(this.open, current);
     this.closed.add(current);
     current.setClosed();
-
-    current.setDisplay();
 
     const neighbors = current.neighbors;
     for (let n = 0; n < neighbors.length; n++) {
@@ -66,7 +63,6 @@ export class AStar {
         neighbor.setParent(current);
         neighbor.setG(gSum);
       }
-      neighbor.setDisplay();
     }
 
     return false;

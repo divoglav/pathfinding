@@ -5,14 +5,14 @@ const config = {
   },
 
   map: {
-    rows: 40,
-    columns: 40,
+    rows: 60,
+    columns: 60,
 
     unblockSpawnLayers: 4,
 
     blocks: {
       // random, noise, none
-      type: "random",
+      type: "noise",
 
       noise: {
         percent: 0.36,
@@ -30,7 +30,10 @@ const config = {
 
     lineWidth: 0.2,
 
-    cellAnimation: true,
+    animation: {
+      active: true,
+      increment: 0.1
+    },
 
     colors: {
       border: "#888",
