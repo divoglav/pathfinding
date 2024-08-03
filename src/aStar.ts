@@ -26,10 +26,9 @@ export class AStar {
     let current: CellOrNull = cell;
     while (current) {
       current.setPath();
-      current.setDisplay(true);
+      current.setDisplay();
       current = current.parent;
-    }
-  }
+    } }
 
   iterate(): boolean {
     if (this.open.length <= 0) return true;
@@ -37,6 +36,7 @@ export class AStar {
     let current = this.getBestFromOpen();
 
     if (current === this.target) {
+      this.open.length = 0;
       this.reconstructPath(current);
       return true;
     }
@@ -45,14 +45,13 @@ export class AStar {
     this.closed.add(current);
     current.setClosed();
 
-    current.setDisplay(true);
+    current.setDisplay();
 
     const neighbors = current.neighbors;
     for (let n = 0; n < neighbors.length; n++) {
       const neighbor = neighbors[n];
       if (!neighbor || neighbor.isClosed || neighbor.isBlock) continue;
 
-      neighbor.setDisplay(true);
 
       const gSum = current.g + 1;
 
@@ -67,6 +66,7 @@ export class AStar {
         neighbor.setParent(current);
         neighbor.setG(gSum);
       }
+      neighbor.setDisplay();
     }
 
     return false;

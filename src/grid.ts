@@ -17,8 +17,8 @@ export class Grid {
       this._cells.push([]);
       for (let y = 0; y < this._cols; y++) {
         const cell = new Cell(x, y);
-        cell.setDisplay(true);
         cell.setEmpty();
+        cell.setDisplay();
         this._cells[x].push(cell);
       }
     }

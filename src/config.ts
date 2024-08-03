@@ -5,22 +5,22 @@ const config = {
   },
 
   map: {
-    rows: 60,
-    columns: 60,
+    rows: 40,
+    columns: 40,
 
     unblockSpawnLayers: 4,
 
     blocks: {
       // random, noise, none
-      type: "noise",
+      type: "random",
 
       noise: {
-        percent: 0.4,
-        scalar: 0.12,
+        percent: 0.36,
+        scalar: 0.14,
       },
 
       random: {
-        percent: 0.3,
+        percent: 0.2,
       },
     },
   },
@@ -29,6 +29,8 @@ const config = {
     FPS: 60,
 
     lineWidth: 0.2,
+
+    cellAnimation: true,
 
     colors: {
       border: "#888",

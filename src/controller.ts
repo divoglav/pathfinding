@@ -25,6 +25,6 @@ export function toggleAt(grid: Grid, xCoordinate: number, yCoordinate: number) {
 
   if (!cell.isBlock) {
     cell.setBlock();
-    cell.setDisplay(true);
+    cell.setDisplay();
   }
 }

@@ -1,6 +1,7 @@
 import config from "./config";
 
 const gScalar = config.pathfinding.gScalar;
+const cellAnimation = config.display.cellAnimation ? 0 : 1;
 
 export type CellOrNull = Cell | null;
 
@@ -15,11 +16,12 @@ export class Cell {
   private _h: number = 0; // distance
   private _f: number = 0; // total
 
-  private _display: boolean = false;
-
   private _neighbors: CellOrNull[] = [];
 
   private _parent: CellOrNull = null;
+
+  private _display: boolean = false;
+  private _animation: number = 0;
 
   constructor(
     readonly x: number,
@@ -49,8 +51,19 @@ export class Cell {
   get isPath() { return this._isPath; }
   setPath() { this.resetState(); this._isPath = true; }
 
+  resetAnimation() { this._animation = cellAnimation; }
+  incrementAnimation(value: number) {
+    this._animation += value;
+    if(this._animation >= 1) {
+      this.unsetDisplay();
+      this._animation = 1;
+    }
+    return this._animation;
+  }
+
   get display() { return this._display; }
-  setDisplay(display: boolean) { this._display = display; }
+  setDisplay() { this._display = true; this.resetAnimation(); }
+  unsetDisplay() { this._display = false; }
 
   private updateF() { this._f = this._g * gScalar + this._h; }
 

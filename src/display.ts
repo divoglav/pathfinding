@@ -1,11 +1,14 @@
 import { Cell } from "./cell";
 import config from "./config";
+import * as math from "./utils/math";
 
 // cache
 const rows = config.map.rows;
 const cols = config.map.columns;
-const cellWidth = config.canvas.width / rows;
-const cellHeight = config.canvas.height / cols;
+const maxWidth = config.canvas.width / rows;
+const maxHeight = config.canvas.height / cols;
+const halfWidth = maxWidth / 2;
+const halfHeight = maxHeight / 2;
 const cellColors = config.display.colors.cells;
 
 export class Display {
@@ -15,7 +18,7 @@ export class Display {
     _context.textRendering = "optimizeSpeed";
     _context.textBaseline = "middle";
     _context.textAlign = "center";
-    _context.font = `${cellWidth / 4}px Ubuntu`;
+    _context.font = `${maxWidth / 4}px Ubuntu`;
     _context.strokeStyle = config.display.colors.border;
     _context.lineWidth = config.display.lineWidth > 0 ? config.display.lineWidth : 0.1;
   }
@@ -26,15 +29,19 @@ export class Display {
   }
 
   drawCells(cells: Cell[][]) {
+    let counter = 0;
     for (let x = 0; x < rows; x++) {
       for (let y = 0; y < cols; y++) {
         const cell: Cell = cells[x][y];
         if (cell.display) {
+          counter++;
           const color = this.getCellColor(cell);
           this.drawCell(cell, color);
         }
       }
     }
+
+    console.log(counter);
   }
 
   private getCellColor(cell: Cell): string {
@@ -53,17 +60,23 @@ export class Display {
   }
 
   private drawCell(cell: Cell, color: string) {
-    const x = cell.x * cellWidth;
-    const y = cell.y * cellHeight;
+    const xCenter = cell.x * maxWidth + halfWidth;
+    const yCenter = cell.y * maxHeight + halfHeight;
+
+    const a = cell.incrementAnimation(0.1);
+
+    const width = math.lerp(0, maxWidth, a);
+    const height = math.lerp(0, maxHeight, a);
+
+    const x = xCenter - width / 2;
+    const y = yCenter - height / 2;
 
     if (this._lastFillColor !== color) {
       this._context.fillStyle = color;
       this._lastFillColor = color;
     }
 
-    this._context.fillRect(x, y, cellWidth, cellHeight);
-    this._context.strokeRect(x, y, cellWidth, cellHeight);
-
-    cell.setDisplay(false);
+    this._context.fillRect(x, y, width, height);
+    this._context.strokeRect(x, y, width, height);
   }
 }
