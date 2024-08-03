@@ -37,7 +37,7 @@ export class Cell {
   }
 
   get isEmpty() { return this._isEmpty; }
-  setEmpty() { this.resetState(); this._isEmpty = true; this.setDisplay(); }
+  setEmpty() { this.resetState(); this._isEmpty = true; this.setDisplay(); this.skipAnimation(); }
 
   get isBlock() { return this._isBlock; }
   setBlock() { this.resetState(); this._isBlock = true; this.setDisplay(); }
@@ -59,6 +59,9 @@ export class Cell {
       this._animation = 1;
     }
     return this._animation;
+  }
+  skipAnimation() {
+    this._animation = 1;
   }
 
   get display() { return this._display; }

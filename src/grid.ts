@@ -64,7 +64,10 @@ export class Grid {
     for (let x = 0; x < this._rows; x++) {
       for (let y = 0; y < this._cols; y++) {
         const cell = this._cells[x][y];
-        if (Math.random() < percent) cell.setBlock();
+        if (Math.random() < percent) {
+          cell.setBlock();
+          cell.skipAnimation();
+        }
       }
     }
   }
@@ -75,7 +78,10 @@ export class Grid {
     for (let x = 0; x < this._rows; x++) {
       for (let y = 0; y < this._cols; y++) {
         const cell = this._cells[x][y];
-        if (noise.get(x, y, scalar) < percent) cell.setBlock();
+        if (noise.get(x, y, scalar) < percent) {
+          cell.setBlock();
+          cell.skipAnimation();
+        }
       }
     }
   }
