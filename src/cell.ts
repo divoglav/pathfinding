@@ -1,10 +1,10 @@
-import config from "../config";
-import { Cell } from "./cell";
+import { ICell } from "./interfaces/cell.interface";
+import config from "./config";
 
 const gScalar = config.pathfinding.gScalar;
 const animation = config.display.animation.active ? 0 : 1;
 
-export class SquareCell extends Cell {
+export class Cell implements ICell  {
   private _isEmpty: boolean = false;
   private _isBlock: boolean = false;
   private _isOpen: boolean = false;
@@ -15,14 +15,14 @@ export class SquareCell extends Cell {
   private _h: number = 0; // distance
   private _f: number = 0; // total
 
-  private _neighbors: (SquareCell | null)[] = [];
+  private _neighbors: (Cell | null)[] = [];
 
-  private _parent: SquareCell | null = null;
+  private _parent: Cell | null = null;
 
   private _displayMark: boolean = false;
   private _animationStep: number = 0;
 
-  constructor(readonly x: number, readonly y: number) { super(); }
+  constructor(readonly x: number, readonly y: number) {}
 
   // State:
 
@@ -82,10 +82,10 @@ export class SquareCell extends Cell {
   // Connections:
 
   getParent() { return this._parent; }
-  setParent(cell: Cell) { this._parent = cell as SquareCell; }
+  setParent(cell: Cell) { this._parent = cell as Cell; }
 
   getNeighbors() { return this._neighbors; }
-  setNeighbors(neighbors: (SquareCell | null)[]) { this._neighbors = neighbors; }
+  setNeighbors(neighbors: (Cell | null)[]) { this._neighbors = neighbors; }
 
   // Display:
 

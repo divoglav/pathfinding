@@ -1,13 +1,11 @@
-import { SquareCell } from "./cells/squareCell";
-import * as generalUtils from "./utils/general";
+import { ICell } from "../interfaces/cell.interface";
+import * as generalUtils from "../utils/general";
 
-export class AStar {
-  private readonly open: SquareCell[] = [];
-  private readonly closed = new Set<SquareCell>();
+export class AStar { private readonly open: ICell[] = []; private readonly closed = new Set<ICell>();
 
   constructor(
-    start: SquareCell,
-    private readonly target: SquareCell,
+    start: ICell,
+    private readonly target: ICell,
   ) {
     this.open.push(start);
     start.setOpen();
@@ -22,8 +20,8 @@ export class AStar {
     return minFCell;
   }
 
-  private reconstructPath(cell: SquareCell) {
-    let current: SquareCell | null = cell;
+  private reconstructPath(cell: ICell) {
+    let current: ICell | null = cell;
     while (current) {
       current.setPath();
       current = current.getParent();

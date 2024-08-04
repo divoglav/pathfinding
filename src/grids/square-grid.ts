@@ -1,15 +1,16 @@
-import { SquareCell } from "../cells/squareCell";
-import { Grid } from "./grid";
+
 import * as noise from "../libs/noise/noise";
 import config from "../config";
+import { ICell } from "../interfaces/cell.interface";
+import { Cell } from "../cell";
+import { IGrid } from "../interfaces/grid.interface";
 
-export class SquareGrid extends Grid {
+export class SquareGrid implements IGrid {
   private readonly _rows: number;
   private readonly _cols: number;
-  private readonly _cells: SquareCell[][] = [];
+  private readonly _cells: ICell[][] = [];
 
   constructor(rows: number, cols: number) {
-    super();
     this._rows = rows;
     this._cols = cols;
   }
@@ -18,8 +19,7 @@ export class SquareGrid extends Grid {
     for (let x = 0; x < this._rows; x++) {
       this._cells.push([]);
       for (let y = 0; y < this._cols; y++) {
-        const cell = new SquareCell(x, y);
-        cell.setEmpty();
+        const cell = new Cell(x, y);
         this._cells[x].push(cell);
       }
     }

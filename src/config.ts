@@ -1,7 +1,7 @@
 const config = {
   canvas: {
-    width: 700,
-    height: 700,
+    width: 600,
+    height: 600,
   },
 
   map: {
@@ -36,15 +36,15 @@ const config = {
     },
 
     colors: {
-      border: "#888",
-      background: "#888",
+      border: "#313244",
+      background: "#313244",
 
       cells: {
-        empty: "#888",
-        block: "#333",
-        open: "green",
-        closed: "teal",
-        path: "orange",
+        empty: "#313244",
+        block: "#11111b",
+        open: "#89b4fa",
+        closed: "#b4befe",
+        path: "#f38ba8",
         debug: "magenta",
       },
     },
