@@ -1,10 +1,28 @@
 import config from "./config";
 import { ICell } from "./interfaces/cell.interface";
-import * as math from "./utils/math";
+import * as math from "./libs/utils/math";
+
+const hexCosines: number[] = [];
+const hexSines: number[] = [];
+
+function calculateHexCosines(cosines: number[], sines: number[]) {
+  const div6 = math.TAU / 6;
+  const div12 = math.TAU / 12;
+  for (let i = 0; i < 6; i++) {
+    const angle = div6 * i - div12;
+    cosines.push(Math.cos(angle));
+    sines.push(Math.sin(angle));
+  }
+}
+
+calculateHexCosines(hexCosines, hexSines);
 
 // cache
 const rows = config.map.rows;
 const cols = config.map.columns;
+const diameter = config.canvas.width / rows;
+const outerRadius = diameter / 2;
+const innerRadius = outerRadius * math.COS_30;
 const maxWidth = config.canvas.width / rows;
 const maxHeight = config.canvas.height / cols;
 const halfWidth = maxWidth / 2;
@@ -37,7 +55,8 @@ export class Display {
         if (cell.shouldDisplay()) {
           counter++;
           const color = this.getCellColor(cell);
-          this.drawCell(cell, color);
+          //this.drawSquareCell(cell, color);
+          this.drawHexCell(cell, color);
         }
       }
     }
@@ -64,7 +83,34 @@ export class Display {
     return value * value * value;
   }
 
-  private drawCell(cell: ICell, color: string) {
+  private drawHexCell(cell: ICell, color: string) {
+    const xOffset = cell.y % 2 == 0 ? innerRadius : 0;
+    const xCenter = outerRadius * 2 + xOffset +  cell.x * (2 * innerRadius);
+    const yCenter = outerRadius * 2 + cell.y * (1.5 * outerRadius);
+
+    const step = this.easeFunction(cell.incrementAnimation(animationIncrement));
+
+    const width = math.lerp(0, maxWidth, step);
+    const height = math.lerp(0, maxHeight, step);
+
+    const x = xCenter - width / 2;
+    const y = yCenter - height / 2;
+
+    if (this._lastFillColor !== color) {
+      this._context.fillStyle = color;
+      this._lastFillColor = color;
+    }
+
+    this._context.beginPath();
+    this._context.moveTo(x + outerRadius* hexCosines[0], y + outerRadius * hexSines[0]);
+    for (let i = 1; i < 6; i++) {
+      this._context.lineTo(x + outerRadius * hexCosines[i], y + outerRadius* hexSines[i]);
+    }
+    this._context.closePath();
+    this._context.fill();
+  }
+
+  private drawSquareCell(cell: ICell, color: string) {
     const xCenter = cell.x * maxWidth + halfWidth;
     const yCenter = cell.y * maxHeight + halfHeight;
 

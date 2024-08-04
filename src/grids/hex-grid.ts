@@ -5,7 +5,7 @@ import { IGrid } from "../interfaces/grid.interface";
 import { ICell } from "../interfaces/cell.interface";
 import { Cell } from "../cell";
 
-export class SquareGrid implements IGrid {
+export class HexGrid implements IGrid {
   private readonly _rows: number;
   private readonly _cols: number;
   private readonly _cells: ICell[][] = [];
@@ -20,22 +20,26 @@ export class SquareGrid implements IGrid {
       this._cells.push([]);
       for (let y = 0; y < this._cols; y++) {
         const cell = new Cell(x, y);
+        cell.setEmpty();
         this._cells[x].push(cell);
       }
     }
   }
 
+  // DIFF
   setupNeighbors() {
     for (let x = 0; x < this._rows; x++) {
       for (let y = 0; y < this._cols; y++) {
         const cell = this._cells[x][y];
 
-        const north = this.getCell(x, y - 1);
+        const northEast = this.getCell(x + 1, y - 1);
         const east = this.getCell(x + 1, y);
-        const south = this.getCell(x, y + 1);
+        const southEast = this.getCell(x, y + 1);
+        const southWest = this.getCell(x - 1, y + 1);
         const west = this.getCell(x - 1, y);
+        const northWest = this.getCell(x, y - 1);
 
-        cell.setNeighbors([north, east, south, west]);
+        cell.setNeighbors([northEast, east, southEast, southWest, west, northWest]);
       }
     }
   }

@@ -3,9 +3,10 @@ import "./styles/style.css";
 import config from "./config";
 import { Display } from "./display";
 import { AStar } from "./algorithms/a-star";
-import { SquareGrid } from "./grids/square-grid";
+//import { SquareGrid } from "./grids/square-grid";
+import { HexGrid } from "./grids/hex-grid";
 
-const grid = new SquareGrid(config.map.rows, config.map.columns);
+const grid = new HexGrid(config.map.rows, config.map.columns);
 grid.createCells();
 grid.setupNeighbors();
 grid.generateBlocks(config.map.blocks.type);

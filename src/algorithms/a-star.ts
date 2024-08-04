@@ -1,7 +1,9 @@
 import { ICell } from "../interfaces/cell.interface";
-import * as generalUtils from "../utils/general";
+import * as generalUtils from "../libs/utils/general";
 
-export class AStar { private readonly open: ICell[] = []; private readonly closed = new Set<ICell>();
+export class AStar {
+  private readonly open: ICell[] = [];
+  private readonly closed = new Set<ICell>();
 
   constructor(
     start: ICell,

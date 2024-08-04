@@ -16,6 +16,7 @@ const config = {
 
       noise: {
         percent: 0.36,
+        //percent: 0,
         scalar: 0.14,
       },
 
@@ -31,7 +32,7 @@ const config = {
     lineWidth: 0.2,
 
     animation: {
-      active: true,
+      active: false,
       increment: 0.1
     },
 
@@ -40,7 +41,8 @@ const config = {
       background: "#313244",
 
       cells: {
-        empty: "#313244",
+        //empty: "#313244",
+        empty: "teal",
         block: "#11111b",
         open: "#89b4fa",
         closed: "#b4befe",
