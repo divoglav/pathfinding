@@ -117,7 +117,7 @@ export class SquareGrid extends Grid {
   unblockCellRecursive(cell: SquareCell, recursions: number = 0) {
     cell.setEmpty();
 
-    const neighbors = cell.neighbors;
+    const neighbors = cell.getNeighbors();
     for (let i = 0; i < neighbors.length; i++) {
       const neighbor = neighbors[i];
       if (!neighbor) continue;

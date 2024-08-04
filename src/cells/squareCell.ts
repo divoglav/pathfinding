@@ -1,11 +1,10 @@
 import config from "../config";
+import { Cell } from "./cell";
 
 const gScalar = config.pathfinding.gScalar;
 const animation = config.display.animation.active ? 0 : 1;
 
-export type CellOrNull = SquareCell | null;
-
-export class SquareCell {
+export class SquareCell extends Cell {
   private _isEmpty: boolean = false;
   private _isBlock: boolean = false;
   private _isOpen: boolean = false;
@@ -16,17 +15,16 @@ export class SquareCell {
   private _h: number = 0; // distance
   private _f: number = 0; // total
 
-  private _neighbors: CellOrNull[] = [];
+  private _neighbors: (SquareCell | null)[] = [];
 
-  private _parent: CellOrNull = null;
+  private _parent: SquareCell | null = null;
 
-  private _display: boolean = false;
-  private _animation: number = 0;
+  private _displayMark: boolean = false;
+  private _animationStep: number = 0;
 
-  constructor(
-    readonly x: number,
-    readonly y: number,
-  ) {}
+  constructor(readonly x: number, readonly y: number) { super(); }
+
+  // State:
 
   private resetState() {
     this._isEmpty = false;
@@ -36,109 +34,73 @@ export class SquareCell {
     this._isPath = false;
   }
 
-  get isEmpty() {
-    return this._isEmpty;
-  }
+  isEmpty() { return this._isEmpty; }
   setEmpty() {
     this.resetState();
     this._isEmpty = true;
-    this.setDisplay();
+    this.markDisplay();
     this.skipAnimation();
   }
 
-  get isBlock() {
-    return this._isBlock;
-  }
+  isBlock() { return this._isBlock; }
   setBlock() {
     this.resetState();
     this._isBlock = true;
-    this.setDisplay();
+    this.markDisplay();
   }
 
-  get isOpen() {
-    return this._isOpen;
-  }
+  isOpen() { return this._isOpen; }
   setOpen() {
     this.resetState();
     this._isOpen = true;
-    this.setDisplay();
+    this.markDisplay();
   }
 
-  get isClosed() {
-    return this._isClosed;
-  }
+  isClosed() { return this._isClosed; }
   setClosed() {
     this.resetState();
     this._isClosed = true;
-    this.setDisplay();
+    this.markDisplay();
   }
 
-  get isPath() {
-    return this._isPath;
-  }
+  isPath() { return this._isPath; }
   setPath() {
     this.resetState();
     this._isPath = true;
-    this.setDisplay();
+    this.markDisplay();
   }
 
-  resetAnimation() {
-    this._animation = animation;
-  }
+  // Costs:
+
+  private updateF() { this._f = this._g * gScalar + this._h; }
+
+  getG() { return this._g; }
+  setG(value: number) { this._g = value; this.updateF(); }
+  setH(value: number) { this._h = value; }
+  getF() { return this._f; }
+
+  // Connections:
+
+  getParent() { return this._parent; }
+  setParent(cell: Cell) { this._parent = cell as SquareCell; }
+
+  getNeighbors() { return this._neighbors; }
+  setNeighbors(neighbors: (SquareCell | null)[]) { this._neighbors = neighbors; }
+
+  // Display:
+
+  shouldDisplay() { return this._displayMark; }
+  private markDisplay() { this._displayMark = true; this.resetAnimation(); }
+  unmarkDisplay() { this._displayMark = false; }
+
+  private resetAnimation() { this._animationStep = animation; }
   incrementAnimation(value: number) {
-    this._animation += value;
-    if (this._animation >= 1) {
-      this.unsetDisplay();
-      this._animation = 1;
+    this._animationStep += value;
+    if (this._animationStep >= 1) {
+      this.unmarkDisplay();
+      this._animationStep = 1;
     }
-    return this._animation;
+    return this._animationStep;
   }
-  skipAnimation() {
-    this._animation = 1;
-  }
-
-  get display() {
-    return this._display;
-  }
-  private setDisplay() {
-    this._display = true;
-    this.resetAnimation();
-  }
-  unsetDisplay() {
-    this._display = false;
-  }
-
-  private updateF() {
-    this._f = this._g * gScalar + this._h;
-  }
-
-  get g() {
-    return this._g;
-  }
-  setG(value: number) {
-    this._g = value;
-    this.updateF();
-  }
-
-  setH(value: number) {
-    this._h = value;
-  }
-
-  get f() {
-    return this._f;
-  }
-
-  get parent() {
-    return this._parent;
-  }
-  setParent(cell: SquareCell) {
-    this._parent = cell;
-  }
-
-  get neighbors() {
-    return this._neighbors;
-  }
-  setNeighbors(neighbors: CellOrNull[]) {
-    this._neighbors = neighbors;
-  }
+  skipAnimation() { this._animationStep = 1; }
 }

@@ -5,5 +5,5 @@ export abstract class Grid {
   abstract setupNeighbors(): void;
   abstract generateBlocks(type: string): void;
   abstract getCell(x: number, y: number): Cell | null;
-  abstract getCells(): Cell[];
+  abstract getCells(): Cell[] | Cell[][];
 }

@@ -1,4 +1,4 @@
-import { SquareCell, CellOrNull } from "./cells/squareCell";
+import { SquareCell } from "./cells/squareCell";
 import * as generalUtils from "./utils/general";
 
 export class AStar {
@@ -17,17 +17,18 @@ export class AStar {
     let minFCell = this.open[0];
     for (let i = 1; i < this.open.length; i++) {
       const cell = this.open[i];
-      if (cell.f < minFCell.f) minFCell = cell;
+      if (cell.getF() < minFCell.getF()) minFCell = cell;
     }
     return minFCell;
   }
 
   private reconstructPath(cell: SquareCell) {
-    let current: CellOrNull = cell;
+    let current: SquareCell | null = cell;
     while (current) {
       current.setPath();
-      current = current.parent;
-    } }
+      current = current.getParent();
+    }
+  }
 
   iterate(): boolean {
     if (this.open.length <= 0) return true;
@@ -44,16 +45,15 @@ export class AStar {
     this.closed.add(current);
     current.setClosed();
 
-    const neighbors = current.neighbors;
+    const neighbors = current.getNeighbors();
     for (let n = 0; n < neighbors.length; n++) {
       const neighbor = neighbors[n];
-      if (!neighbor || neighbor.isClosed || neighbor.isBlock) continue;
+      if (!neighbor || neighbor.isClosed() || neighbor.isBlock()) continue;
 
+      const gSum = current.getG() + 1;
 
-      const gSum = current.g + 1;
-
-      if (neighbor.isOpen) {
-        if (gSum < neighbor.g) {
+      if (neighbor.isOpen()) {
+        if (gSum < neighbor.getG()) {
           neighbor.setParent(current);
           neighbor.setG(gSum);
         }
