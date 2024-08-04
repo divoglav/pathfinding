@@ -34,14 +34,18 @@ export class HexGrid implements IGrid {
 
         const northEast = this.getCell(x + 1, y - 1);
         const east = this.getCell(x + 1, y);
-        const southEast = this.getCell(x, y + 1);
-        const southWest = this.getCell(x - 1, y + 1);
+        const southEast = this.getCell(x + 1, y + 1);
+        const southWest = this.getCell(x, y + 1);
         const west = this.getCell(x - 1, y);
         const northWest = this.getCell(x, y - 1);
 
         cell.setNeighbors([northEast, east, southEast, southWest, west, northWest]);
       }
     }
+
+    //
+    console.log(this._cells);
+    
   }
 
   generateBlocks(type: string) {

@@ -5,8 +5,8 @@ const config = {
   },
 
   map: {
-    rows: 60,
-    columns: 60,
+    rows: 30,
+    columns: 30,
 
     unblockSpawnLayers: 4,
 
@@ -21,7 +21,7 @@ const config = {
       },
 
       random: {
-        percent: 0.2,
+        percent: 0.3,
       },
     },
   },
@@ -32,8 +32,8 @@ const config = {
     lineWidth: 0.2,
 
     animation: {
-      active: false,
-      increment: 0.1
+      active: true,
+      increment: 0.3
     },
 
     colors: {
@@ -41,8 +41,8 @@ const config = {
       background: "#313244",
 
       cells: {
-        //empty: "#313244",
-        empty: "teal",
+        empty: "#313244",
+        //empty: "teal",
         block: "#11111b",
         open: "#89b4fa",
         closed: "#b4befe",
