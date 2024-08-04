@@ -1,13 +1,15 @@
-import { Cell } from "./cell";
-import config from "./config";
-import * as noise from "./libs/noise/noise";
+import { SquareCell } from "../cells/squareCell";
+import { Grid } from "./grid";
+import * as noise from "../libs/noise/noise";
+import config from "../config";
 
-export class Grid {
+export class SquareGrid extends Grid {
   private readonly _rows: number;
   private readonly _cols: number;
-  private readonly _cells: Cell[][] = [];
+  private readonly _cells: SquareCell[][] = [];
 
   constructor(rows: number, cols: number) {
+    super();
     this._rows = rows;
     this._cols = cols;
   }
@@ -16,7 +18,7 @@ export class Grid {
     for (let x = 0; x < this._rows; x++) {
       this._cells.push([]);
       for (let y = 0; y < this._cols; y++) {
-        const cell = new Cell(x, y);
+        const cell = new SquareCell(x, y);
         cell.setEmpty();
         this._cells[x].push(cell);
       }
@@ -90,7 +92,7 @@ export class Grid {
     return x >= 0 && x < this._rows && y >= 0 && y < this._cols;
   }
 
-  calculateAllDistancesTo(target: Cell) {
+  calculateAllDistancesTo(target: SquareCell) {
     const distanceMethod = config.pathfinding.distanceMethod;
 
     for (let x = 0; x < this._rows; x++) {
@@ -102,17 +104,17 @@ export class Grid {
     }
   }
 
-  private euclideanDistance(from: Cell, to: Cell) {
+  private euclideanDistance(from: SquareCell, to: SquareCell) {
     const xDifference = from.x - to.x;
     const yDifference = from.y - to.y;
     return Math.sqrt(xDifference * xDifference + yDifference * yDifference);
   }
 
-  private manhattanDistance(from: Cell, to: Cell) {
+  private manhattanDistance(from: SquareCell, to: SquareCell) {
     return Math.abs(from.x - to.x) + Math.abs(from.y - to.y);
   }
 
-  unblockCellRecursive(cell: Cell, recursions: number = 0) {
+  unblockCellRecursive(cell: SquareCell, recursions: number = 0) {
     cell.setEmpty();
 
     const neighbors = cell.neighbors;

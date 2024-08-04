@@ -1,4 +1,4 @@
-import { Cell } from "./cell";
+import { SquareCell } from "./cells/squareCell";
 import config from "./config";
 import * as math from "./utils/math";
 
@@ -29,11 +29,11 @@ export class Display {
     this._context.fillRect(0, 0, config.canvas.width, config.canvas.height);
   }
 
-  drawCells(cells: Cell[][]) {
+  drawCells(cells: SquareCell[][]) {
     let counter = 0;
     for (let x = 0; x < rows; x++) {
       for (let y = 0; y < cols; y++) {
-        const cell: Cell = cells[x][y];
+        const cell: SquareCell = cells[x][y];
         if (cell.display) {
           counter++;
           const color = this.getCellColor(cell);
@@ -45,7 +45,7 @@ export class Display {
     console.log(counter);
   }
 
-  private getCellColor(cell: Cell): string {
+  private getCellColor(cell: SquareCell): string {
     if (cell.isEmpty) {
       return cellColors.empty;
     } else if (cell.isBlock) {
@@ -64,7 +64,7 @@ export class Display {
     return value * value * value;
   }
 
-  private drawCell(cell: Cell, color: string) {
+  private drawCell(cell: SquareCell, color: string) {
     const xCenter = cell.x * maxWidth + halfWidth;
     const yCenter = cell.y * maxHeight + halfHeight;
 

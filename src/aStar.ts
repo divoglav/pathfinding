@@ -1,13 +1,13 @@
-import { Cell, CellOrNull } from "./cell";
+import { SquareCell, CellOrNull } from "./cells/squareCell";
 import * as generalUtils from "./utils/general";
 
 export class AStar {
-  private readonly open: Cell[] = [];
-  private readonly closed = new Set<Cell>();
+  private readonly open: SquareCell[] = [];
+  private readonly closed = new Set<SquareCell>();
 
   constructor(
-    start: Cell,
-    private readonly target: Cell,
+    start: SquareCell,
+    private readonly target: SquareCell,
   ) {
     this.open.push(start);
     start.setOpen();
@@ -22,7 +22,7 @@ export class AStar {
     return minFCell;
   }
 
-  private reconstructPath(cell: Cell) {
+  private reconstructPath(cell: SquareCell) {
     let current: CellOrNull = cell;
     while (current) {
       current.setPath();

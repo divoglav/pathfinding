@@ -1,6 +1,6 @@
 import { SquareCell } from "./cells/squareCell";
 import config from "./config";
-import { Grid } from "./grid";
+import { Grid } from "./grids";
 
 // cache
 const rows = config.map.rows;

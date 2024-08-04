@@ -1,5 +1,5 @@
 import config from "./config";
-import { Grid } from "./grid";
+import { Grid } from "./grids";
 
 let bcrTop: number = 0;
 let bcrLeft: number = 0;
