@@ -5,14 +5,14 @@ const config = {
   },
 
   map: {
-    rows: 30,
-    columns: 30,
+    grid: "hex", // square, hex
+    rows: 40,
+    columns: 40,
 
     unblockSpawnLayers: 4,
 
     blocks: {
-      // random, noise, none
-      type: "noise",
+      type: "noise", // random, noise, none
 
       noise: {
         percent: 0.36,
@@ -33,7 +33,7 @@ const config = {
 
     animation: {
       active: true,
-      increment: 0.3
+      increment: 0.1
     },
 
     colors: {
@@ -53,8 +53,7 @@ const config = {
   },
 
   pathfinding: {
-    // manhattan, euclidean
-    distanceMethod: "euclidean",
+    distanceMethod: "euclidean", // manhattan, euclidean
     gScalar: 0.3,
   },
 };

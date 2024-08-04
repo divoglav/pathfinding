@@ -1,7 +1,7 @@
 import "./styles/reset.css";
 import "./styles/style.css";
 import config from "./config";
-import { Display } from "./display";
+import { SquareDisplay } from "./displays/square-display";
 import { AStar } from "./algorithms/a-star";
 import { SquareGrid } from "./grids/square-grid";
 import { HexGrid } from "./grids/hex-grid";
@@ -23,7 +23,7 @@ canvas.height = config.canvas.height;
 document.body.appendChild(canvas);
 const context = canvas.getContext("2d");
 
-const display = new Display(context!);
+const display = new SquareDisplay(context!);
 display.clear();
 
 const aStar = new AStar(startCell, endCell);

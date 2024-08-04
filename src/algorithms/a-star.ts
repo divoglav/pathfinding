@@ -1,3 +1,4 @@
+import config from "../config";
 import { ICell } from "../interfaces/cell.interface";
 import * as generalUtils from "../libs/utils/general";
 

@@ -1,19 +1,26 @@
-Hexagonal grid.
+REFACTOR:
+  Parent grid class from which the current
+  two grids come from.
 
-Diagonal movement.
+  Parent display class from which two display
+  classes will come from. One for squares and
+  one for hexagons.
 
-Different pathfinding algorithms.
+FEATURES:
+  Diagonal movement.
 
-Full drawing control.
+  Different pathfinding algorithms.
 
-Configurable User Interface.
+  Full drawing control.
 
-Two-way pathfinding.
+  Configurable User Interface.
 
-The macro optimization.
-- difficult
-- sector splits
+  Two-way pathfinding.
 
-Multiple targets?
+  The macro optimization.
+    Difficult.
+    Sector splits.
 
-Scrollable timeline.
+  Multiple targets?
+
+  Scrollable timeline.

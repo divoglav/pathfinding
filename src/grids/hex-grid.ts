@@ -20,32 +20,31 @@ export class HexGrid implements IGrid {
       this._cells.push([]);
       for (let y = 0; y < this._cols; y++) {
         const cell = new Cell(x, y);
-        cell.setEmpty();
         this._cells[x].push(cell);
       }
     }
   }
 
-  // DIFF
+  // TODO: This is the only difference from the other grid.
+  // So make a Grid class from which the SquareGrid and
+  // HexGrid come from.
   setupNeighbors() {
     for (let x = 0; x < this._rows; x++) {
       for (let y = 0; y < this._cols; y++) {
         const cell = this._cells[x][y];
 
-        const northEast = this.getCell(x + 1, y - 1);
+        const isEven = y % 2 === 0;
+
+        const northEast = this.getCell(isEven ? x : x + 1, y - 1);
         const east = this.getCell(x + 1, y);
-        const southEast = this.getCell(x + 1, y + 1);
-        const southWest = this.getCell(x, y + 1);
+        const southEast = this.getCell(isEven ? x : x + 1, y + 1);
+        const southWest = this.getCell(isEven ? x - 1 : x, y + 1);
         const west = this.getCell(x - 1, y);
-        const northWest = this.getCell(x, y - 1);
+        const northWest = this.getCell(isEven ? x - 1 : x, y - 1);
 
         cell.setNeighbors([northEast, east, southEast, southWest, west, northWest]);
       }
     }
-
-    //
-    console.log(this._cells);
-    
   }
 
   generateBlocks(type: string) {
