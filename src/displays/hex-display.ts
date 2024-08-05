@@ -16,7 +16,7 @@ for (let i = 0; i < 6; i++) {
 }
 
 export class HexDisplay extends Display {
-  private readonly _diameter = config.canvas.width / this._cols;
+  private readonly _diameter = config.canvas.width / this._cols * (2 - math.COS_30);
   private readonly _outerRadius = this._diameter / 2;
   private readonly _innerRadius = this._outerRadius * math.COS_30;
 

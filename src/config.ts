@@ -1,13 +1,12 @@
 const config = {
   canvas: {
-    width: 600,
-    height: 500,
+    width: 800,
+    height: 800,
   },
 
   map: {
     grid: "hex", // square, hex
-    columns: 40,
-    //rows: 30,
+    columns: 60,
 
     unblockSpawnLayers: 4,
 
