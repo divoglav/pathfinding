@@ -1,10 +1,10 @@
 REFACTOR:
-  Parent grid class from which the current
-  two grids come from.
-
   Parent display class from which two display
   classes will come from. One for squares and
   one for hexagons.
+
+  Utils as static classes will maybe help the
+  namespaces and ease of use.
 
 FEATURES:
   Diagonal movement.
