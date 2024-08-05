@@ -1,23 +1,24 @@
 import * as noise from "../libs/noise/noise";
-import * as utils from "../utils"; import config from "../config";
+import * as utils from "../utils";
+import config from "../config";
 import { IGrid } from "../interfaces/grid.interface";
 import { ICell } from "../interfaces/cell.interface";
 import { Cell } from "../cell";
 
 export abstract class Grid implements IGrid {
-  protected readonly _rows: number;
   protected readonly _cols: number;
+  protected readonly _rows: number;
   protected readonly _cells: ICell[][] = [];
 
-  constructor(rows: number, cols: number) {
-    this._rows = rows;
+  constructor(cols: number, rows: number) {
     this._cols = cols;
+    this._rows = rows;
   }
 
   createCells() {
-    for (let x = 0; x < this._rows; x++) {
+    for (let x = 0; x < this._cols; x++) {
       this._cells.push([]);
-      for (let y = 0; y < this._cols; y++) {
+      for (let y = 0; y < this._rows; y++) {
         const cell = new Cell(x, y);
         this._cells[x].push(cell);
       }
@@ -40,7 +41,7 @@ export abstract class Grid implements IGrid {
   }
 
   protected isValidCoordinate(x: number, y: number) {
-    return x >= 0 && x < this._rows && y >= 0 && y < this._cols;
+    return x >= 0 && x < this._cols && y >= 0 && y < this._rows;
   }
 
   protected getCell(x: number, y: number) {
@@ -49,8 +50,8 @@ export abstract class Grid implements IGrid {
 
   protected generateRandomBlocks() {
     const percent = config.map.blocks.random.percent;
-    for (let x = 0; x < this._rows; x++) {
-      for (let y = 0; y < this._cols; y++) {
+    for (let x = 0; x < this._cols; x++) {
+      for (let y = 0; y < this._rows; y++) {
         const cell = this._cells[x][y];
         if (Math.random() < percent) {
           cell.setBlock();
@@ -63,8 +64,8 @@ export abstract class Grid implements IGrid {
   protected generateNoiseBlocks() {
     const percent = config.map.blocks.noise.percent;
     const scalar = config.map.blocks.noise.scalar;
-    for (let x = 0; x < this._rows; x++) {
-      for (let y = 0; y < this._cols; y++) {
+    for (let x = 0; x < this._cols; x++) {
+      for (let y = 0; y < this._rows; y++) {
         const cell = this._cells[x][y];
         if (noise.get(x, y, scalar) < percent) {
           cell.setBlock();
@@ -81,8 +82,8 @@ export abstract class Grid implements IGrid {
   calculateAllDistancesTo(target: ICell) {
     const distanceMethod = config.pathfinding.distanceMethod;
 
-    for (let x = 0; x < this._rows; x++) {
-      for (let y = 0; y < this._cols; y++) {
+    for (let x = 0; x < this._cols; x++) {
+      for (let y = 0; y < this._rows; y++) {
         const cell = this._cells[x][y];
         if (distanceMethod === "manhattan") cell.setH(utils.manhattanDistance(cell, target));
         else if (distanceMethod === "euclidean") cell.setH(utils.euclideanDistance(cell, target));

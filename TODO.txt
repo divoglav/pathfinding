@@ -1,8 +1,9 @@
-REFACTOR:
-  Parent display class from which two display
-  classes will come from. One for squares and
-  one for hexagons.
+FIX:
+  Grid fills.
 
+  Rows and Columns are reversed lol.
+
+REFACTOR:
   Utils as static classes will maybe help the
   namespaces and ease of use.
 

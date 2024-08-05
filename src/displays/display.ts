@@ -1,13 +1,19 @@
 import config from "../config";
 import { ICell } from "../interfaces/cell.interface";
 import { IDisplay } from "../interfaces/display.interface";
+import * as utils from "../utils";
 
 export abstract class Display implements IDisplay {
   protected _lastFillColor: string = "";
 
-  protected readonly _rows = config.map.rows;
   protected readonly _cols = config.map.columns;
-  protected readonly _maxWidth = config.canvas.width / this._rows;
+  protected readonly _rows = utils.calculateRowsCount(
+    config.canvas.width,
+    config.canvas.height,
+    config.map.columns,
+    config.map.grid === "hex",
+  );
+  protected readonly _maxWidth = config.canvas.width / this._cols;
   protected readonly _cellColors = config.display.colors.cells;
   protected readonly _animationIncrement = config.display.animation.increment;
 
@@ -42,18 +48,15 @@ export abstract class Display implements IDisplay {
   protected abstract drawCell(cell: ICell, color: string): void;
 
   drawCells(cells: ICell[][]) {
-    let counter = 0;
-    for (let x = 0; x < this._rows; x++) {
-      for (let y = 0; y < this._cols; y++) {
+    for (let x = 0; x < this._cols; x++) {
+      for (let y = 0; y < this._rows; y++) {
         const cell: ICell = cells[x][y];
         if (cell.shouldDisplay()) {
-          counter++;
           const color = this.getCellColor(cell);
           this.drawCell(cell, color);
         }
       }
     }
-    console.log(counter);
   }
 
   clear() {

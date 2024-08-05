@@ -2,8 +2,8 @@ import { Grid } from "./grid";
 
 export class HexGrid extends Grid {
   setupNeighbors() {
-    for (let x = 0; x < this._rows; x++) {
-      for (let y = 0; y < this._cols; y++) {
+    for (let x = 0; x < this._cols; x++) {
+      for (let y = 0; y < this._rows; y++) {
         const cell = this._cells[x][y];
 
         const isEven = y % 2 === 0;

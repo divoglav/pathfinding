@@ -4,7 +4,7 @@ import { ICell } from "../interfaces/cell.interface";
 import { Display } from "./display";
 
 export class SquareDisplay extends Display {
-  protected readonly _maxHeight = config.canvas.height / this._cols;
+  protected readonly _maxHeight = config.canvas.height / this._rows;
   protected readonly _halfWidth = this._maxWidth / 2;
   protected readonly _halfHeight = this._maxHeight / 2;
 
