@@ -56,6 +56,7 @@ export class SquareDisplay {
           counter++;
           const color = this.getCellColor(cell);
           this.drawCell(cell, color)
+          //this.drawHexCell(cell, color)
         }
       }
     }
