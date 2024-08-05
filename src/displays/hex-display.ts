@@ -3,6 +3,18 @@ import config from "../config";
 import { ICell } from "../interfaces/cell.interface";
 import { Display } from "./display";
 
+const hexCosines: number[] = [];
+const hexSines: number[] = [];
+
+const div6 = math.TAU / 6;
+const div12 = math.TAU / 12;
+
+for (let i = 0; i < 6; i++) {
+  const angle = div6 * i - div12;
+  hexCosines.push(Math.cos(angle));
+  hexSines.push(Math.sin(angle));
+}
+
 export class HexDisplay extends Display {
   private readonly _diameter = config.canvas.width / this._rows;
   private readonly _outerRadius = this._diameter / 2;

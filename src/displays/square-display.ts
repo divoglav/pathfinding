@@ -3,26 +3,19 @@ import config from "../config";
 import { ICell } from "../interfaces/cell.interface";
 import { Display } from "./display";
 
-const rows = config.map.rows;
-const cols = config.map.columns;
-//const diameter = config.canvas.width / rows;
-//const outerRadius = diameter / 2;
-//const innerRadius = outerRadius * math.COS_30;
-const maxWidth = config.canvas.width / rows;
-const maxHeight = config.canvas.height / cols;
-const halfWidth = maxWidth / 2;
-const halfHeight = maxHeight / 2;
-const cellColors = config.display.colors.cells;
-
 export class SquareDisplay extends Display {
+  protected readonly _maxHeight = config.canvas.height / this._cols;
+  protected readonly _halfWidth = this._maxWidth / 2;
+  protected readonly _halfHeight = this._maxHeight / 2;
+
   protected drawCell(cell: ICell, color: string) {
-    const xCenter = cell.x * maxWidth + halfWidth;
-    const yCenter = cell.y * maxHeight + halfHeight;
+    const xCenter = cell.x * this._maxWidth + this._halfWidth;
+    const yCenter = cell.y * this._maxHeight + this._halfHeight;
 
-    const step = this.easeFunction(cell.incrementAnimation(animationIncrement));
+    const step = this.easeFunction(cell.incrementAnimation(this._animationIncrement));
 
-    const width = math.lerp(0, maxWidth, step);
-    const height = math.lerp(0, maxHeight, step);
+    const width = math.lerp(0, this._maxWidth, step);
+    const height = math.lerp(0, this._maxHeight, step);
 
     const x = xCenter - width / 2;
     const y = yCenter - height / 2;

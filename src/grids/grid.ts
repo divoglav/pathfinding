@@ -1,6 +1,5 @@
 import * as noise from "../libs/noise/noise";
-import * as utils from "../utils";
-import config from "../config";
+import * as utils from "../utils"; import config from "../config";
 import { IGrid } from "../interfaces/grid.interface";
 import { ICell } from "../interfaces/cell.interface";
 import { Cell } from "../cell";

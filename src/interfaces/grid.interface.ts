@@ -4,5 +4,7 @@ export interface IGrid {
   createCells(): void;
   setupNeighbors(): void;
   generateBlocks(type: string): void;
-  getCells(): ICell[] | ICell[][];
+  getCells(): ICell[][];
+  calculateAllDistancesTo(target: ICell): void;
+  unblockCellRecursive(cell: ICell, recursions: number): void;
 }
