@@ -15,7 +15,14 @@ export class HexGrid extends Grid {
         const west = this.getCell(x - 1, y);
         const northWest = this.getCell(isEven ? x - 1 : x, y - 1);
 
-        cell.setNeighbors([northEast, east, southEast, southWest, west, northWest]);
+        cell.setNeighbors([
+          this.createNeighbor(northEast),
+          this.createNeighbor(east),
+          this.createNeighbor(southEast),
+          this.createNeighbor(southWest),
+          this.createNeighbor(west),
+          this.createNeighbor(northWest),
+        ]);
       }
     }
   }

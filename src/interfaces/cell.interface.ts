@@ -1,3 +1,8 @@
+export type Neighbor = {
+  cell: ICell;
+  moveCost: number;
+} | null;
+
 export interface ICell {
   readonly x: number;
   readonly y: number;
@@ -21,8 +26,8 @@ export interface ICell {
   getParent(): ICell | null;
   setParent(cell: ICell): void;
 
-  getNeighbors(): (ICell | null)[];
-  setNeighbors(neighbors: (ICell | null)[]): void;
+  getNeighbors(): Neighbor[];
+  setNeighbors(neighbors: Neighbor[]): void;
 
   shouldDisplay(): boolean;
   unmarkDisplay(): void;

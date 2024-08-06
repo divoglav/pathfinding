@@ -1,4 +1,4 @@
-import { ICell } from "./interfaces/cell.interface";
+import { ICell, Neighbor } from "./interfaces/cell.interface";
 import config from "./config";
 
 const gScalar = config.pathfinding.gScalar;
@@ -15,7 +15,7 @@ export class Cell implements ICell  {
   private _h: number = 0; // distance
   private _f: number = 0; // total
 
-  private _neighbors: (Cell | null)[] = [];
+  private _neighbors: Neighbor[] = [];
 
   private _parent: Cell | null = null;
 
@@ -85,7 +85,7 @@ export class Cell implements ICell  {
   setParent(cell: Cell) { this._parent = cell as Cell; }
 
   getNeighbors() { return this._neighbors; }
-  setNeighbors(neighbors: (Cell | null)[]) { this._neighbors = neighbors; }
+  setNeighbors(neighbors: Neighbor[]) { this._neighbors = neighbors; }
 
   // Display:
 

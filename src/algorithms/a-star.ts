@@ -42,16 +42,19 @@ export class AStar {
     }
 
     Utilities.removeFromArray(this.open, current);
-    
+
     this.closed.add(current);
     current.setClosed();
 
     const neighbors = current.getNeighbors();
     for (let n = 0; n < neighbors.length; n++) {
-      const neighbor = neighbors[n];
-      if (!neighbor || neighbor.isClosed() || neighbor.isBlock()) continue;
+      const exists = neighbors[n];
+      if (!exists) continue;
+      const neighbor = exists.cell;
+      if (neighbor.isClosed() || neighbor.isBlock()) continue;
+      const neighborMoveCost = exists.moveCost;
 
-      const gSum = current.getG() + 1;
+      const gSum = current.getG() + neighborMoveCost;
 
       if (neighbor.isOpen()) {
         if (gSum < neighbor.getG()) {

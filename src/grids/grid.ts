@@ -2,7 +2,7 @@ import * as noise from "../libs/noise/noise";
 import config from "../config";
 import { Utils } from "../utils";
 import { IGrid } from "../interfaces/grid.interface";
-import { ICell } from "../interfaces/cell.interface";
+import { ICell, Neighbor } from "../interfaces/cell.interface";
 import { Cell } from "../cell";
 
 export abstract class Grid implements IGrid {
@@ -23,6 +23,11 @@ export abstract class Grid implements IGrid {
         this._cells[x].push(cell);
       }
     }
+  }
+
+  protected createNeighbor(cell: ICell | null, moveCost: number = 1): Neighbor {
+    if (!cell) return null;
+    return { cell: cell, moveCost: moveCost };
   }
 
   abstract setupNeighbors(): void;
@@ -99,10 +104,10 @@ export abstract class Grid implements IGrid {
       const neighbor = neighbors[i];
       if (!neighbor) continue;
 
-      neighbor.setEmpty();
+      neighbor.cell.setEmpty();
 
       if (recursions > 0) {
-        this.unblockCellRecursive(neighbor, recursions - 1);
+        this.unblockCellRecursive(neighbor.cell, recursions - 1);
       }
     }
   }

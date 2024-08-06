@@ -5,13 +5,15 @@ const config = {
   },
 
   map: {
-    grid: "hex", // square, hex
-    columns: 42,
+    grid: "square", // square, hex
+    squareDiagonals: true,
+
+    columns: 40,
 
     unblockSpawnLayers: 4,
 
     blocks: {
-      type: "noise", // random, noise, none
+      type: "noise", // none, noise, random
 
       noise: {
         percent: 0.36,
@@ -25,6 +27,11 @@ const config = {
     },
   },
 
+  pathfinding: {
+    distanceMethod: "euclidean", // manhattan, euclidean
+    gScalar: 0.3,
+  },
+
   display: {
     FPS: 60,
 
@@ -32,7 +39,7 @@ const config = {
 
     animation: {
       active: true,
-      increment: 0.1
+      increment: 0.1,
     },
 
     colors: {
@@ -49,11 +56,6 @@ const config = {
         debug: "magenta",
       },
     },
-  },
-
-  pathfinding: {
-    distanceMethod: "euclidean", // manhattan, euclidean
-    gScalar: 0.3,
   },
 };
 

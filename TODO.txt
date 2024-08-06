@@ -1,14 +1,10 @@
 FIX:
   Fix the padding on hex grid fills.
 
-REFACTOR:
-  Utils as static classes will maybe help the
-  namespaces and ease of use.
-
 FEATURES:
   Choose between pointy-top and flat-top hexagons.
 
-  Diagonal movement.
+  Square diagonal movement.
 
   Different pathfinding algorithms.
 
