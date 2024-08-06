@@ -1,24 +1,24 @@
-import * as math from "../libs/utils/math";
 import config from "../config";
 import { ICell } from "../interfaces/cell.interface";
+import { Mathematics } from "../libs/utils/mathematics";
 import { Display } from "./display";
 
 const hexCosines: number[] = [];
 const hexSines: number[] = [];
 
-const div6 = math.TAU / 6;
-const div12 = math.TAU / 12;
+const div6 = Mathematics.TAU / 6;
+const div12 = Mathematics.TAU / 12;
 
 for (let i = 0; i < 6; i++) {
-  const angle = div6 * i - div12;
+  const angle = div6 * i - div12; // -30 degrees for pointy-top
   hexCosines.push(Math.cos(angle));
   hexSines.push(Math.sin(angle));
 }
 
 export class HexDisplay extends Display {
-  private readonly _diameter = (config.canvas.width / this._cols) * (2 - math.COS_30);
+  private readonly _diameter = (config.canvas.width / this._cols) * (2 - Mathematics.COS_30);
   private readonly _outerRadius = this._diameter / 2;
-  private readonly _innerRadius = this._outerRadius * math.COS_30;
+  private readonly _innerRadius = this._outerRadius * Mathematics.COS_30;
 
   protected drawCell(cell: ICell, color: string) {
     const xOffset = cell.y % 2 === 0 ? 0 : this._innerRadius;

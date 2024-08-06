@@ -1,5 +1,5 @@
-import * as math from "../libs/utils/math";
 import config from "../config";
+import { Mathematics } from "../libs/utils/mathematics";
 import { ICell } from "../interfaces/cell.interface";
 import { Display } from "./display";
 
@@ -14,8 +14,8 @@ export class SquareDisplay extends Display {
 
     const step = this.easeFunction(cell.incrementAnimation(this._animationIncrement));
 
-    const width = math.lerp(0, this._maxWidth, step);
-    const height = math.lerp(0, this._maxHeight, step);
+    const width = Mathematics.lerp(0, this._maxWidth, step);
+    const height = Mathematics.lerp(0, this._maxHeight, step);
 
     const x = xCenter - width / 2;
     const y = yCenter - height / 2;

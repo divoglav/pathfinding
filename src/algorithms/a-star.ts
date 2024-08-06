@@ -1,6 +1,5 @@
-import config from "../config";
 import { ICell } from "../interfaces/cell.interface";
-import * as generalUtils from "../libs/utils/general";
+import { Utilities } from "../libs/utils/utilities";
 
 export class AStar {
   private readonly open: ICell[] = [];
@@ -42,7 +41,8 @@ export class AStar {
       return true;
     }
 
-    generalUtils.removeFromArray(this.open, current);
+    Utilities.removeFromArray(this.open, current);
+    
     this.closed.add(current);
     current.setClosed();
 

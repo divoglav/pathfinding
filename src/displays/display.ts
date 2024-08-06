@@ -1,13 +1,13 @@
 import config from "../config";
 import { ICell } from "../interfaces/cell.interface";
 import { IDisplay } from "../interfaces/display.interface";
-import * as utils from "../utils";
+import { Utils } from "../utils";
 
 export abstract class Display implements IDisplay {
   protected _lastFillColor: string = "";
 
   protected readonly _cols = config.map.columns;
-  protected readonly _rows = utils.calculateRowsCount(
+  protected readonly _rows = Utils.calculateRowsCount(
     config.canvas.width,
     config.canvas.height,
     config.map.columns,

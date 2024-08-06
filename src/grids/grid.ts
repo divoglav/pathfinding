@@ -1,6 +1,6 @@
 import * as noise from "../libs/noise/noise";
-import * as utils from "../utils";
 import config from "../config";
+import { Utils } from "../utils";
 import { IGrid } from "../interfaces/grid.interface";
 import { ICell } from "../interfaces/cell.interface";
 import { Cell } from "../cell";
@@ -85,8 +85,8 @@ export abstract class Grid implements IGrid {
     for (let x = 0; x < this._cols; x++) {
       for (let y = 0; y < this._rows; y++) {
         const cell = this._cells[x][y];
-        if (distanceMethod === "manhattan") cell.setH(utils.manhattanDistance(cell, target));
-        else if (distanceMethod === "euclidean") cell.setH(utils.euclideanDistance(cell, target));
+        if (distanceMethod === "manhattan") cell.setH(Utils.manhattanDistance(cell, target));
+        else if (distanceMethod === "euclidean") cell.setH(Utils.euclideanDistance(cell, target));
       }
     }
   }

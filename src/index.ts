@@ -1,6 +1,5 @@
 import "./styles/reset.css";
 import "./styles/style.css";
-import * as utils from "./utils";
 import config from "./config";
 import { IGrid } from "./interfaces/grid.interface";
 import { IDisplay } from "./interfaces/display.interface";
@@ -9,10 +8,16 @@ import { SquareDisplay } from "./displays/square-display";
 import { HexGrid } from "./grids/hex-grid";
 import { HexDisplay } from "./displays/hex-display";
 import { AStar } from "./algorithms/a-star";
+import { Utils } from "./utils";
 
 // Grid:
 
-const rows = utils.calculateRowsCount(config.canvas.width, config.canvas.height, config.map.columns, config.map.grid === "hex");
+const rows = Utils.calculateRowsCount(
+  config.canvas.width,
+  config.canvas.height,
+  config.map.columns,
+  config.map.grid === "hex",
+);
 
 let grid: IGrid;
 if (config.map.grid === "hex") grid = new HexGrid(config.map.columns, rows);
