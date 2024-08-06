@@ -2,22 +2,28 @@ FIX:
   Fix the padding on hex grid fills.
 
 FEATURES:
-  Choose between pointy-top and flat-top hexagons.
-
-  Square diagonal movement.
+  Full drawing control.
+  
+  Automatic design:
+    (requires full drawing control)
+    Automatically start (or restart) the pathfinder
+    after the end of a draw (or delete). This makes
+    additional controls unnecessary.
 
   Different pathfinding algorithms.
-
-  Full drawing control.
 
   Configurable User Interface.
 
   Two-way pathfinding.
 
-  The macro optimization.
-    Difficult.
-    Sector splits.
-
   Multiple targets?
 
   Scrollable timeline.
+
+  Hexagons Improvements:
+    Choose between pointy-top and flat-top hexagons.
+    Cube coordinate distances instead of euclidean.
+
+  The macro optimization:
+    Difficult.
+    Sector splits.

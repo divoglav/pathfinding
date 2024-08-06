@@ -5,7 +5,7 @@ const config = {
   },
 
   map: {
-    grid: "square", // square, hex
+    grid: "hex", // square, hex
     squareDiagonals: true,
 
     columns: 40,
