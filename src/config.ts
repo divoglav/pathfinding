@@ -6,7 +6,7 @@ const config = {
 
   map: {
     grid: "hex", // square, hex
-    columns: 60,
+    columns: 42,
 
     unblockSpawnLayers: 4,
 
