@@ -10,11 +10,10 @@ FEATURES:
     after the end of a draw (or delete). This makes
     additional controls unnecessary.
 
-  Different pathfinding algorithms.
+  Weighted graph:
+    Like water and stuff.
 
   Configurable User Interface.
-
-  Two-way pathfinding.
 
   Multiple targets?
 

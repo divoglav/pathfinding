@@ -1,12 +1,12 @@
 const config = {
   canvas: {
-    width: 800,
-    height: 800,
+    width: 700,
+    height: 700,
   },
 
   map: {
-    grid: "hex", // square, hex
-    squareDiagonals: true,
+    grid: "square", // square, hex
+    squareDiagonals: false,
 
     columns: 40,
 
