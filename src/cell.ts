@@ -1,7 +1,7 @@
 import { ICell, Neighbor } from "./interfaces/cell.interface";
 import config from "./config";
 
-const gScalar = config.pathfinding.gScalar;
+const gScalar = config.pathfinding.heuristicWeight;
 const animation = config.display.animation.active ? 0 : 1;
 
 export class Cell implements ICell  {

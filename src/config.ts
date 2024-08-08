@@ -4,8 +4,14 @@ const config = {
     height: 700,
   },
 
+  pathfinding: {
+    distanceMethod: "euclidean", // manhattan, euclidean
+    heuristicWeight: 0.3,
+    bidirectional: true,
+  },
+
   map: {
-    grid: "hex", // square, hex
+    grid: "square", // square, hex
     squareDiagonals: false,
 
     columns: 40,
@@ -25,11 +31,6 @@ const config = {
         percent: 0.3,
       },
     },
-  },
-
-  pathfinding: {
-    distanceMethod: "euclidean", // manhattan, euclidean
-    gScalar: 0.3,
   },
 
   display: {

@@ -1,16 +1,15 @@
-import config from "../config";
+import { IBidirectionalAStar } from "../interfaces/bidirectionalAStar.interface";
 import { ICell } from "../interfaces/cell.interface";
 import { Utilities } from "../libs/utils/utilities";
 import { Utils } from "../utils";
 
-export class BidirectionalAStar {
+export class BidirectionalAStar implements IBidirectionalAStar {
   private readonly _open: ICell[] = [];
   private readonly _closed = new Set<ICell>();
 
   private _ended: boolean = false;
-  private _success: boolean = false;
 
-  public otherAStar: BidirectionalAStar | null = null;
+  private _archon: IBidirectionalAStar | null = null;
 
   constructor(
     start: ICell,
@@ -31,58 +30,47 @@ export class BidirectionalAStar {
 
   reconstructPathFrom(cell: ICell) {
     let current: ICell | null = cell;
-    let count = config.map.columns ** 2;
-    while (current && count > 0) {
-      count--;
+    while (current) {
       current.setPath();
       current = current.getParent();
     }
-    if (count <= 0) console.error("Infinite Reconstruct");
+  }
+
+  setArchon(archon: IBidirectionalAStar) {
+    this._archon = archon;
   }
 
   hasEnded(): boolean {
     return this._ended;
   }
 
-  setEnd() {
+  end() {
     this._ended = true;
   }
 
-  isSuccess(): boolean {
-    return this._success;
-  }
+  containsCell(cell: ICell): boolean {
+    let inClosed: boolean = this._closed.has(cell);
 
-  private openContains(cell: ICell): boolean {
+    let inOpen: boolean = false;
     for (let i = 0; i < this._open.length; i++) {
-      if (this._open[i].equals(cell)) return true;
+      if (this._open[i].equals(cell)) inOpen = true;
     }
-    return false;
-  }
 
-  private closedContains(cell: ICell): boolean {
-    if (this._closed.has(cell)) return true;
-    return false;
-  }
-
-  contains(cell: ICell): boolean {
-    if (this.openContains(cell) || this.closedContains(cell)) return true;
-    return false;
+    return inClosed || inOpen;
   }
 
   iterate() {
     if (this._ended) return;
 
     if (this._open.length <= 0) {
-      this._ended = true;
-      this._success = false;
+      this.end();
       return;
     }
 
     let current = this.getBestFromOpen();
 
     if (current.equals(this.target)) {
-      this._ended = true;
-      this._success = true;
+      this.end();
       this._open.length = 0;
       this.reconstructPathFrom(current);
       return;
@@ -102,12 +90,11 @@ export class BidirectionalAStar {
 
       if (neighbor.isBlock()) continue;
 
-      if (this.otherAStar && this.otherAStar.contains(neighbor)) {
-        this._ended = true;
-        this._success = true;
-        this.otherAStar.setEnd();
-        this.otherAStar.reconstructPathFrom(neighbor);
+      if (this._archon && this._archon.containsCell(neighbor)) {
+        this.end();
+        this._archon.end();
         this.reconstructPathFrom(current);
+        this._archon.reconstructPathFrom(neighbor);
         return;
       }
 

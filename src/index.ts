@@ -53,19 +53,18 @@ display.clear();
 // Algorithm:
 
 const aStar = new BidirectionalAStar(startCell, endCell);
-const aStar2 = new BidirectionalAStar(endCell, startCell);
+const aStarInverse = new BidirectionalAStar(endCell, startCell);
 
-aStar.otherAStar = aStar2;
-aStar2.otherAStar = aStar;
-//grid.precalculateAllDistancesTo(endCell);
+aStar.setArchon(aStarInverse);
+aStarInverse.setArchon(aStar);
 
 // Loop:
 const displayInterval = 1000 / config.display.FPS;
 setInterval(() => {
   display.drawCells(cells);
 
-  if (aStar.hasEnded() || aStar2.hasEnded()) return;
+  if (aStar.hasEnded() || aStarInverse.hasEnded()) return;
+
   aStar.iterate();
-  if (aStar.hasEnded()) return;
-  aStar2.iterate();
+  aStarInverse.iterate();
 }, displayInterval);
