@@ -1,8 +1,6 @@
 FIX:
   Fix the padding on hex grid fills.
 
-  See the pseudocode fix.
-
 FEATURES:
   Full drawing control.
   
@@ -17,14 +15,8 @@ FEATURES:
 
   Configurable User Interface.
 
-  Multiple targets?
-
   Scrollable timeline.
 
   Hexagons Improvements:
     Choose between pointy-top and flat-top hexagons.
     Cube coordinate distances instead of euclidean.
-
-  The macro optimization:
-    Difficult.
-    Sector splits.

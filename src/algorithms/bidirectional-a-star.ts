@@ -23,7 +23,7 @@ export class BidirectionalAStar implements IPathfinder, IBidirectionalAStar {
     start.setOpen();
   }
 
-  private getBestFromOpen() {
+  private _getBestFromOpen() {
     let minFCell = this._open[0];
     for (let i = 1; i < this._open.length; i++) {
       const cell = this._open[i];
@@ -71,7 +71,7 @@ export class BidirectionalAStar implements IPathfinder, IBidirectionalAStar {
       return;
     }
 
-    let current = this.getBestFromOpen();
+    let current = this._getBestFromOpen();
 
     if (current.equals(this.target)) {
       this.end();

@@ -10,36 +10,36 @@ export class SquareGrid extends Grid {
         const cell = this._cells[x][y];
 
         if (diagonals) {
-          const north = this.getCell(x, y - 1);
-          const northEast = this.getCell(x + 1, y - 1);
-          const east = this.getCell(x + 1, y);
-          const southEast = this.getCell(x + 1, y + 1);
-          const south = this.getCell(x, y + 1);
-          const southWest = this.getCell(x - 1, y + 1);
-          const west = this.getCell(x - 1, y);
-          const northWest = this.getCell(x - 1, y + 1);
+          const north = this._getCell(x, y - 1);
+          const northEast = this._getCell(x + 1, y - 1);
+          const east = this._getCell(x + 1, y);
+          const southEast = this._getCell(x + 1, y + 1);
+          const south = this._getCell(x, y + 1);
+          const southWest = this._getCell(x - 1, y + 1);
+          const west = this._getCell(x - 1, y);
+          const northWest = this._getCell(x - 1, y + 1);
 
           cell.setNeighbors([
-            this.createNeighbor(north),
-            this.createNeighbor(northEast),
-            this.createNeighbor(east),
-            this.createNeighbor(southEast),
-            this.createNeighbor(south),
-            this.createNeighbor(southWest),
-            this.createNeighbor(west),
-            this.createNeighbor(northWest),
+            this._createNeighbor(north),
+            this._createNeighbor(northEast),
+            this._createNeighbor(east),
+            this._createNeighbor(southEast),
+            this._createNeighbor(south),
+            this._createNeighbor(southWest),
+            this._createNeighbor(west),
+            this._createNeighbor(northWest),
           ]);
         } else {
-          const north = this.getCell(x, y - 1);
-          const east = this.getCell(x + 1, y);
-          const south = this.getCell(x, y + 1);
-          const west = this.getCell(x - 1, y);
+          const north = this._getCell(x, y - 1);
+          const east = this._getCell(x + 1, y);
+          const south = this._getCell(x, y + 1);
+          const west = this._getCell(x - 1, y);
 
           cell.setNeighbors([
-            this.createNeighbor(north),
-            this.createNeighbor(east),
-            this.createNeighbor(south),
-            this.createNeighbor(west),
+            this._createNeighbor(north),
+            this._createNeighbor(east),
+            this._createNeighbor(south),
+            this._createNeighbor(west),
           ]);
         }
       }

@@ -8,20 +8,20 @@ export class HexGrid extends Grid {
 
         const isEven = y % 2 === 0;
 
-        const northEast = this.getCell(isEven ? x : x + 1, y - 1);
-        const east = this.getCell(x + 1, y);
-        const southEast = this.getCell(isEven ? x : x + 1, y + 1);
-        const southWest = this.getCell(isEven ? x - 1 : x, y + 1);
-        const west = this.getCell(x - 1, y);
-        const northWest = this.getCell(isEven ? x - 1 : x, y - 1);
+        const northEast = this._getCell(isEven ? x : x + 1, y - 1);
+        const east = this._getCell(x + 1, y);
+        const southEast = this._getCell(isEven ? x : x + 1, y + 1);
+        const southWest = this._getCell(isEven ? x - 1 : x, y + 1);
+        const west = this._getCell(x - 1, y);
+        const northWest = this._getCell(isEven ? x - 1 : x, y - 1);
 
         cell.setNeighbors([
-          this.createNeighbor(northEast),
-          this.createNeighbor(east),
-          this.createNeighbor(southEast),
-          this.createNeighbor(southWest),
-          this.createNeighbor(west),
-          this.createNeighbor(northWest),
+          this._createNeighbor(northEast),
+          this._createNeighbor(east),
+          this._createNeighbor(southEast),
+          this._createNeighbor(southWest),
+          this._createNeighbor(west),
+          this._createNeighbor(northWest),
         ]);
       }
     }

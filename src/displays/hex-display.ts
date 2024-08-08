@@ -20,12 +20,12 @@ export class HexDisplay extends Display {
   private readonly _outerRadius = this._diameter / 2;
   private readonly _innerRadius = this._outerRadius * Mathematics.COS_30;
 
-  protected drawCell(cell: ICell, color: string) {
+  protected _drawCell(cell: ICell, color: string) {
     const xOffset = cell.y % 2 === 0 ? 0 : this._innerRadius;
     const xCenter = this._outerRadius + xOffset + cell.x * (2 * this._innerRadius);
     const yCenter = this._outerRadius + cell.y * (1.5 * this._outerRadius);
 
-    const step = this.easeFunction(cell.incrementAnimation(this._animationIncrement));
+    const step = this._easeFunction(cell.incrementAnimation(this._animationIncrement));
     const animationRadius = this._outerRadius * step;
 
     if (this._lastFillColor !== color) {

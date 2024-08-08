@@ -25,7 +25,7 @@ export abstract class Grid implements IGrid {
     }
   }
 
-  protected createNeighbor(cell: ICell | null, moveCost: number = 1): Neighbor {
+  protected _createNeighbor(cell: ICell | null, moveCost: number = 1): Neighbor {
     if (!cell) return null;
     return { cell: cell, moveCost: moveCost };
   }
@@ -35,25 +35,25 @@ export abstract class Grid implements IGrid {
   generateBlocks(type: string) {
     switch (type) {
       case "random":
-        this.generateRandomBlocks();
+        this._generateRandomBlocks();
         break;
       case "noise":
-        this.generateNoiseBlocks();
+        this._generateNoiseBlocks();
         break;
       default:
         break;
     }
   }
 
-  protected isValidCoordinate(x: number, y: number) {
+  protected _isValidCoordinate(x: number, y: number) {
     return x >= 0 && x < this._cols && y >= 0 && y < this._rows;
   }
 
-  protected getCell(x: number, y: number) {
-    return this.isValidCoordinate(x, y) ? this._cells[x][y] : null;
+  protected _getCell(x: number, y: number) {
+    return this._isValidCoordinate(x, y) ? this._cells[x][y] : null;
   }
 
-  protected generateRandomBlocks() {
+  protected _generateRandomBlocks() {
     const percent = config.map.blocks.random.percent;
     for (let x = 0; x < this._cols; x++) {
       for (let y = 0; y < this._rows; y++) {
@@ -66,7 +66,7 @@ export abstract class Grid implements IGrid {
     }
   }
 
-  protected generateNoiseBlocks() {
+  protected _generateNoiseBlocks() {
     const percent = config.map.blocks.noise.percent;
     const scalar = config.map.blocks.noise.scalar;
     for (let x = 0; x < this._cols; x++) {

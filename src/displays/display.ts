@@ -26,7 +26,7 @@ export abstract class Display implements IDisplay {
     _context.lineWidth = config.display.lineWidth > 0 ? config.display.lineWidth : 0.1;
   }
 
-  protected getCellColor(cell: ICell): string {
+  protected _getCellColor(cell: ICell): string {
     if (cell.isEmpty()) {
       return this._cellColors.empty;
     } else if (cell.isBlock()) {
@@ -41,19 +41,19 @@ export abstract class Display implements IDisplay {
     return this._cellColors.debug;
   }
 
-  protected easeFunction(value: number) {
+  protected _easeFunction(value: number) {
     return value * value * value;
   }
 
-  protected abstract drawCell(cell: ICell, color: string): void;
+  protected abstract _drawCell(cell: ICell, color: string): void;
 
   drawCells(cells: ICell[][]) {
     for (let x = 0; x < this._cols; x++) {
       for (let y = 0; y < this._rows; y++) {
         const cell: ICell = cells[x][y];
         if (cell.shouldDisplay()) {
-          const color = this.getCellColor(cell);
-          this.drawCell(cell, color);
+          const color = this._getCellColor(cell);
+          this._drawCell(cell, color);
         }
       }
     }

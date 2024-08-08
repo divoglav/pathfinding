@@ -26,7 +26,7 @@ export class Cell implements ICell  {
 
   // State:
 
-  private resetState() {
+  private _resetState() {
     this._isEmpty = false;
     this._isBlock = false;
     this._isOpen = false;
@@ -36,46 +36,46 @@ export class Cell implements ICell  {
 
   isEmpty() { return this._isEmpty; }
   setEmpty() {
-    this.resetState();
+    this._resetState();
     this._isEmpty = true;
-    this.markDisplay();
+    this._markDisplay();
     this.skipAnimation();
   }
 
   isBlock() { return this._isBlock; }
   setBlock() {
-    this.resetState();
+    this._resetState();
     this._isBlock = true;
-    this.markDisplay();
+    this._markDisplay();
   }
 
   isOpen() { return this._isOpen; }
   setOpen() {
-    this.resetState();
+    this._resetState();
     this._isOpen = true;
-    this.markDisplay();
+    this._markDisplay();
   }
 
   isClosed() { return this._isClosed; }
   setClosed() {
-    this.resetState();
+    this._resetState();
     this._isClosed = true;
-    this.markDisplay();
+    this._markDisplay();
   }
 
   isPath() { return this._isPath; }
   setPath() {
-    this.resetState();
+    this._resetState();
     this._isPath = true;
-    this.markDisplay();
+    this._markDisplay();
   }
 
   // Costs:
 
-  private updateF() { this._f = this._g * gScalar + this._h; }
+  private _updateF() { this._f = this._g * gScalar + this._h; }
 
   getG() { return this._g; }
-  setG(value: number) { this._g = value; this.updateF(); }
+  setG(value: number) { this._g = value; this._updateF(); }
   getH(): number { return this._h };
   setH(value: number) { this._h = value; }
   getF() { return this._f; }
@@ -91,10 +91,10 @@ export class Cell implements ICell  {
   // Display:
 
   shouldDisplay() { return this._displayMark; }
-  private markDisplay() { this._displayMark = true; this.resetAnimation(); }
+  private _markDisplay() { this._displayMark = true; this._resetAnimation(); }
   unmarkDisplay() { this._displayMark = false; }
 
-  private resetAnimation() { this._animationStep = animation; }
+  private _resetAnimation() { this._animationStep = animation; }
   incrementAnimation(value: number) {
     this._animationStep += value;
     if (this._animationStep >= 1) {

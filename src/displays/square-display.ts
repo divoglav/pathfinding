@@ -8,11 +8,11 @@ export class SquareDisplay extends Display {
   protected readonly _halfWidth = this._maxWidth / 2;
   protected readonly _halfHeight = this._maxHeight / 2;
 
-  protected drawCell(cell: ICell, color: string) {
+  protected _drawCell(cell: ICell, color: string) {
     const xCenter = cell.x * this._maxWidth + this._halfWidth;
     const yCenter = cell.y * this._maxHeight + this._halfHeight;
 
-    const step = this.easeFunction(cell.incrementAnimation(this._animationIncrement));
+    const step = this._easeFunction(cell.incrementAnimation(this._animationIncrement));
 
     const width = Mathematics.lerp(0, this._maxWidth, step);
     const height = Mathematics.lerp(0, this._maxHeight, step);

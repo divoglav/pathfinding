@@ -16,7 +16,7 @@ export class AStar implements IPathfinder {
     start.setOpen();
   }
 
-  private getBestFromOpen() {
+  private _getBestFromOpen() {
     let minFCell = this._open[0];
     for (let i = 1; i < this._open.length; i++) {
       const cell = this._open[i];
@@ -25,7 +25,7 @@ export class AStar implements IPathfinder {
     return minFCell;
   }
 
-  private reconstructPathFrom(cell: ICell) {
+  private _reconstructPathFrom(cell: ICell) {
     let current: ICell | null = cell;
     while (current) {
       current.setPath();
@@ -33,28 +33,28 @@ export class AStar implements IPathfinder {
     }
   }
 
-  hasEnded(): boolean {
-    return this._ended;
+  private _end() {
+    this._ended = true;
   }
 
-  end() {
-    this._ended = true;
+  hasEnded(): boolean {
+    return this._ended;
   }
 
   iterate() {
     if (this._ended) return;
 
     if (this._open.length <= 0) {
-      this.end();
+      this._end();
       return;
     }
 
-    let current = this.getBestFromOpen();
+    let current = this._getBestFromOpen();
 
     if (current.equals(this.target)) {
-      this.end();
+      this._end();
       this._open.length = 0;
-      this.reconstructPathFrom(current);
+      this._reconstructPathFrom(current);
       return;
     }
 
