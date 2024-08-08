@@ -1,6 +1,8 @@
 FIX:
   Fix the padding on hex grid fills.
 
+  See the pseudocode fix.
+
 FEATURES:
   Full drawing control.
   

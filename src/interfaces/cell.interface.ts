@@ -20,6 +20,7 @@ export interface ICell {
 
   getG(): number;
   setG(value: number): void;
+  getH(): number;
   setH(value: number): void;
   getF(): number;
 
@@ -33,4 +34,6 @@ export interface ICell {
   unmarkDisplay(): void;
   incrementAnimation(value: number): number;
   skipAnimation(): void;
+
+  equals(otherCell: ICell): boolean;
 }

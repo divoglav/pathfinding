@@ -84,7 +84,7 @@ export abstract class Grid implements IGrid {
     return this._cells;
   }
 
-  calculateAllDistancesTo(target: ICell) {
+  precalculateAllDistancesTo(target: ICell) {
     const distanceMethod = config.pathfinding.distanceMethod;
 
     for (let x = 0; x < this._cols; x++) {

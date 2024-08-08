@@ -5,6 +5,6 @@ export interface IGrid {
   setupNeighbors(): void;
   generateBlocks(type: string): void;
   getCells(): ICell[][];
-  calculateAllDistancesTo(target: ICell): void;
+  precalculateAllDistancesTo(target: ICell): void;
   unblockCellRecursive(cell: ICell, recursions: number): void;
 }

@@ -76,7 +76,6 @@ export class Cell implements ICell  {
 
   getG() { return this._g; }
   setG(value: number) { this._g = value; this.updateF(); }
-  getH(): number { return this._h };
   setH(value: number) { this._h = value; }
   getF() { return this._f; }
 
@@ -104,9 +103,4 @@ export class Cell implements ICell  {
     return this._animationStep;
   }
   skipAnimation() { this._animationStep = 1; }
-
-  equals(otherCell: ICell): boolean {
-    if(this.x === otherCell.x && this.y === otherCell.y) return true;
-    return false;
-  }
 }
