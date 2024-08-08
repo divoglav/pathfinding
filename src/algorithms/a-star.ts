@@ -1,16 +1,16 @@
+import config from "../config";
 import { ICell } from "../interfaces/cell.interface";
 import { Utilities } from "../libs/utils/utilities";
 import { Utils } from "../utils";
 
-export class AStar {
+export class BidirectionalAStar {
   private readonly _open: ICell[] = [];
   private readonly _closed = new Set<ICell>();
-  private _meetingCell: ICell | null = null;
 
   private _ended: boolean = false;
   private _success: boolean = false;
 
-  public otherAStar: AStar | null = null;
+  public otherAStar: BidirectionalAStar | null = null;
 
   constructor(
     start: ICell,
@@ -29,25 +29,15 @@ export class AStar {
     return minFCell;
   }
 
-  reconstructPath(cell: ICell) {
+  reconstructPathFrom(cell: ICell) {
     let current: ICell | null = cell;
-    let count = 1000;
+    let count = config.map.columns ** 2;
     while (current && count > 0) {
-      count--
+      count--;
       current.setPath();
       current = current.getParent();
     }
-    if(count <= 0) {
-      console.log("ASDDDDDDDDDDDDD");
-    }
-  }
-
-  setMeetingCell(cell: ICell) {
-    this._meetingCell = cell;
-  }
-
-  getMeetingCell(): ICell | null {
-    return this._meetingCell;
+    if (count <= 0) console.error("Infinite Reconstruct");
   }
 
   hasEnded(): boolean {
@@ -80,7 +70,9 @@ export class AStar {
   }
 
   iterate() {
-    if (this._ended || this._open.length <= 0) {
+    if (this._ended) return;
+
+    if (this._open.length <= 0) {
       this._ended = true;
       this._success = false;
       return;
@@ -89,14 +81,14 @@ export class AStar {
     let current = this.getBestFromOpen();
 
     if (current.equals(this.target)) {
-      this._open.length = 0;
       this._ended = true;
       this._success = true;
+      this._open.length = 0;
+      this.reconstructPathFrom(current);
       return;
     }
 
     Utilities.removeFromArray(this._open, current);
-
     this._closed.add(current);
     current.setClosed();
 
@@ -106,19 +98,20 @@ export class AStar {
       if (!exists) continue;
 
       const neighbor = exists.cell;
+      const neighborMoveCost = exists.moveCost;
+
       if (neighbor.isBlock()) continue;
 
       if (this.otherAStar && this.otherAStar.contains(neighbor)) {
-        this.reconstructPath(current);
-        this.otherAStar.reconstructPath(neighbor);
         this._ended = true;
         this._success = true;
+        this.otherAStar.setEnd();
+        this.otherAStar.reconstructPathFrom(neighbor);
+        this.reconstructPathFrom(current);
         return;
       }
 
       if (neighbor.isClosed()) continue;
-
-      const neighborMoveCost = exists.moveCost;
 
       const gSum = current.getG() + neighborMoveCost;
       if (neighbor.getH() <= 0) neighbor.setH(Utils.euclideanDistance(neighbor, this.target));
@@ -136,6 +129,6 @@ export class AStar {
       }
     }
 
-    return false;
+    return;
   }
 }

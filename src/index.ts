@@ -7,7 +7,7 @@ import { SquareGrid } from "./grids/square-grid";
 import { SquareDisplay } from "./displays/square-display";
 import { HexGrid } from "./grids/hex-grid";
 import { HexDisplay } from "./displays/hex-display";
-import { AStar } from "./algorithms/a-star";
+import { BidirectionalAStar } from "./algorithms/a-star";
 import { Utils } from "./utils";
 
 // Grid:
@@ -52,8 +52,8 @@ display.clear();
 
 // Algorithm:
 
-const aStar = new AStar(startCell, endCell);
-const aStar2 = new AStar(endCell, startCell);
+const aStar = new BidirectionalAStar(startCell, endCell);
+const aStar2 = new BidirectionalAStar(endCell, startCell);
 
 aStar.otherAStar = aStar2;
 aStar2.otherAStar = aStar;
@@ -65,14 +65,7 @@ setInterval(() => {
   display.drawCells(cells);
 
   if (aStar.hasEnded() || aStar2.hasEnded()) return;
-
   aStar.iterate();
+  if (aStar.hasEnded()) return;
   aStar2.iterate();
-
-  const meetingCell = aStar.getMeetingCell() || aStar2.getMeetingCell();
-  if (meetingCell) {
-    aStar.setEnd();
-    aStar2.setEnd();
-    return;
-  }
 }, displayInterval);

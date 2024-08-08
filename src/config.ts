@@ -5,7 +5,7 @@ const config = {
   },
 
   map: {
-    grid: "square", // square, hex
+    grid: "hex", // square, hex
     squareDiagonals: false,
 
     columns: 40,
@@ -13,7 +13,7 @@ const config = {
     unblockSpawnLayers: 4,
 
     blocks: {
-      type: "noise", // none, noise, random
+      type: "random", // none, noise, random
 
       noise: {
         percent: 0.36,
