@@ -72,14 +72,12 @@ export class AStar implements IPathfinder {
 
       const gSum = current.getG() + neighborMoveCost;
 
-      if (neighbor.isOpen()) {
-        if (gSum < neighbor.getG()) {
-          neighbor.setParent(current);
-          neighbor.setG(gSum);
-        }
-      } else {
+      if (!neighbor.isOpen()) {
         this._open.push(neighbor);
         neighbor.setOpen();
+        neighbor.setParent(current);
+        neighbor.setG(gSum);
+      } else if (gSum < neighbor.getG()) {
         neighbor.setParent(current);
         neighbor.setG(gSum);
       }
