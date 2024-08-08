@@ -49,11 +49,9 @@ const config = {
 
       cells: {
         empty: "#313244",
-        //empty: "teal",
         block: "#11111b",
         open: "#89b4fa",
-        //closed: "#b4befe",
-        closed: "darkgreen",
+        closed: "#b4befe",
         path: "#f38ba8",
         debug: "magenta",
       },
