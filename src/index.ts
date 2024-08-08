@@ -7,8 +7,11 @@ import { SquareGrid } from "./grids/square-grid";
 import { SquareDisplay } from "./displays/square-display";
 import { HexGrid } from "./grids/hex-grid";
 import { HexDisplay } from "./displays/hex-display";
-import { BidirectionalAStar } from "./algorithms/a-star";
+import { BidirectionalAStar } from "./algorithms/bidirectional-a-star";
 import { Utils } from "./utils";
+import { IPathfinder } from "./interfaces/pathfinder.interface";
+import { IBidirectionalAStar } from "./interfaces/bidirectionalAStar.interface";
+import { AStar } from "./algorithms/a-star";
 
 // Grid:
 
@@ -31,9 +34,9 @@ grid.generateBlocks(config.map.blocks.type);
 
 const cells = grid.getCells();
 const startCell = cells[0][0];
-const endCell = cells[config.map.columns - 1][rows - 1];
+const targetCell = cells[config.map.columns - 1][rows - 1];
 grid.unblockCellRecursive(startCell, config.map.unblockSpawnLayers);
-grid.unblockCellRecursive(endCell, config.map.unblockSpawnLayers);
+grid.unblockCellRecursive(targetCell, config.map.unblockSpawnLayers);
 
 // Canvas:
 
@@ -50,21 +53,39 @@ if (config.map.grid === "hex") display = new HexDisplay(context!);
 else display = new SquareDisplay(context!);
 display.clear();
 
-// Algorithm:
+// Pathfinder:
 
-const aStar = new BidirectionalAStar(startCell, endCell);
-const aStarInverse = new BidirectionalAStar(endCell, startCell);
+let aStar: IPathfinder | IBidirectionalAStar;
+let aStarInverse: IBidirectionalAStar;
+const bidirectional = config.pathfinding.bidirectional;
+if (bidirectional) {
+  aStar = new BidirectionalAStar(startCell, targetCell);
+  aStarInverse = new BidirectionalAStar(targetCell, startCell);
 
-aStar.setArchon(aStarInverse);
-aStarInverse.setArchon(aStar);
+  (aStar as IBidirectionalAStar).setArchon(aStarInverse);
+  aStarInverse.setArchon(aStar as IBidirectionalAStar);
+} else {
+  aStar = new AStar(startCell, targetCell);
+  grid.precalculateAllDistancesTo(targetCell);
+}
+
+const normalPathfinders = () => {
+  if (aStar.hasEnded()) return;
+  aStar.iterate();
+};
+
+const bidirectionalPathfinders = () => {
+  if (aStar.hasEnded() || aStarInverse.hasEnded()) return;
+  aStar.iterate();
+  aStarInverse.iterate();
+};
 
 // Loop:
+
 const displayInterval = 1000 / config.display.FPS;
 setInterval(() => {
   display.drawCells(cells);
 
-  if (aStar.hasEnded() || aStarInverse.hasEnded()) return;
-
-  aStar.iterate();
-  aStarInverse.iterate();
+  if (bidirectional) bidirectionalPathfinders();
+  else normalPathfinders();
 }, displayInterval);

@@ -1,9 +1,7 @@
 import { ICell } from "./cell.interface";
+import { IPathfinder } from "./pathfinder.interface";
 
-export interface IBidirectionalAStar {
-  end(): void;
-  hasEnded(): boolean;
-
+export interface IBidirectionalAStar extends IPathfinder {
   setArchon(archon: IBidirectionalAStar): void;
 
   containsCell(cell: ICell): boolean;
