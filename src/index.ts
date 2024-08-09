@@ -29,6 +29,9 @@ else grid = new SquareGrid(config.map.columns, rows);
 grid.createCells();
 grid.setupNeighbors();
 grid.generateBlocks(config.map.blocks.type);
+grid.generateTerrain(config.map.terrain.type);
+console.log(grid);
+
 
 // Cells:
 

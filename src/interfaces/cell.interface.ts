@@ -11,6 +11,8 @@ export interface ICell {
   setEmpty(): void;
   isBlock(): boolean;
   setBlock(): void;
+  isTerrain(): boolean;
+  setTerrain(): void;
   isOpen(): boolean;
   setOpen(): void;
   isClosed(): boolean;
@@ -20,6 +22,8 @@ export interface ICell {
 
   getG(): number;
   setG(value: number): void;
+  getT(): number;
+  setT(value: number): void;
   getH(): number;
   setH(value: number): void;
   getF(): number;

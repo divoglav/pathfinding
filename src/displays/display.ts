@@ -31,6 +31,8 @@ export abstract class Display implements IDisplay {
       return this._cellColors.empty;
     } else if (cell.isBlock()) {
       return this._cellColors.block;
+    } else if (cell.isTerrain()) {
+      return this._cellColors.terrain;
     } else if (cell.isOpen()) {
       return this._cellColors.open;
     } else if (cell.isClosed()) {

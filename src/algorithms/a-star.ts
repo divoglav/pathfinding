@@ -65,12 +65,14 @@ export class AStar implements IPathfinder {
     const neighbors = current.getNeighbors();
     for (let n = 0; n < neighbors.length; n++) {
       const exists = neighbors[n];
-      if (!exists) continue;
-      const neighbor = exists.cell;
-      if (neighbor.isBlock() || neighbor.isClosed()) continue;
-      const neighborMoveCost = exists.moveCost;
+      if(!exists) continue;
 
-      const gSum = current.getG() + neighborMoveCost;
+      const neighbor = exists.cell;
+      const moveCost = exists.moveCost;
+
+      if (!neighbor || neighbor.isBlock() || neighbor.isClosed()) continue;
+
+      const gSum = current.getG() + moveCost;
 
       if (!neighbor.isOpen()) {
         this._open.push(neighbor);

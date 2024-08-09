@@ -25,24 +25,13 @@ export abstract class Grid implements IGrid {
     }
   }
 
-  protected _createNeighbor(cell: ICell | null, moveCost: number = 1): Neighbor {
+  protected _createNeighbor(cell: ICell | null, moveCost: number): Neighbor {
     if (!cell) return null;
-    return { cell: cell, moveCost: moveCost };
-  }
 
-  abstract setupNeighbors(): void;
-
-  generateBlocks(type: string) {
-    switch (type) {
-      case "random":
-        this._generateRandomBlocks();
-        break;
-      case "noise":
-        this._generateNoiseBlocks();
-        break;
-      default:
-        break;
-    }
+    return {
+      cell: cell,
+      moveCost: moveCost,
+    } as Neighbor;
   }
 
   protected _isValidCoordinate(x: number, y: number) {
@@ -80,6 +69,73 @@ export abstract class Grid implements IGrid {
     }
   }
 
+  protected _generateRandomTerrain() {
+    const percent = config.map.terrain.random.percent;
+    for (let x = 0; x < this._cols; x++) {
+      for (let y = 0; y < this._rows; y++) {
+        const cell = this._cells[x][y];
+        if (cell.isBlock()) continue;
+        if (Math.random() < percent) {
+          cell.setT(1);
+          cell.setTerrain();
+          cell.skipAnimation();
+        }
+      }
+    }
+  }
+
+  protected _generateNoiseTerrain() {
+    const percent = config.map.terrain.noise.percent;
+    const scalar = config.map.terrain.noise.scalar;
+
+    let xOffset = config.map.terrain.noise.offsetFromBlocks.x;
+    let yOffset = config.map.terrain.noise.offsetFromBlocks.y;
+    if (config.map.terrain.noise.offsetFromBlocks.random) {
+      xOffset *= Math.random();
+      yOffset *= Math.random();
+    }
+
+    for (let x = 0; x < this._cols; x++) {
+      for (let y = 0; y < this._rows; y++) {
+        const cell = this._cells[x][y];
+        if (cell.isBlock()) continue;
+        if (noise.get(x + xOffset, y + xOffset, scalar) < percent) {
+          cell.setT(1);
+          cell.setTerrain();
+          cell.skipAnimation();
+        }
+      }
+    }
+  }
+
+  abstract setupNeighbors(): void;
+
+  generateBlocks(type: string) {
+    switch (type) {
+      case "random":
+        this._generateRandomBlocks();
+        break;
+      case "noise":
+        this._generateNoiseBlocks();
+        break;
+      default:
+        break;
+    }
+  }
+
+  generateTerrain(type: string) {
+    switch (type) {
+      case "random":
+        this._generateRandomTerrain();
+        break;
+      case "noise":
+        this._generateNoiseTerrain();
+        break;
+      default:
+        break;
+    }
+  }
+
   getCells() {
     return this._cells;
   }
@@ -104,11 +160,10 @@ export abstract class Grid implements IGrid {
       const neighbor = neighbors[i];
       if (!neighbor) continue;
 
-      neighbor.cell.setEmpty();
+      neighbor.cell.setEmpty(); // HACK
+      neighbor.cell.setT(0);
 
-      if (recursions > 0) {
-        this.unblockCellRecursive(neighbor.cell, recursions - 1);
-      }
+      if (recursions > 0) this.unblockCellRecursive(neighbor.cell, recursions - 1);
     }
   }
 }
