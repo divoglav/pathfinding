@@ -1,7 +1,13 @@
 FIX:
   Fix the padding on hex grid fills.
 
+  Fix bidirectional diagonal squares.
+
 FEATURES:
+  Hover cell debug:
+    - Maybe keybind press to console current cell.
+    - Will fix some bugs.
+
   Full drawing control.
   
   Automatic design:

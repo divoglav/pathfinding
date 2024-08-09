@@ -30,8 +30,6 @@ grid.createCells();
 grid.setupNeighbors();
 grid.generateBlocks(config.map.blocks.type);
 grid.generateTerrain(config.map.terrain.type);
-console.log(grid);
-
 
 // Cells:
 
@@ -58,30 +56,13 @@ display.clear();
 
 // Pathfinder:
 
-let aStar: IPathfinder | IBidirectionalAStar;
-let aStarInverse: IBidirectionalAStar;
-const bidirectional = config.pathfinding.bidirectional;
-if (bidirectional) {
+let aStar: IPathfinder;
+if (config.pathfinding.bidirectional) {
   aStar = new BidirectionalAStar(startCell, targetCell);
-  aStarInverse = new BidirectionalAStar(targetCell, startCell);
-
-  (aStar as IBidirectionalAStar).setArchon(aStarInverse);
-  aStarInverse.setArchon(aStar as IBidirectionalAStar);
 } else {
   aStar = new AStar(startCell, targetCell);
   grid.precalculateAllDistancesTo(targetCell);
 }
-
-const normalPathfinders = () => {
-  if (aStar.hasEnded()) return;
-  aStar.iterate();
-};
-
-const bidirectionalPathfinders = () => {
-  if (aStar.hasEnded() || aStarInverse.hasEnded()) return;
-  aStar.iterate();
-  aStarInverse.iterate();
-};
 
 // Loop:
 
@@ -89,6 +70,5 @@ const displayInterval = 1000 / config.display.FPS;
 setInterval(() => {
   display.drawCells(cells);
 
-  if (bidirectional) bidirectionalPathfinders();
-  else normalPathfinders();
+  aStar.iterate();
 }, displayInterval);

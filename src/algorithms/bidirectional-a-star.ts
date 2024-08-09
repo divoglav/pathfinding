@@ -1,5 +1,4 @@
 import config from "../config";
-import { IBidirectionalAStar } from "../interfaces/bidirectionalAStar.interface";
 import { ICell } from "../interfaces/cell.interface";
 import { IPathfinder } from "../interfaces/pathfinder.interface";
 import { Utilities } from "../libs/utils/utilities";
@@ -7,26 +6,31 @@ import { Utils } from "../utils";
 
 const euclideanDistance: boolean = config.pathfinding.distanceMethod === "euclidean";
 
-export class BidirectionalAStar implements IPathfinder, IBidirectionalAStar {
+// add interface
+export class BidirectionalAStar implements IPathfinder {
   private readonly _open: ICell[] = [];
   private readonly _closed = new Set<ICell>();
 
+  private readonly _openInverse: ICell[] = [];
+  private readonly _closedInverse = new Set<ICell>();
+
   private _ended: boolean = false;
 
-  private _archon: IBidirectionalAStar | null = null;
-
   constructor(
-    start: ICell,
-    private readonly target: ICell,
+    private readonly _start: ICell,
+    private readonly _target: ICell,
   ) {
-    this._open.push(start);
-    start.setOpen();
+    this._open.push(_start);
+    _start.setOpen();
+
+    this._openInverse.push(_target);
+    _target.setOpen();
   }
 
-  private _getBestFromOpen() {
-    let minFCell = this._open[0];
-    for (let i = 1; i < this._open.length; i++) {
-      const cell = this._open[i];
+  private _getBestFrom(cells: ICell[]) {
+    let minFCell = cells[0];
+    for (let i = 1; i < cells.length; i++) {
+      const cell = cells[i];
       if (cell.getF() < minFCell.getF()) minFCell = cell;
     }
     return minFCell;
@@ -40,50 +44,25 @@ export class BidirectionalAStar implements IPathfinder, IBidirectionalAStar {
     }
   }
 
-  setArchon(archon: IBidirectionalAStar) {
-    this._archon = archon;
-  }
-
   hasEnded(): boolean {
     return this._ended;
   }
-
   end() {
     this._ended = true;
   }
 
-  containsCell(cell: ICell): boolean {
-    let inClosed: boolean = this._closed.has(cell);
+  containsCell(cell: ICell, open: ICell[], closed: Set<ICell>): boolean {
+    let inClosed: boolean = closed.has(cell);
 
     let inOpen: boolean = false;
-    for (let i = 0; i < this._open.length; i++) {
-      if (this._open[i].equals(cell)) inOpen = true;
+    for (let i = 0; i < open.length; i++) {
+      if (open[i].equals(cell)) inOpen = true;
     }
 
     return inClosed || inOpen;
   }
 
-  iterate() {
-    if (this._ended) return;
-
-    if (this._open.length <= 0) {
-      this.end();
-      return;
-    }
-
-    let current = this._getBestFromOpen();
-
-    if (current.equals(this.target)) {
-      this.end();
-      this._open.length = 0;
-      this.reconstructPathFrom(current);
-      return;
-    }
-
-    Utilities.removeFromArray(this._open, current);
-    this._closed.add(current);
-    current.setClosed();
-
+  private processNeighbors(current: ICell, target: ICell, open: ICell[], openOther: ICell[], closedOther: Set<ICell>) {
     const neighbors = current.getNeighbors();
     for (let n = 0; n < neighbors.length; n++) {
       const exists = neighbors[n];
@@ -94,11 +73,10 @@ export class BidirectionalAStar implements IPathfinder, IBidirectionalAStar {
 
       if (neighbor.isBlock()) continue;
 
-      if (this._archon && this._archon.containsCell(neighbor)) {
+      if (this.containsCell(neighbor, openOther, closedOther)) {
         this.end();
-        this._archon.end();
         this.reconstructPathFrom(current);
-        this._archon.reconstructPathFrom(neighbor);
+        this.reconstructPathFrom(neighbor);
         return;
       }
 
@@ -107,12 +85,12 @@ export class BidirectionalAStar implements IPathfinder, IBidirectionalAStar {
       const gSum = current.getG() + neighborMoveCost;
       if (neighbor.getH() <= 0) {
         euclideanDistance
-          ? neighbor.setH(Utils.euclideanDistance(neighbor, this.target))
-          : neighbor.setH(Utils.manhattanDistance(neighbor, this.target));
+          ? neighbor.setH(Utils.euclideanDistance(neighbor, target))
+          : neighbor.setH(Utils.manhattanDistance(neighbor, target));
       }
 
       if (!neighbor.isOpen()) {
-        this._open.push(neighbor);
+        open.push(neighbor);
         neighbor.setOpen();
         neighbor.setParent(current);
         neighbor.setG(gSum);
@@ -121,7 +99,43 @@ export class BidirectionalAStar implements IPathfinder, IBidirectionalAStar {
         neighbor.setG(gSum);
       }
     }
+  }
 
-    return;
+  iterate() {
+    if (this._ended) return;
+
+    if (this._open.length <= 0 || this._openInverse.length <= 0) {
+      this.end();
+      return;
+    }
+
+    let current = this._getBestFrom(this._open);
+    let currentInverse = this._getBestFrom(this._openInverse);
+
+    if (current.equals(this._target)) {
+      this.end();
+      this._open.length = 0;
+      this.reconstructPathFrom(current);
+      return;
+    }
+
+    if (currentInverse.equals(this._start)) {
+      this.end();
+      this._openInverse.length = 0;
+      this.reconstructPathFrom(currentInverse);
+      return;
+    }
+
+    Utilities.removeFromArray(this._open, current);
+    this._closed.add(current);
+    current.setClosed();
+
+    Utilities.removeFromArray(this._openInverse, currentInverse);
+    this._closedInverse.add(currentInverse);
+    currentInverse.setClosed();
+
+    this.processNeighbors(current, this._target, this._open, this._openInverse, this._closedInverse);
+    if (this._ended) return;
+    this.processNeighbors(currentInverse, this._start, this._openInverse, this._open, this._closed);
   }
 }
