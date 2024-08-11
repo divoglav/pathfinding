@@ -2,7 +2,7 @@ import * as noise from "../libs/noise/noise";
 import config from "../config";
 import { Utils } from "../utils";
 import { IGrid } from "../interfaces/grid.interface";
-import { ICell, Neighbor } from "../interfaces/cell.interface";
+import { CellType, ICell, Neighbor } from "../interfaces/cell.interface";
 import { Cell } from "../cell";
 
 export abstract class Grid implements IGrid {
@@ -27,11 +27,7 @@ export abstract class Grid implements IGrid {
 
   protected _createNeighbor(cell: ICell | null, moveCost: number): Neighbor {
     if (!cell) return null;
-
-    return {
-      cell: cell,
-      moveCost: moveCost,
-    } as Neighbor;
+    return { cell: cell, moveCost: moveCost } as Neighbor;
   }
 
   protected _isValidCoordinate(x: number, y: number) {
@@ -48,7 +44,8 @@ export abstract class Grid implements IGrid {
       for (let y = 0; y < this._rows; y++) {
         const cell = this._cells[x][y];
         if (Math.random() < percent) {
-          cell.setBlock();
+          cell.setType(CellType.Block);
+          cell.markDisplay();
           cell.skipAnimation();
         }
       }
@@ -62,7 +59,8 @@ export abstract class Grid implements IGrid {
       for (let y = 0; y < this._rows; y++) {
         const cell = this._cells[x][y];
         if (noise.get(x, y, scalar) < percent) {
-          cell.setBlock();
+          cell.setType(CellType.Block);
+          cell.markDisplay();
           cell.skipAnimation();
         }
       }
@@ -74,10 +72,11 @@ export abstract class Grid implements IGrid {
     for (let x = 0; x < this._cols; x++) {
       for (let y = 0; y < this._rows; y++) {
         const cell = this._cells[x][y];
-        if (cell.isBlock()) continue;
+        if (cell.isType(CellType.Block)) continue;
         if (Math.random() < percent) {
-          cell.setT(1);
-          cell.setTerrain();
+          cell.setType(CellType.Terrain);
+          cell.setT(1); // TODO: turn this into a gradient
+          cell.markDisplay();
           cell.skipAnimation();
         }
       }
@@ -98,10 +97,11 @@ export abstract class Grid implements IGrid {
     for (let x = 0; x < this._cols; x++) {
       for (let y = 0; y < this._rows; y++) {
         const cell = this._cells[x][y];
-        if (cell.isBlock()) continue;
+        if (cell.isType(CellType.Block)) continue;
         if (noise.get(x + xOffset, y + xOffset, scalar) < percent) {
-          cell.setT(1);
-          cell.setTerrain();
+          cell.setType(CellType.Terrain);
+          cell.setT(1); // TODO: turn this into a gradient
+          cell.markDisplay();
           cell.skipAnimation();
         }
       }
@@ -153,17 +153,22 @@ export abstract class Grid implements IGrid {
   }
 
   unblockCellRecursive(cell: ICell, recursions: number = 0) {
-    cell.setEmpty();
+    // HACK
+    // TODO: this needs refactoring.
+    cell.setType(CellType.Empty);
+    cell.setT(0);
+    cell.markDisplay();
 
     const neighbors = cell.getNeighbors();
     for (let i = 0; i < neighbors.length; i++) {
-      const neighbor = neighbors[i];
+      const neighbor = neighbors[i]?.cell;
       if (!neighbor) continue;
 
-      neighbor.cell.setEmpty(); // HACK
-      neighbor.cell.setT(0);
+      neighbor.setType(CellType.Empty);
+      neighbor.setT(0);
+      neighbor.markDisplay();
 
-      if (recursions > 0) this.unblockCellRecursive(neighbor.cell, recursions - 1);
+      if (recursions > 0) this.unblockCellRecursive(neighbor, recursions - 1);
     }
   }
 }

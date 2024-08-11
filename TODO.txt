@@ -1,4 +1,8 @@
 FIX:
+  Finish the cell state refactor:
+    Bidirectional A* is missing the display marks.
+    Look at the Display class for problems.
+
   Fix the padding on hex grid fills.
 
   Fix bidirectional diagonal squares.

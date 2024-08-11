@@ -10,7 +10,6 @@ import { HexDisplay } from "./displays/hex-display";
 import { BidirectionalAStar } from "./algorithms/bidirectional-a-star";
 import { Utils } from "./utils";
 import { IPathfinder } from "./interfaces/pathfinder.interface";
-import { IBidirectionalAStar } from "./interfaces/bidirectionalAStar.interface";
 import { AStar } from "./algorithms/a-star";
 
 // Grid:

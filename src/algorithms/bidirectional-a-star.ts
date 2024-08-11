@@ -1,5 +1,5 @@
 import config from "../config";
-import { ICell } from "../interfaces/cell.interface";
+import { CellList, CellType, ICell } from "../interfaces/cell.interface";
 import { IPathfinder } from "../interfaces/pathfinder.interface";
 import { Utilities } from "../libs/utils/utilities";
 import { Utils } from "../utils";
@@ -21,10 +21,10 @@ export class BidirectionalAStar implements IPathfinder {
     private readonly _target: ICell,
   ) {
     this._open.push(_start);
-    _start.setOpen();
+    _start.setList(CellList.Open);
 
     this._openInverse.push(_target);
-    _target.setOpen();
+    _target.setList(CellList.Open);
   }
 
   private _getBestFrom(cells: ICell[]) {
@@ -39,7 +39,7 @@ export class BidirectionalAStar implements IPathfinder {
   reconstructPathFrom(cell: ICell) {
     let current: ICell | null = cell;
     while (current) {
-      current.setPath();
+      current.setPath(true);
       current = current.getParent();
     }
   }
@@ -71,7 +71,7 @@ export class BidirectionalAStar implements IPathfinder {
       const neighbor = exists.cell;
       const neighborMoveCost = exists.moveCost;
 
-      if (neighbor.isBlock()) continue;
+      if (neighbor.isType(CellType.Block)) continue;
 
       if (this.containsCell(neighbor, openOther, closedOther)) {
         this.end();
@@ -80,7 +80,7 @@ export class BidirectionalAStar implements IPathfinder {
         return;
       }
 
-      if (neighbor.isClosed()) continue;
+      if (neighbor.inList(CellList.Closed)) continue;
 
       const gSum = current.getG() + neighborMoveCost;
       if (neighbor.getH() <= 0) {
@@ -89,9 +89,9 @@ export class BidirectionalAStar implements IPathfinder {
           : neighbor.setH(Utils.manhattanDistance(neighbor, target));
       }
 
-      if (!neighbor.isOpen()) {
+      if (!neighbor.inList(CellList.Open)) {
         open.push(neighbor);
-        neighbor.setOpen();
+        neighbor.setList(CellList.Open);
         neighbor.setParent(current);
         neighbor.setG(gSum);
       } else if (gSum < neighbor.getG()) {
@@ -128,11 +128,11 @@ export class BidirectionalAStar implements IPathfinder {
 
     Utilities.removeFromArray(this._open, current);
     this._closed.add(current);
-    current.setClosed();
+    current.setList(CellList.Closed);
 
     Utilities.removeFromArray(this._openInverse, currentInverse);
     this._closedInverse.add(currentInverse);
-    currentInverse.setClosed();
+    currentInverse.setList(CellList.Closed);
 
     this.processNeighbors(current, this._target, this._open, this._openInverse, this._closedInverse);
     if (this._ended) return;

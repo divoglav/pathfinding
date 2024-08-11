@@ -1,7 +1,7 @@
 const config = {
   canvas: {
-    width: 700,
-    height: 700,
+    width: 634,
+    height: 634,
   },
 
   pathfinding: {
@@ -11,14 +11,14 @@ const config = {
       t: 40,
       h: 10,
     },
-    bidirectional: true,
+    bidirectional: false,
   },
 
   map: {
     grid: "square", // square, hex
     squareDiagonals: false,
 
-    columns: 80,
+    columns: 50,
 
     unblockSpawnLayers: 4,
 

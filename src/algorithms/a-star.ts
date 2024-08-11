@@ -1,4 +1,4 @@
-import { ICell } from "../interfaces/cell.interface";
+import { CellList, CellType, ICell } from "../interfaces/cell.interface";
 import { IPathfinder } from "../interfaces/pathfinder.interface";
 import { Utilities } from "../libs/utils/utilities";
 
@@ -13,7 +13,7 @@ export class AStar implements IPathfinder {
     private readonly target: ICell,
   ) {
     this._open.push(start);
-    start.setOpen();
+    start.setList(CellList.Open);
   }
 
   private _getBestFromOpen() {
@@ -28,7 +28,8 @@ export class AStar implements IPathfinder {
   private _reconstructPathFrom(cell: ICell) {
     let current: ICell | null = cell;
     while (current) {
-      current.setPath();
+      current.setPath(true);
+      current.markDisplay();
       current = current.getParent();
     }
   }
@@ -60,23 +61,25 @@ export class AStar implements IPathfinder {
 
     Utilities.removeFromArray(this._open, current);
     this._closed.add(current);
-    current.setClosed();
+    current.setList(CellList.Closed);
+    current.markDisplay();
 
     const neighbors = current.getNeighbors();
     for (let n = 0; n < neighbors.length; n++) {
       const exists = neighbors[n];
-      if(!exists) continue;
+      if (!exists) continue;
 
       const neighbor = exists.cell;
       const moveCost = exists.moveCost;
 
-      if (!neighbor || neighbor.isBlock() || neighbor.isClosed()) continue;
+      if (!neighbor || neighbor.isType(CellType.Block) || neighbor.inList(CellList.Closed)) continue;
 
       const gSum = current.getG() + moveCost;
 
-      if (!neighbor.isOpen()) {
+      if (!neighbor.inList(CellList.Open)) {
         this._open.push(neighbor);
-        neighbor.setOpen();
+        neighbor.setList(CellList.Open);
+        neighbor.markDisplay();
         neighbor.setParent(current);
         neighbor.setG(gSum);
       } else if (gSum < neighbor.getG()) {

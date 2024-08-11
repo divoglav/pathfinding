@@ -1,5 +1,5 @@
 import config from "../config";
-import { ICell } from "../interfaces/cell.interface";
+import { CellList, CellType, ICell } from "../interfaces/cell.interface";
 import { IDisplay } from "../interfaces/display.interface";
 import { Utils } from "../utils";
 
@@ -27,19 +27,30 @@ export abstract class Display implements IDisplay {
   }
 
   protected _getCellColor(cell: ICell): string {
-    if (cell.isEmpty()) {
-      return this._cellColors.empty;
-    } else if (cell.isBlock()) {
+    if (cell.isType(CellType.Block)) {
       return this._cellColors.block;
-    } else if (cell.isTerrain()) {
-      return this._cellColors.terrain;
-    } else if (cell.isOpen()) {
-      return this._cellColors.open;
-    } else if (cell.isClosed()) {
-      return this._cellColors.closed;
-    } else if (cell.isPath()) {
+    }
+
+    if (cell.isPath()) {
       return this._cellColors.path;
     }
+
+    if (cell.inList(CellList.Open)) {
+      return this._cellColors.open;
+    }
+
+    if (cell.inList(CellList.Closed)) {
+      return this._cellColors.closed;
+    }
+
+    if (cell.isType(CellType.Empty)) {
+      return this._cellColors.empty;
+    }
+
+    if (cell.isType(CellType.Terrain)) {
+      return this._cellColors.terrain;
+    }
+
     return this._cellColors.debug;
   }
 

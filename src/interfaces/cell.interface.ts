@@ -1,24 +1,26 @@
-export type Neighbor = {
-  cell: ICell;
-  moveCost: number;
-} | null;
+export enum CellType {
+  Empty,
+  Terrain,
+  Block,
+}
+
+export enum CellList {
+  None,
+  Open,
+  Closed,
+}
 
 export interface ICell {
   readonly x: number;
   readonly y: number;
 
-  isEmpty(): boolean;
-  setEmpty(): void;
-  isBlock(): boolean;
-  setBlock(): void;
-  isTerrain(): boolean;
-  setTerrain(): void;
-  isOpen(): boolean;
-  setOpen(): void;
-  isClosed(): boolean;
-  setClosed(): void;
+  isType(type: CellType): boolean;
+  // TODO: will not need a terrain type if every cell can be terrain
+  setType(type: CellType): void;
+  inList(list: CellList): boolean;
+  setList(list: CellList): void;
   isPath(): boolean;
-  setPath(): void;
+  setPath(path: boolean): void;
 
   getG(): number;
   setG(value: number): void;
@@ -35,9 +37,14 @@ export interface ICell {
   setNeighbors(neighbors: Neighbor[]): void;
 
   shouldDisplay(): boolean;
-  unmarkDisplay(): void;
+  markDisplay(): void;
   incrementAnimation(value: number): number;
   skipAnimation(): void;
 
   equals(otherCell: ICell): boolean;
 }
+
+export type Neighbor = {
+  cell: ICell;
+  moveCost: number;
+} | null;
