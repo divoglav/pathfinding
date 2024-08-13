@@ -36,10 +36,11 @@ export class BidirectionalAStar implements IPathfinder {
     return minFCell;
   }
 
-  reconstructPathFrom(cell: ICell) {
+  private reconstructPathFrom(cell: ICell) {
     let current: ICell | null = cell;
     while (current) {
       current.setPath(true);
+      current.markDisplay();
       current = current.getParent();
     }
   }
@@ -92,6 +93,7 @@ export class BidirectionalAStar implements IPathfinder {
       if (!neighbor.inList(CellList.Open)) {
         open.push(neighbor);
         neighbor.setList(CellList.Open);
+        neighbor.markDisplay();
         neighbor.setParent(current);
         neighbor.setG(gSum);
       } else if (gSum < neighbor.getG()) {
@@ -129,6 +131,7 @@ export class BidirectionalAStar implements IPathfinder {
     Utilities.removeFromArray(this._open, current);
     this._closed.add(current);
     current.setList(CellList.Closed);
+    current.markDisplay();
 
     Utilities.removeFromArray(this._openInverse, currentInverse);
     this._closedInverse.add(currentInverse);

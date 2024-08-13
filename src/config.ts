@@ -11,7 +11,7 @@ const config = {
       t: 40,
       h: 10,
     },
-    bidirectional: false,
+    bidirectional: true,
   },
 
   map: {

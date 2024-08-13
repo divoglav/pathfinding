@@ -20,9 +20,6 @@ FEATURES:
     after the end of a draw (or delete). This makes
     additional controls unnecessary.
 
-  Better cell flags.
-    Consider returning the bit code.
-
   Configurable User Interface.
 
   Scrollable timeline.

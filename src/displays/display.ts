@@ -27,29 +27,17 @@ export abstract class Display implements IDisplay {
   }
 
   protected _getCellColor(cell: ICell): string {
-    if (cell.isType(CellType.Block)) {
-      return this._cellColors.block;
-    }
+    if (cell.isType(CellType.Block)) return this._cellColors.block;
 
-    if (cell.isPath()) {
-      return this._cellColors.path;
-    }
+    if (cell.isPath()) return this._cellColors.path;
 
-    if (cell.inList(CellList.Open)) {
-      return this._cellColors.open;
-    }
+    if (cell.inList(CellList.Open)) return this._cellColors.open;
 
-    if (cell.inList(CellList.Closed)) {
-      return this._cellColors.closed;
-    }
+    if (cell.inList(CellList.Closed)) return this._cellColors.closed;
 
-    if (cell.isType(CellType.Empty)) {
-      return this._cellColors.empty;
-    }
+    if (cell.isType(CellType.Empty)) return this._cellColors.empty;
 
-    if (cell.isType(CellType.Terrain)) {
-      return this._cellColors.terrain;
-    }
+    if (cell.isType(CellType.Terrain)) return this._cellColors.terrain;
 
     return this._cellColors.debug;
   }
