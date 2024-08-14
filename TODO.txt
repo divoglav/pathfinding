@@ -1,8 +1,4 @@
 FIX:
-  Finish the cell state refactor:
-    Bidirectional A* is missing the display marks.
-    Look at the Display class for problems.
-
   Fix the padding on hex grid fills.
 
   Fix bidirectional diagonal squares.
@@ -42,3 +38,6 @@ FEATURES:
     Increase the color like a gradient depending on
     how costly the terrain is. Noise function to make
     the terrain look more realistic.
+
+  Consider porting to WebGL.
+    - Delegate stuff to the GPU if possible.

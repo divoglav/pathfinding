@@ -1,7 +1,6 @@
 import "./styles/reset.css";
 import "./styles/style.css";
 import config from "./config";
-import { IGrid } from "./interfaces/grid.interface";
 import { IDisplay } from "./interfaces/display.interface";
 import { SquareGrid } from "./grids/square-grid";
 import { SquareDisplay } from "./displays/square-display";
@@ -11,6 +10,8 @@ import { BidirectionalAStar } from "./algorithms/bidirectional-a-star";
 import { Utils } from "./utils";
 import { IPathfinder } from "./interfaces/pathfinder.interface";
 import { AStar } from "./algorithms/a-star";
+import { Input } from "./input";
+import { Grid } from "./grids/grid";
 
 // Grid:
 
@@ -21,14 +22,14 @@ const rows = Utils.calculateRowsCount(
   config.map.grid === "hex",
 );
 
-let grid: IGrid;
+let grid: Grid;
 if (config.map.grid === "hex") grid = new HexGrid(config.map.columns, rows);
 else grid = new SquareGrid(config.map.columns, rows);
 
 grid.createCells();
-grid.setupNeighbors();
 grid.generateBlocks(config.map.blocks.type);
 grid.generateTerrain(config.map.terrain.type);
+grid.setupNeighbors();
 
 // Cells:
 
@@ -45,6 +46,10 @@ canvas.width = config.canvas.width;
 canvas.height = config.canvas.height;
 document.body.appendChild(canvas);
 const context = canvas.getContext("2d");
+
+// Controls:
+
+new Input(canvas);
 
 // Display:
 
@@ -68,6 +73,11 @@ if (config.pathfinding.bidirectional) {
 const displayInterval = 1000 / config.display.FPS;
 setInterval(() => {
   display.drawCells(cells);
+
+  if (Input.isClicked) {
+    const cell = grid.getCellAt(Input.x, Input.y);
+    if (cell) console.log(cell)
+  }
 
   aStar.iterate();
 }, displayInterval);

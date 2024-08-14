@@ -1,7 +1,7 @@
 const config = {
   canvas: {
     width: 634,
-    height: 634,
+    height: 634
   },
 
   pathfinding: {
@@ -11,14 +11,14 @@ const config = {
       t: 40,
       h: 10,
     },
-    bidirectional: true,
+    bidirectional: false,
   },
 
   map: {
     grid: "square", // square, hex
     squareDiagonals: false,
 
-    columns: 50,
+    columns: 20,
 
     unblockSpawnLayers: 4,
 
@@ -27,7 +27,6 @@ const config = {
 
       noise: {
         percent: 0.28,
-        //percent: 0,
         scalar: 0.10,
       },
 
@@ -44,8 +43,8 @@ const config = {
         scalar: 0.06,
         offsetFromBlocks: {
           random: true,
-          x: 1,
-          y: 1,
+          x: 2,
+          y: 2,
         },
       },
 
@@ -73,8 +72,8 @@ const config = {
         empty: "#313244",
         block: "#11111b",
         terrain: "darkgreen",
-        open: "#89b4fa",
-        closed: "#b4befe",
+        open: "#b4befe",
+        closed: "#89b4fa",
         path: "#f38ba8",
         debug: "magenta",
       },

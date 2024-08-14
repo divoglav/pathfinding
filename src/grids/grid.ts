@@ -4,8 +4,9 @@ import { Utils } from "../utils";
 import { IGrid } from "../interfaces/grid.interface";
 import { CellType, ICell, Neighbor } from "../interfaces/cell.interface";
 import { Cell } from "../cell";
+import { ISelector } from "../interfaces/selector.interface";
 
-export abstract class Grid implements IGrid {
+export abstract class Grid implements IGrid, ISelector {
   protected readonly _cols: number;
   protected readonly _rows: number;
   protected readonly _cells: ICell[][] = [];
@@ -109,6 +110,8 @@ export abstract class Grid implements IGrid {
   }
 
   abstract setupNeighbors(): void;
+
+  abstract getCellAt(xCoordinate: number, yCoordinate: number): ICell | null;
 
   generateBlocks(type: string) {
     switch (type) {

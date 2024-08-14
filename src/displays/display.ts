@@ -13,15 +13,10 @@ export abstract class Display implements IDisplay {
     config.map.columns,
     config.map.grid === "hex",
   );
-  protected readonly _maxWidth = config.canvas.width / this._cols;
   protected readonly _cellColors = config.display.colors.cells;
   protected readonly _animationIncrement = config.display.animation.increment;
 
   constructor(protected readonly _context: CanvasRenderingContext2D) {
-    _context.textRendering = "optimizeSpeed";
-    _context.textBaseline = "middle";
-    _context.textAlign = "center";
-    _context.font = `${this._maxWidth / 4}px Ubuntu`;
     _context.strokeStyle = config.display.colors.border;
     _context.lineWidth = config.display.lineWidth > 0 ? config.display.lineWidth : 0.1;
   }

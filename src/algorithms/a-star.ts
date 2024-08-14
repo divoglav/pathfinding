@@ -82,7 +82,7 @@ export class AStar implements IPathfinder {
         neighbor.markDisplay();
         neighbor.setParent(current);
         neighbor.setG(gSum);
-      } else if (gSum < neighbor.getG()) {
+      } else if (gSum <= neighbor.getG()) {
         neighbor.setParent(current);
         neighbor.setG(gSum);
       }

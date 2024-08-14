@@ -1,6 +1,8 @@
 import { Grid } from "./grid";
 
 export class HexGrid extends Grid {
+  // TODO: selector
+
   setupNeighbors() {
     for (let x = 0; x < this._cols; x++) {
       for (let y = 0; y < this._rows; y++) {
